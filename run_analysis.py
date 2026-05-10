@@ -2,7 +2,7 @@
 일별 자동 분석 스크립트
 ========================
 GitHub Actions에서 매일 실행되어 분석 리포트를 생성합니다.
-결과물: reports/YYYY-MM-DD.md
+결과물: reports/YYYY-MM-DD.html
 """
 
 import json
@@ -20,13 +20,13 @@ log = logging.getLogger(__name__)
 
 # ── 경로 ─────────────────────────────────────────────────────
 REPORTS_DIR = Path("reports")
-MD_DIR   = REPORTS_DIR / "md"
+html_DIR   = REPORTS_DIR / "html"
 JSON_DIR = REPORTS_DIR / "json"
-MD_DIR.mkdir(parents=True, exist_ok=True)
+html_DIR.mkdir(parents=True, exist_ok=True)
 JSON_DIR.mkdir(parents=True, exist_ok=True)
 
 TODAY = datetime.today().strftime("%Y-%m-%d")
-REPORT_PATH = MD_DIR / f"{TODAY}.md"
+REPORT_PATH = html_DIR / f"{TODAY}.html"
 # ── 관심 종목 (watchlist.json에서 로드) ──────────────────────
 WATCHLIST_PATH = Path("watchlist.json")
 
@@ -227,91 +227,209 @@ def combined_row(ticker: str, name: str, sig: dict) -> str:
 def build_report(kr_results: dict, us_results: dict) -> str:
     now = datetime.now().strftime("%Y-%m-%d %H:%M KST")
 
-    lines = [
-        "# 📊 퀀트 일별 분석 리포트",
-        "",
-        f"> 생성일시: {now}  ",
-        "> ⚠️ 본 리포트는 **보조 참고용**입니다. 투자 판단은 본인 책임입니다.",
-        "",
-        "---",
-        "",
-    ]
+    def color_return(val: float) -> str:
+        color = "#e53935" if val > 0 else "#1e88e5"
+        return f'<span style="color:{color}">{val:+.2f}%</span>'
 
-    TABLE_HEADER = [
-        "| 티커 | 종목명 | 종합신호 | 현재가 | 등락률 | RSI | ADX | 모멘텀 | 매수/매도 | 수익률Z | 변동폭Z | 거래량Z | 체제 |",
-        "|------|--------|----------|--------|--------|-----|-----|--------|-----------|---------|---------|---------|------|",
-    ]
+    def color_rsi(val: float) -> str:
+        if val > 65:
+            color = "#e53935"
+        elif val < 35:
+            color = "#1e88e5"
+        else:
+            color = "#888"
+        return f'<span style="color:{color}">{val}</span>'
 
-    # 한국
-    lines += ["## 🇰🇷 한국 시장", ""]
-    lines += TABLE_HEADER
-    for ticker, (name, sig) in kr_results.items():
-        if sig:
-            lines.append(combined_row(ticker, name, sig))
+    def color_adx(val: float) -> str:
+        color = "#e53935" if val >= 25 else "#888"
+        return f'<span style="color:{color}">{val}</span>'
 
-    # 미국
-    lines += ["", "---", "", "## 🇺🇸 미국 시장", ""]
-    lines += TABLE_HEADER
-    for ticker, (name, sig) in us_results.items():
-        if sig:
-            lines.append(combined_row(ticker, name, sig))
+    def color_mom(val: float) -> str:
+        color = "#e53935" if val > 2 else ("#1e88e5" if val < -2 else "#888")
+        return f'<span style="color:{color}">{val:+.2f}%</span>'
 
-    # 용어 설명
-    lines += [
-        "",
-        "---",
-        "",
-        "## 📖 지표 설명",
-        "",
-        "### 종합신호",
-        "7개 지표 중 매수/매도 신호가 몇 개인지 집계한 결과예요.",
-        "",
-        "| 신호 | 의미 |",
-        "|------|------|",
-        "| 🟢 강한매수 | 7개 중 5개 이상 매수 신호 → 강하게 상승 가능성 |",
-        "| 🔵 약한매수 | 7개 중 3~4개 매수 신호 → 상승 우세하나 확신 낮음 |",
-        "| ⚪ 중립 | 매수/매도 혼재 → 방향성 불명확, 관망 권장 |",
-        "| 🟠 약한매도 | 7개 중 3~4개 매도 신호 → 하락 우세하나 확신 낮음 |",
-        "| 🔴 강한매도 | 7개 중 5개 이상 매도 신호 → 강하게 하락 가능성 |",
-        "",
-        "### 7가지 개별 지표",
-        "",
-        "| 지표 | 매수 조건 | 매도 조건 | 설명 |",
-        "|------|-----------|-----------|------|",
-        "| RSI | 35 이하 | 65 이상 | 과매도/과매수 측정. 너무 많이 팔렸으면 반등, 너무 많이 올랐으면 조정 가능성 |",
-        "| MACD | 히스토그램 양수 | 히스토그램 음수 | 단기/장기 이동평균 차이. 양수면 단기 상승 모멘텀 |",
-        "| ADX방향 | DI+ > DI- | DI+ < DI- | 상승/하락 방향성. ADX 수치가 25 이상이어야 신뢰도 높음 |",
-        "| 볼린저 | 하단 25% 이하 | 상단 75% 이상 | 가격이 밴드 어디에 위치하는지. 하단이면 저점 근처 |",
-        "| MA크로스 | 20일선 > 60일선 | 20일선 < 60일선 | 골든크로스/데드크로스. 중기 추세 방향 |",
-        "| 모멘텀 | 1/3/6개월 평균 +2% 이상 | -2% 이하 | 최근 수익률 추세. 오르는 종목이 계속 오르는 경향 |",
-        "| 거래량 | - | - | 평소 대비 1.5배 이상이면 급등 (방향은 별도 판단) |",
-        "",
-        "### HMM 피처 (Z-score)",
-        "과거 1년 평균 대비 현재가 얼마나 이상한지를 나타내요. **0이 보통, ±2 이상이면 비정상적**이에요.",
-        "",
-        "| 컬럼 | 설명 | 해석 |",
-        "|------|------|------|",
-        "| 수익률Z | 오늘 수익률이 과거 대비 얼마나 큰지 | +2 이상: 비정상 급등 / -2 이하: 비정상 급락 |",
-        "| 변동폭Z | 오늘 고저 변동폭이 과거 대비 얼마나 큰지 | +2 이상: 극단적 변동성 (불안정) |",
-        "| 거래량Z | 오늘 거래량 변화가 과거 대비 얼마나 큰지 | +2 이상: 거래량 폭발 (세력 개입 가능) |",
-        "",
-        "### 시장 체제 (HMM 기반 추정)",
-        "",
-        "| 체제 | 조건 | 전략 힌트 |",
-        "|------|------|-----------|",
-        "| 🐂 강세 | 수익률Z > 1, 변동폭 낮음 | 추세 추종 유리 |",
-        "| 💥 폭락 | 수익률Z < -1.5 | 손절/현금화 고려 |",
-        "| ⚡ 고변동 | 변동폭Z > 1.5 | 레버리지 위험, 관망 |",
-        "| 😴 횡보 | 수익률/변동폭 모두 낮음 | 돌파 대기, 박스권 매매 |",
-        "| 🌀 노이즈 | 위 조건 해당 없음 | 방향성 불명확 |",
-        "",
-        "---",
-        "",
-        "*자동 생성: [quant-pipeline](https://github.com/QAZyunho/quant-pipeline/tree/reports)*",
-    ]
+    def color_z(val: float) -> str:
+        if val > 2:
+            color = "#e53935"
+        elif val < -2:
+            color = "#1e88e5"
+        elif abs(val) > 1:
+            color = "#fb8c00"
+        else:
+            color = "#888"
+        return f'<span style="color:{color}">{val:+.2f}</span>'
 
-    return "\n".join(lines)
+    def color_signal(overall: str) -> str:
+        colors = {
+            "🟢 강한매수": "#e53935",
+            "🔵 약한매수": "#1e88e5",
+            "⚪ 중립":     "#888",
+            "🟠 약한매도": "#fb8c00",
+            "🔴 강한매도": "#5e35b1",
+        }
+        color = colors.get(overall, "#888")
+        return f'<span style="color:{color};font-weight:bold">{overall}</span>'
 
+    def make_table(results: dict) -> str:
+        rows = ""
+        for ticker, (name, sig) in results.items():
+            if not sig:
+                continue
+            rz  = sig["returns_z"]
+            raz = sig["range_z"]
+            vcz = sig["vol_change_z"]
+
+            if rz > 1.0 and raz < 0.5:
+                regime = "🐂 강세"
+            elif rz < -1.5:
+                regime = "💥 폭락"
+            elif raz > 1.5:
+                regime = "⚡ 고변동"
+            elif abs(rz) < 0.3 and raz < 0.3:
+                regime = "😴 횡보"
+            else:
+                regime = "🌀 노이즈"
+
+            rows += f"""
+            <tr>
+                <td><b>{ticker}</b></td>
+                <td>{name}</td>
+                <td>{color_signal(sig['overall'])}</td>
+                <td>{sig['close']:,.0f}</td>
+                <td>{color_return(sig['returns_1d'])}</td>
+                <td>{color_rsi(sig['rsi'])}</td>
+                <td>{color_adx(sig['adx'])}</td>
+                <td>{color_mom(sig['mom_score'])}</td>
+                <td>{sig['buy_count']}/{sig['sell_count']}</td>
+                <td>{color_z(rz)}</td>
+                <td>{color_z(raz)}</td>
+                <td>{color_z(vcz)}</td>
+                <td>{regime}</td>
+            </tr>"""
+        return rows
+
+    TABLE_HEADER = """
+    <table>
+        <thead>
+            <tr>
+                <th>티커</th><th>종목명</th><th>종합신호</th>
+                <th>현재가</th><th>등락률</th>
+                <th title="14일 기준. 35↓과매도(파랑) 65↑과매수(빨강)">RSI</th>
+                <th title="25 이상이면 추세 존재(빨강)">ADX</th>
+                <th title="1/3/6개월 평균 수익률">모멘텀</th>
+                <th title="7개 지표 중 매수/매도 신호 개수">매수/매도</th>
+                <th title="수익률 Z-score. ±2 이상이면 비정상">수익률Z</th>
+                <th title="변동폭 Z-score. +2 이상이면 극단적 변동">변동폭Z</th>
+                <th title="거래량 Z-score. +2 이상이면 거래량 폭발">거래량Z</th>
+                <th>체제</th>
+            </tr>
+        </thead>
+        <tbody>
+    """
+
+    html = f"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀀트 리포트 {TODAY}</title>
+<style>
+  body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #0d1117; color: #c9d1d9; padding: 24px; }}
+  h1   {{ color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; }}
+  h2   {{ color: #e6edf3; margin-top: 32px; }}
+  h3   {{ color: #8b949e; }}
+  .meta {{ color: #8b949e; font-size: 0.9em; margin-bottom: 24px; }}
+  .warn {{ background: #2d1b00; border-left: 4px solid #fb8c00;
+           padding: 8px 16px; border-radius: 4px; margin-bottom: 24px; }}
+  table {{ border-collapse: collapse; width: 100%; margin-bottom: 16px;
+           font-size: 0.9em; }}
+  th    {{ background: #161b22; color: #8b949e; padding: 8px 12px;
+           text-align: left; border-bottom: 1px solid #30363d;
+           cursor: help; }}
+  td    {{ padding: 7px 12px; border-bottom: 1px solid #21262d; }}
+  tr:hover td {{ background: #161b22; }}
+  details {{ margin-top: 32px; }}
+  summary {{ cursor: pointer; color: #58a6ff; font-size: 1.1em;
+             font-weight: bold; padding: 8px 0; }}
+  .legend-table td, .legend-table th {{
+    font-size: 0.85em; padding: 5px 10px; }}
+  .footer {{ color: #8b949e; font-size: 0.8em; margin-top: 40px;
+             border-top: 1px solid #30363d; padding-top: 12px; }}
+</style>
+</head>
+<body>
+
+<h1>📊 퀀트 일별 분석 리포트</h1>
+<div class="meta">생성일시: {now}</div>
+<div class="warn">⚠️ 본 리포트는 <b>보조 참고용</b>입니다. 투자 판단은 본인 책임입니다.</div>
+
+<h2>🇰🇷 한국 시장</h2>
+{TABLE_HEADER}
+{make_table(kr_results)}
+        </tbody>
+    </table>
+
+<h2>🇺🇸 미국 시장</h2>
+{TABLE_HEADER}
+{make_table(us_results)}
+        </tbody>
+    </table>
+
+<details>
+<summary>📖 지표 설명 (클릭해서 펼치기)</summary>
+
+<h3>종합신호</h3>
+<table class="legend-table">
+  <tr><th>신호</th><th>의미</th></tr>
+  <tr><td>🟢 강한매수</td><td>7개 중 5개 이상 매수 → 상승 가능성 높음</td></tr>
+  <tr><td>🔵 약한매수</td><td>7개 중 3~4개 매수 → 상승 우세하나 확신 낮음</td></tr>
+  <tr><td>⚪ 중립</td><td>매수/매도 혼재 → 방향성 불명확, 관망 권장</td></tr>
+  <tr><td>🟠 약한매도</td><td>7개 중 3~4개 매도 → 하락 우세하나 확신 낮음</td></tr>
+  <tr><td>🔴 강한매도</td><td>7개 중 5개 이상 매도 → 하락 가능성 높음</td></tr>
+</table>
+
+<h3>7가지 개별 지표</h3>
+<table class="legend-table">
+  <tr><th>지표</th><th>매수 조건</th><th>매도 조건</th><th>설명</th></tr>
+  <tr><td>RSI</td><td>35 이하 🔵</td><td>65 이상 🔴</td><td>과매도/과매수 측정. 너무 팔렸으면 반등, 너무 올랐으면 조정 가능성</td></tr>
+  <tr><td>MACD</td><td>히스토그램 양수</td><td>히스토그램 음수</td><td>단기/장기 이동평균 차이. 양수면 단기 상승 모멘텀</td></tr>
+  <tr><td>ADX방향</td><td>DI+ &gt; DI-</td><td>DI+ &lt; DI-</td><td>ADX 25🔴 이상이어야 신뢰도 높음</td></tr>
+  <tr><td>볼린저</td><td>하단 25% 이하</td><td>상단 75% 이상</td><td>가격이 밴드 어디 위치하는지. 하단이면 저점 근처</td></tr>
+  <tr><td>MA크로스</td><td>20일선 &gt; 60일선</td><td>20일선 &lt; 60일선</td><td>골든/데드크로스. 중기 추세 방향</td></tr>
+  <tr><td>모멘텀</td><td>평균 +2% 이상 🔴</td><td>평균 -2% 이하 🔵</td><td>1/3/6개월 평균 수익률. 오르는 종목이 계속 오르는 경향</td></tr>
+  <tr><td>거래량</td><td colspan="2">평소 대비 1.5배 이상이면 급등 (방향은 별도 판단)</td><td>매수/매도 카운트 미포함</td></tr>
+</table>
+
+<h3>Z-score 색상 기준</h3>
+<table class="legend-table">
+  <tr><th>색상</th><th>범위</th><th>의미</th></tr>
+  <tr><td style="color:#e53935">빨강</td><td>+2 이상</td><td>비정상적으로 높음</td></tr>
+  <tr><td style="color:#fb8c00">주황</td><td>±1 ~ ±2</td><td>주의 구간</td></tr>
+  <tr><td style="color:#888">회색</td><td>±1 이내</td><td>정상 범위</td></tr>
+  <tr><td style="color:#1e88e5">파랑</td><td>-2 이하</td><td>비정상적으로 낮음</td></tr>
+</table>
+
+<h3>시장 체제</h3>
+<table class="legend-table">
+  <tr><th>체제</th><th>조건</th><th>전략 힌트</th></tr>
+  <tr><td>🐂 강세</td><td>수익률Z &gt; 1, 변동폭 낮음</td><td>추세 추종 유리</td></tr>
+  <tr><td>💥 폭락</td><td>수익률Z &lt; -1.5</td><td>손절/현금화 고려</td></tr>
+  <tr><td>⚡ 고변동</td><td>변동폭Z &gt; 1.5</td><td>레버리지 위험, 관망</td></tr>
+  <tr><td>😴 횡보</td><td>수익률/변동폭 모두 낮음</td><td>돌파 대기, 박스권 매매</td></tr>
+  <tr><td>🌀 노이즈</td><td>위 조건 해당 없음</td><td>방향성 불명확</td></tr>
+</table>
+
+</details>
+
+<div class="footer">
+  자동 생성: <a href="https://github.com/QAZyunho/quant-pipeline/tree/reports" style="color:#58a6ff">quant-pipeline</a>
+</div>
+
+</body>
+</html>"""
+
+    return html
 
 # ════════════════════════════════════════════════════════════
 # 메인
@@ -364,8 +482,8 @@ def main():
     REPORT_PATH.write_text(report, encoding="utf-8")
     log.info(f"✅ 리포트 저장: {REPORT_PATH}")
 
-    # latest.md 심볼릭 업데이트 (항상 최신본)
-    latest = REPORTS_DIR / "latest.md"
+    # latest.html 심볼릭 업데이트 (항상 최신본)
+    latest = REPORTS_DIR / "latest.html"
     latest.write_text(report, encoding="utf-8")
 
     # JSON 요약 저장 (향후 LLM 페이퍼 트레이딩 봇이 읽을 용도)
@@ -374,9 +492,9 @@ def main():
         "kr": {t: {"name": n, **s} if s else {"name": n} for t, (n, s) in kr_results.items()},
         "us": {t: {"name": n, **s} if s else {"name": n} for t, (n, s) in us_results.items()},
     }
-    # md 저장
+    # html 저장
     REPORT_PATH.write_text(report, encoding="utf-8")
-    (MD_DIR / "latest.md").write_text(report, encoding="utf-8")
+    (html_DIR / "latest.html").write_text(report, encoding="utf-8")
     log.info(f"✅ 리포트 저장: {REPORT_PATH}")
 
     # json 저장 (git 제외)

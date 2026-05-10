@@ -55,9 +55,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin reports
           git worktree add /tmp/reports-branch origin/reports
-          mkdir -p /tmp/reports-branch/md
-          cp reports/md/*.md /tmp/reports-branch/md/ 2>/dev/null || true
+          mkdir -p /tmp/reports-branch/html
+          cp reports/html/*.html /tmp/reports-branch/html/ 2>/dev/null || true
           cd /tmp/reports-branch
-          git add md/
+          git add html/
           git diff --staged --quiet || git commit -m "📊 일별 분석 리포트: $(date +'%Y-%m-%d')"
           git push origin HEAD:reports
