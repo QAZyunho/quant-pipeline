@@ -291,19 +291,6 @@ def build_report(kr_results: dict, us_results: dict) -> str:
             roe = sig.get("roe", sig.get("div", 0))  # 미국은 ROE, 한국은 DIV
             div = sig.get("div", 0)
 
-            # 목표주가
-            target = sig.get("target", {})
-            if target and target.get("target_avg"):
-                upside = target.get("upside", 0)
-                up_color = "#e53935" if upside > 0 else "#1e88e5"
-                target_str = (
-                    f'<span style="color:{up_color}">'
-                    f'{int(target["target_avg"]):,}원 '
-                    f'({upside:+.1f}%)</span>'
-                )
-            else:
-                target_str = "<span style='color:#555'>-</span>"
-
             def fmt_ratio(v, low_good=True):
                 if v == 0: return "<span style='color:#555'>-</span>"
                 if low_good:
@@ -327,7 +314,6 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 <td>{fmt_ratio(pbr)}</td>
                 <td>{fmt_ratio(roe, low_good=False)}</td>
                 <td><span style="color:#888">{div}%</span></td>
-                <td>{target_str}</td>
                 <td>{color_z(rz)}</td>
                 <td>{color_z(raz)}</td>
                 <td>{color_z(vcz)}</td>
@@ -349,7 +335,6 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 <th title="주가순자산비율. 1 이하면 저평가">PBR</th>
                 <th title="자기자본이익률. 높을수록 수익성 좋음">ROE%</th>
                 <th title="배당수익률">배당%</th>
-                <th title="증권사 평균 목표주가 대비 상승여력">목표주가</th>
                 <th title="수익률 Z-score">수익률Z</th>
                 <th title="변동폭 Z-score">변동폭Z</th>
                 <th title="거래량 Z-score">거래량Z</th>
@@ -517,9 +502,6 @@ def main():
     # 리포트 생성
     log.info("📝 리포트 생성 중...")
     report = build_report(kr_results, us_results)
-
-    REPORT_PATH.write_text(report, encoding="utf-8")
-    log.info(f"✅ 리포트 저장: {REPORT_PATH}")
 
     # latest.html 심볼릭 업데이트 (항상 최신본)
     latest = REPORTS_DIR / "latest.html"
