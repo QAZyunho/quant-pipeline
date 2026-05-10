@@ -471,13 +471,13 @@ def build_report(kr_results: dict, us_results: dict) -> str:
 <h3>7가지 개별 지표</h3>
 <table class="legend-table">
   <tr><th>지표</th><th>매수 조건</th><th>매도 조건</th><th>설명</th></tr>
-  <tr><td>RSI</td><td>35 이하 🔵</td><td>65 이상 🔴</td><td>과매도/과매수 측정. 너무 팔렸으면 반등, 너무 올랐으면 조정 가능성</td></tr>
-  <tr><td>MACD</td><td>히스토그램 양수</td><td>히스토그램 음수</td><td>단기/장기 이동평균 차이. 양수면 단기 상승 모멘텀</td></tr>
-  <tr><td>ADX방향</td><td>DI+ &gt; DI-</td><td>DI+ &lt; DI-</td><td>ADX 25🔴 이상이어야 신뢰도 높음</td></tr>
-  <tr><td>볼린저</td><td>하단 25% 이하</td><td>상단 75% 이상</td><td>가격이 밴드 어디 위치하는지. 하단이면 저점 근처</td></tr>
-  <tr><td>MA크로스</td><td>20일선 &gt; 60일선</td><td>20일선 &lt; 60일선</td><td>골든/데드크로스. 중기 추세 방향</td></tr>
-  <tr><td>모멘텀</td><td>평균 +2% 이상 🔴</td><td>평균 -2% 이하 🔵</td><td>1/3/6개월 평균 수익률. 오르는 종목이 계속 오르는 경향</td></tr>
-  <tr><td>거래량</td><td colspan="2">평소 대비 1.5배 이상이면 급등 (방향은 별도 판단)</td><td>매수/매도 카운트 미포함</td></tr>
+  <tr><td><strong>RSI</strong><br/>(상대강도지수)</td><td>35 이하 🔵</td><td>65 이상 🔴</td><td><strong>최근 14일 상승일 vs 하락일 강도</strong><br/>0~100 값. 35 이하면 "너무 팔려서 반등 가능성", 65 이상이면 "너무 올라서 조정 가능성". 과열/침체 구간 판단</td></tr>
+  <tr><td><strong>MACD</strong><br/>(이동평균수렴확산)</td><td>히스토그램 양수</td><td>히스토그램 음수</td><td><strong>12일선 - 26일선 vs 9일 평균</strong><br/>단기 추세가 장기 추세보다 강한지 측정. 양수면 "상승 모멘텀 시작", 음수면 "하락 모멘텀"</td></tr>
+  <tr><td><strong>ADX방향</strong><br/>(추세강도+방향)</td><td>DI+ &gt; DI-</td><td>DI+ &lt; DI-</td><td><strong>상승력(DI+) vs 하락력(DI-) 비교</strong><br/>DI+가 크면 상승세, DI-가 크면 하락세. 단, ADX 25 이상일 때만 신뢰 (추세 뚜렷할 때)</td></tr>
+  <tr><td><strong>볼린저밴드</strong><br/>(변동성 밴드)</td><td>하단 25% 이하</td><td>상단 75% 이상</td><td><strong>20일 평균 ± (표준편차 × 2)</strong><br/>정상 가격 범위 대비 현재 위치. 하단이면 "저점 근처", 상단이면 "고점 근처" 가능성</td></tr>
+  <tr><td><strong>MA크로스</strong><br/>(이동평균교차)</td><td>20일선 &gt; 60일선</td><td>20일선 &lt; 60일선</td><td><strong>단기 평균 vs 중기 평균</strong><br/>20일선이 60일선 위로 올라가면 골든크로스(상승), 아래로 내려가면 데드크로스(하락) 신호</td></tr>
+  <tr><td><strong>모멘텀</strong><br/>(수익률 지속성)</td><td>평균 +2% 이상 🔴</td><td>평균 -2% 이하 🔵</td><td><strong>1개월/3개월/6개월 수익률 평균</strong><br/>상승하는 종목이 계속 상승하는 경향 활용. +2% 이상이면 강한 상승세 지속 중</td></tr>
+  <tr><td><strong>거래량</strong><br/>(관심도/유동성)</td><td colspan="2">평소 대비 1.5배 이상이면 급등 (방향은 별도 판단)</td><td><strong>평균 거래량 vs 현재 거래량</strong><br/>거래량 급증은 "큰 변화 신호". 방향은 다른 지표로 판단 (매수/매도 카운트 제외)</td></tr>
 </table>
 
 <h3>Z-score 색상 기준</h3>
@@ -487,6 +487,34 @@ def build_report(kr_results: dict, us_results: dict) -> str:
   <tr><td style="color:#fb8c00">주황</td><td>±1 ~ ±2</td><td>주의 구간</td></tr>
   <tr><td style="color:#888">회색</td><td>±1 이내</td><td>정상 범위</td></tr>
   <tr><td style="color:#1e88e5">파랑</td><td>-2 이하</td><td>비정상적으로 낮음</td></tr>
+</table>
+
+<h3>펀더멘털 지표 (밸류에이션/수익성)</h3>
+<table class="legend-table">
+  <tr><th>지표</th><th>좋은 값</th><th>주의 값</th><th>설명</th></tr>
+  <tr><td><strong>PER</strong><br/>(주가수익비율)</td><td style="color:#1e88e5">한국: 10 이하<br/>미국: 15 이하</td><td style="color:#fb8c00">20 이상</td><td><strong>주가 ÷ 주당순이익(EPS)</strong><br/>현재 주가가 1년 수익의 몇 배인지 측정. 10이면 "10년간 벌어야 현재 주가만큼 수익". 낮을수록 저평가 (단, 적자 회사는 의미 없음)</td></tr>
+  <tr><td><strong>PBR</strong><br/>(주가순자산비율)</td><td style="color:#1e88e5">1.0 이하</td><td style="color:#fb8c00">3.0 이상</td><td><strong>주가 ÷ 주당순자산(BPS)</strong><br/>회사를 청산할 때 주주가 받을 몫 대비 주가. 1.0 이하면 "자산 가치보다 저렴". 성장주는 높아도 OK, 가치주는 낮을수록 좋음</td></tr>
+  <tr><td><strong>ROE</strong><br/>(자기자본이익률)</td><td style="color:#e53935">15% 이상</td><td style="color:#888">5% 이하</td><td><strong>순이익 ÷ 자기자본 × 100</strong><br/>주주 돈으로 얼마나 이익을 냈는지. 15%면 "100원 투자해서 15원 벌었다". 경영진의 능력과 사업 수익성을 보여줌</td></tr>
+  <tr><td><strong>ROA</strong><br/>(총자산이익률)</td><td style="color:#e53935">8% 이상</td><td style="color:#888">3% 이하</td><td><strong>순이익 ÷ 총자산 × 100</strong><br/>빌린 돈 포함해 모든 자산으로 얼마나 효율적으로 이익을 냈는지. 자산 대비 수익 창출 능력 측정</td></tr>
+  <tr><td><strong>배당수익률</strong></td><td style="color:#e53935">3% 이상</td><td style="color:#888">1% 이하</td><td><strong>연간 배당금 ÷ 주가 × 100</strong><br/>주식을 사면 1년간 받는 배당금이 투자금의 몇 %인지. 은행 이자 대신 배당 받고 싶은 투자자에게 중요</td></tr>
+</table>
+
+<h3>성장성/안정성 지표</h3>
+<table class="legend-table">
+  <tr><th>지표</th><th>좋은 값</th><th>주의 값</th><th>설명</th></tr>
+  <tr><td><strong>매출성장률</strong><br/>(YoY)</td><td style="color:#e53935">15% 이상</td><td style="color:#888">마이너스</td><td><strong>(올해매출 - 작년매출) ÷ 작년매출 × 100</strong><br/>회사가 얼마나 빠르게 성장하고 있는지 측정. 15%면 "매출이 1년 만에 15% 늘었다". 지속적 성장 가능성의 핵심 지표</td></tr>
+  <tr><td><strong>영업이익성장률</strong><br/>(YoY)</td><td style="color:#e53935">20% 이상</td><td style="color:#888">마이너스</td><td><strong>(올해영업이익 - 작년영업이익) ÷ 작년영업이익 × 100</strong><br/>매출 증가와 함께 실제 수익도 늘고 있는지 확인. 매출은 늘어도 영업이익은 줄어들면 경쟁력 악화 신호</td></tr>
+  <tr><td><strong>부채비율</strong></td><td style="color:#1e88e5">50% 이하</td><td style="color:#fb8c00">150% 이상</td><td><strong>부채 ÷ 자기자본 × 100</strong><br/>빌린 돈이 자기 돈의 몇 %인지. 50%면 "자기돈 100원에 빌린돈 50원". 높으면 파산 위험, 낮으면 안전하지만 성장 동력 부족할 수도</td></tr>
+  <tr><td><strong>유동비율</strong></td><td style="color:#1e88e5">150% 이상</td><td style="color:#fb8c00">100% 이하</td><td><strong>유동자산 ÷ 유동부채 × 100</strong><br/>1년 내 현금화 가능한 자산으로 1년 내 갚아야 할 빚을 감당할 수 있는지. 150% 이상이면 단기 자금난 걱정 없음</td></tr>
+  <tr><td><strong>이자보상배율</strong></td><td style="color:#1e88e5">5배 이상</td><td style="color:#fb8c00">3배 이하</td><td><strong>영업이익 ÷ 이자비용</strong><br/>영업으로 번 돈으로 이자를 몇 번 갚을 수 있는지. 5배면 "이자의 5배를 벌고 있어 안전". 3배 미만이면 이자 부담이 과중</td></tr>
+</table>
+
+<h3>종합 스코어링</h3>
+<table class="legend-table">
+  <tr><th>구분</th><th>구성요소</th><th>점수 범위</th><th>활용법</th></tr>
+  <tr><td><strong>🎯 스윙점수</strong></td><td>RSI, MACD, 볼린저, ADX<br/>거래량, 모멘텀, 수익률</td><td>0~100점</td><td>단기 진입 타이밍 판단<br/>70점 이상: 진입 고려</td></tr>
+  <tr><td><strong>⭐ 장기점수</strong></td><td>수익성(25) + 안정성(25)<br/>밸류에이션(25) + 성장성(25)</td><td>0~100점<br/>A+ ~ F등급</td><td>장기 투자가치 판단<br/>B+ 이상 종목 선호</td></tr>
+  <tr><td><strong>🎊 최종추천</strong></td><td>스윙 + 장기 종합</td><td>강매수/매수/스윙<br/>관심/보유/회피</td><td>투자 의사결정 참고<br/>개인 성향에 맞게 활용</td></tr>
 </table>
 
 <h3>시장 체제</h3>
