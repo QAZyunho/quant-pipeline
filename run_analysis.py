@@ -51,9 +51,19 @@ WATCHLIST = load_watchlist()
 # 데이터 수집
 # ════════════════════════════════════════════════════════════
 def fetch_kr(ticker: str, years: int = 2) -> pd.DataFrame:
-    from kiwoom_client import KiwoomClient
-    client = KiwoomClient()
-    return client.get_ohlcv(ticker, years)
+    from pykrx import stock
+    end   = datetime.today().strftime("%Y%m%d")
+    start = (datetime.today() - timedelta(days=365 * years)).strftime("%Y%m%d")
+    df = stock.get_market_ohlcv(start, end, ticker)
+    if df.empty:
+        return df
+    df.index = pd.to_datetime(df.index)
+    df.columns = ["open", "high", "low", "close", "volume", "change_pct"]
+    df["returns"]     = df["close"].pct_change()
+    df["log_returns"] = np.log(df["close"] / df["close"].shift(1))
+    df["range"]       = (df["high"] - df["low"]) / df["close"]
+    df["vol_change"]  = df["volume"].pct_change()
+    return df.dropna()
 
 def fetch_us(ticker: str, years: int = 2) -> pd.DataFrame:
     import yfinance as yf

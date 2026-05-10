@@ -39,7 +39,7 @@ jobs:
       - name: 📦 의존성 설치
         run: |
           pip install --upgrade pip
-          pip install yfinance pandas numpy pyarrow requests
+          pip install -r requirements.txt
 
       # 4. 분석 실행
       - name: 🔍 분석 실행
