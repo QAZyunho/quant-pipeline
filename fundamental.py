@@ -18,15 +18,17 @@ log = logging.getLogger(__name__)
 # 한국: pykrx 펀더멘털
 # ════════════════════════════════════════════════════════════
 def get_kr_fundamental(ticker: str) -> dict:
-    """pykrx로 PER, PBR, EPS, BPS, DIV 수집."""
     try:
         from pykrx import stock
         today = datetime.today().strftime("%Y%m%d")
         start = (datetime.today() - timedelta(days=14)).strftime("%Y%m%d")
 
-        df = stock.get_market_fundamental(start, today, ticker)
-        if df.empty:
-            log.warning(f"[KR] {ticker} 펀더멘털 데이터 없음")
+        try:
+            df = stock.get_market_fundamental(start, today, ticker)
+        except Exception:
+            return {}  # KRX 서버 오류 (주말 등) → 조용히 빈 값 반환
+
+        if df is None or df.empty:
             return {}
 
         row = df.iloc[-1]
@@ -40,7 +42,6 @@ def get_kr_fundamental(ticker: str) -> dict:
     except Exception as e:
         log.warning(f"[KR] {ticker} 펀더멘털 수집 실패: {e}")
         return {}
-
 
 # ════════════════════════════════════════════════════════════
 # 미국: yfinance 펀더멘털

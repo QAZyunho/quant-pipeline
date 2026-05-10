@@ -76,8 +76,8 @@ def get_dart_financials(
 
     # ── OpenDartReader 초기화 ─────────────────────────────────
     try:
-        import opendartreader as odr
-        dart = odr.OpenDartReader(key)
+        import OpenDartReader as odr
+        dart = odr(key)
     except Exception as e:
         log.error(f"[DART] OpenDartReader 초기화 실패: {e}")
         return {}
