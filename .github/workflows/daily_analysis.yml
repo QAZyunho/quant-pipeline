@@ -55,9 +55,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin reports
           git worktree add /tmp/reports-branch origin/reports
-          mkdir -p /tmp/reports-branch/html
+          mkdir -p /tmp/reports-branch/html          
           cp reports/html/*.html /tmp/reports-branch/html/ 2>/dev/null || true
           echo '<meta http-equiv="refresh" content="0; url=html/latest.html">' > /tmp/reports-branch/index.html
           touch /tmp/reports-branch/.nojekyll
           cd /tmp/reports-branch
-          git add html/ index.html .nojekyll
+          git add -f html/ index.html .nojekyll
+          git commit --allow-empty -m "📊 일별 분석 리포트: $(date +'%Y-%m-%d %H:%M')"
+          git push origin HEAD:reports
