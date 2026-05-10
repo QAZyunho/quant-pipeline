@@ -355,11 +355,45 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 icon, color, text = rec_map.get(rec, ("❓", "#6b7280", "미지"))
                 return f'<span style="color:{color}">{icon} {text}</span>'
 
-            # 차트 링크 생성
+            # investing.com 차트 링크 생성
             if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
-                chart_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
+                # 한국 주식은 investing.com에서 특별한 형식 사용
+                ticker_map = {
+                    "005930": "samsung-electronics",
+                    "000660": "sk-hynix", 
+                    "035420": "naver-corp",
+                    "207940": "samsung-biologics",
+                    "005380": "hyundai-motor-co",
+                    "000270": "kia-corp",
+                    "068270": "celltrion",
+                    "035720": "kakao",
+                    "051910": "lg-chem-ltd",
+                    "006400": "samsung-sdi-co-ltd",
+                    "000155": "doosan-corp-pref", # 두산우
+                    "005935": "samsung-electronics-co-ltd-pref" # 삼성전자우
+                }
+                investing_name = ticker_map.get(ticker, f"kr-stock-{ticker}")
+                chart_link = f"https://kr.investing.com/equities/{investing_name}"
             else:  # 미국 주식
-                chart_link = f"https://finance.yahoo.com/chart/{ticker}"
+                # 미국 주식 investing.com 매핑
+                us_ticker_map = {
+                    "AAPL": "apple-computer-inc",
+                    "MSFT": "microsoft-corp", 
+                    "GOOGL": "google-inc-c",
+                    "AMZN": "amazon-com-inc",
+                    "TSLA": "tesla-motors",
+                    "META": "facebook-inc",
+                    "NVDA": "nvidia-corp",
+                    "SPY": "spdr-s-p-500",
+                    "QQQ": "powershares-qqq-trust-series-1",
+                    "BRK.B": "berkshire-hathaway-inc",
+                    "JPM": "jp-morgan-chase",
+                    "V": "visa-inc",
+                    "JNJ": "johnson-johnson",
+                    "WMT": "wal-mart-stores"
+                }
+                investing_name = us_ticker_map.get(ticker, ticker.lower())
+                chart_link = f"https://www.investing.com/equities/{investing_name}"
             
             rows += f"""
             <tr>
@@ -391,22 +425,22 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th><th>종합신호</th>
-                <th title="스윙+장기 종합 투자 추천">최종추천</th>
-                <th title="단기 진입 타이밍 점수 (0-100)">스윙점수</th>
-                <th title="장기 투자 가치 점수 (0-100)">장기점수</th>
+                <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
+                <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
+                <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
                 <th>현재가</th><th>등락률</th>
-                <th title="14일 기준. 35↓과매도 65↑과매수">RSI</th>
-                <th title="25 이상이면 추세 존재">ADX</th>
-                <th title="1/3/6개월 평균 수익률">모멘텀</th>
-                <th title="매수/매도 신호 개수">매수/매도</th>
-                <th title="주가수익비율. 낮을수록 저평가">PER</th>
-                <th title="주가순자산비율. 1 이하면 저평가">PBR</th>
-                <th title="자기자본이익률. 높을수록 수익성 좋음">ROE%</th>
-                <th title="배당수익률">배당%</th>
-                <th title="수익률 Z-score">수익률Z</th>
-                <th title="변동폭 Z-score">변동폭Z</th>
-                <th title="거래량 Z-score">거래량Z</th>
-                <th>체제</th>
+                <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
+                <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
+                <th>모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
+                <th>매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
+                <th>PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
+                <th>PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
+                <th>ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
+                <th>배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
+                <th>수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
+                <th>변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
+                <th>거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
+                <th>체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
             </tr>
         </thead>
         <tbody>
@@ -420,25 +454,50 @@ def build_report(kr_results: dict, us_results: dict) -> str:
 <title>퀀트 리포트 {TODAY}</title>
 <style>
   body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-         background: #0d1117; color: #c9d1d9; padding: 24px; }}
-  h1   {{ color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; }}
-  h2   {{ color: #e6edf3; margin-top: 32px; }}
-  h3   {{ color: #8b949e; }}
-  .meta {{ color: #8b949e; font-size: 0.9em; margin-bottom: 24px; }}
+         background: #0d1117; color: #c9d1d9; padding: 24px; font-size: 15px; }}
+  h1   {{ color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; font-size: 28px; }}
+  h2   {{ color: #e6edf3; margin-top: 32px; font-size: 22px; }}
+  h3   {{ color: #8b949e; font-size: 18px; }}
+  h4   {{ color: #e6edf3; font-size: 16px; margin-top: 24px; }}
+  .meta {{ color: #8b949e; font-size: 14px; margin-bottom: 24px; }}
   .warn {{ background: #2d1b00; border-left: 4px solid #fb8c00;
-           padding: 8px 16px; border-radius: 4px; margin-bottom: 24px; }}
+           padding: 12px 20px; border-radius: 4px; margin-bottom: 24px; font-size: 14px; }}
   table {{ border-collapse: collapse; width: 100%; margin-bottom: 16px;
-           font-size: 0.9em; }}
-  th    {{ background: #161b22; color: #8b949e; padding: 8px 12px;
+           font-size: 13px; }}
+  th    {{ background: #161b22; color: #8b949e; padding: 10px 14px;
            text-align: left; border-bottom: 1px solid #30363d;
-           cursor: help; }}
-  td    {{ padding: 7px 12px; border-bottom: 1px solid #21262d; }}
+           font-size: 13px; font-weight: 600; }}
+  td    {{ padding: 9px 14px; border-bottom: 1px solid #21262d; }}
   tr:hover td {{ background: #161b22; }}
   details {{ margin-top: 32px; }}
-  summary {{ cursor: pointer; color: #58a6ff; font-size: 1.1em;
-             font-weight: bold; padding: 8px 0; }}
+  summary {{ cursor: pointer; color: #58a6ff; font-size: 16px;
+             font-weight: 600; padding: 8px 0; }}
+  summary:hover {{ color: #79c0ff; }}
   .legend-table td, .legend-table th {{
-    font-size: 0.85em; padding: 5px 10px; }}
+    font-size: 13px; padding: 8px 14px; border-bottom: 1px solid #30363d; }}
+  .legend-table th {{ background: #0d1117; color: #f0f6fc; font-weight: 600; }}
+  
+  /* 도움말 아이콘 스타일 */
+  .help-icon {{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #0969da;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    margin-left: 4px;
+    cursor: help;
+    vertical-align: middle;
+  }}
+  .help-icon:hover {{
+    background: #1f6feb;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+  }}
   .footer {{ color: #8b949e; font-size: 0.8em; margin-top: 40px;
              border-top: 1px solid #30363d; padding-top: 12px; }}
 </style>
@@ -477,10 +536,39 @@ def build_report(kr_results: dict, us_results: dict) -> str:
     for ticker, name, market in top_picks[:6]:  # 최대 6개
         if market == "KR":
             widget_symbol = f"KRX:{ticker}"
-            naver_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
+            # 한국 주식 investing.com 링크
+            ticker_map = {
+                "005930": "samsung-electronics",
+                "000660": "sk-hynix", 
+                "035420": "naver-corp",
+                "207940": "samsung-biologics",
+                "005380": "hyundai-motor-co",
+                "000270": "kia-corp",
+                "068270": "celltrion",
+                "035720": "kakao",
+                "051910": "lg-chem-ltd",
+                "006400": "samsung-sdi-co-ltd",
+                "000155": "doosan-corp-pref",
+                "005935": "samsung-electronics-co-ltd-pref"
+            }
+            investing_name = ticker_map.get(ticker, f"kr-stock-{ticker}")
+            detail_link = f"https://kr.investing.com/equities/{investing_name}"
         else:
             widget_symbol = f"NASDAQ:{ticker}" if ticker in ["AAPL", "MSFT", "GOOGL", "AMZN", "META", "TSLA", "NVDA"] else f"NYSE:{ticker}"
-            naver_link = f"https://finance.yahoo.com/chart/{ticker}"
+            # 미국 주식 investing.com 링크
+            us_ticker_map = {
+                "AAPL": "apple-computer-inc",
+                "MSFT": "microsoft-corp", 
+                "GOOGL": "google-inc-c",
+                "AMZN": "amazon-com-inc",
+                "TSLA": "tesla-motors",
+                "META": "facebook-inc",
+                "NVDA": "nvidia-corp",
+                "SPY": "spdr-s-p-500",
+                "QQQ": "powershares-qqq-trust-series-1"
+            }
+            investing_name = us_ticker_map.get(ticker, ticker.lower())
+            detail_link = f"https://www.investing.com/equities/{investing_name}"
             
         html += f"""
 <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
@@ -491,8 +579,8 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 style="width:100%; height:100%; border:none;"></iframe>
     </div>
     <div style="margin-top:8px; text-align:center;">
-        <a href="{naver_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
-            📊 상세 차트 보기
+        <a href="{detail_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
+            📊 Investing.com 상세 차트
         </a>
     </div>
 </div>"""
@@ -501,7 +589,10 @@ def build_report(kr_results: dict, us_results: dict) -> str:
 </div>
 
 <details>
-<summary>📖 지표 설명 (클릭해서 펼치기)</summary>
+<summary>📖 상세 가이드 (클릭해서 펼치기)</summary>
+<p style="color:#8b949e; font-size:13px; margin-bottom:16px;">
+💡 각 지표명 옆의 <span class="help-icon">?</span> 아이콘에 마우스를 올리면 상세 설명을 볼 수 있습니다.
+</p>
 
 <h3>종합신호</h3>
 <table class="legend-table">
