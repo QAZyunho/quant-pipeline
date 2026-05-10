@@ -553,29 +553,45 @@ document.addEventListener('click', function(event) {{
 }});
 
 // 테이블 정렬 기능 - 극단적 이상치 사냥을 위한 무기
-let currentSort = {{ column: -1, ascending: true }};
+let currentSort = {{ kr: {{ column: -1, ascending: true }}, us: {{ column: -1, ascending: true }} }};
 
-function sortTable(columnIndex) {{
-    const table = document.querySelector('table');
+function sortTable(columnIndex, market) {{
+    const tables = document.querySelectorAll('table');
+    let table;
+    
+    // 시장별 테이블 선택 (국장: 첫번째, 미장: 두번째)
+    if (market === 'kr') {{
+        table = tables[0];
+    }} else if (market === 'us') {{
+        table = tables[1];
+    }} else {{
+        // 클릭된 헤더가 어느 테이블에 속하는지 자동 감지
+        const clickedElement = event.target.closest('th');
+        table = clickedElement.closest('table');
+        market = Array.from(tables).indexOf(table) === 0 ? 'kr' : 'us';
+    }}
+    
+    if (!table) return;
+    
     const tbody = table.querySelector('tbody');
     const rows = Array.from(tbody.querySelectorAll('tr'));
     
     // 정렬 방향 결정
-    if (currentSort.column === columnIndex) {{
-        currentSort.ascending = !currentSort.ascending;
+    if (currentSort[market].column === columnIndex) {{
+        currentSort[market].ascending = !currentSort[market].ascending;
     }} else {{
-        currentSort.ascending = false; // 첫 클릭은 내림차순 (극값부터)
-        currentSort.column = columnIndex;
+        currentSort[market].ascending = false; // 첫 클릭은 내림차순 (극값부터)
+        currentSort[market].column = columnIndex;
     }}
     
-    // 모든 헤더에서 정렬 표시 제거
+    // 현재 테이블의 모든 헤더에서 정렬 표시 제거
     table.querySelectorAll('th').forEach(th => {{
         th.innerHTML = th.innerHTML.replace(/[↑↓]/g, '');
     }});
     
     // 현재 헤더에 정렬 방향 표시
     const header = table.querySelectorAll('th')[columnIndex];
-    header.innerHTML += currentSort.ascending ? ' ↑' : ' ↓';
+    header.innerHTML += currentSort[market].ascending ? ' ↑' : ' ↓';
     
     // 정렬 로직
     rows.sort((a, b) => {{
@@ -589,6 +605,65 @@ function sortTable(columnIndex) {{
             return match ? parseFloat(match[0]) : 0;
         }};
         
+        // 특수 컬럼별 정렬 로직
+        const getCustomSortValue = (text, colIndex) => {{
+            // 종합신호 (3번 컬럼)
+            if (colIndex === 3) {{
+                if (text.includes('강한매수')) return 5;
+                if (text.includes('약한매수')) return 4;
+                if (text.includes('중립')) return 3;
+                if (text.includes('약한매도')) return 2;
+                if (text.includes('강한매도')) return 1;
+                return 0;
+            }}
+            
+            // 군중심리 (4번 컬럼)
+            if (colIndex === 4) {{
+                if (text.includes('강매수')) return 5;
+                if (text.includes('매수')) return 4;
+                if (text.includes('스윙')) return 3;
+                if (text.includes('관심')) return 2;
+                if (text.includes('보유')) return 1;
+                if (text.includes('회피')) return 0;
+                return -1;
+            }}
+            
+            // 생존등급 (5번 컬럼)
+            if (colIndex === 5) {{
+                if (text.includes('A+')) return 10;
+                if (text.includes('A')) return 9;
+                if (text.includes('B+')) return 8;
+                if (text.includes('B')) return 7;
+                if (text.includes('C+')) return 6;
+                if (text.includes('C')) return 5;
+                if (text.includes('D+')) return 4;
+                if (text.includes('D')) return 3;
+                if (text.includes('F')) return 1;
+                return 0;
+            }}
+            
+            // 체제 (19번 컬럼)
+            if (colIndex === 19) {{
+                if (text.includes('강세')) return 5;
+                if (text.includes('고변동')) return 4;
+                if (text.includes('횡보')) return 3;
+                if (text.includes('노이즈')) return 2;
+                if (text.includes('폭락')) return 1;
+                return 0;
+            }}
+            
+            return null; // 커스텀 정렬이 아닌 경우
+        }};
+        
+        const customA = getCustomSortValue(aVal, columnIndex);
+        const customB = getCustomSortValue(bVal, columnIndex);
+        
+        // 커스텀 정렬 적용
+        if (customA !== null && customB !== null) {{
+            return currentSort[market].ascending ? customA - customB : customB - customA;
+        }}
+        
+        // 숫자 정렬
         const numA = extractNumber(aVal);
         const numB = extractNumber(bVal);
         
@@ -597,18 +672,18 @@ function sortTable(columnIndex) {{
             if (columnIndex >= 16 && columnIndex <= 18) {{ // Z-Score 컬럼들 (수익률Z, 변동폭Z, 거래량Z)
                 const absA = Math.abs(numA);
                 const absB = Math.abs(numB);
-                if (currentSort.ascending) {{
+                if (currentSort[market].ascending) {{
                     return absA - absB;
                 }} else {{
                     return absB - absA; // 극단치(절댓값 큰 것)부터
                 }}
             }} else {{
-                return currentSort.ascending ? numA - numB : numB - numA;
+                return currentSort[market].ascending ? numA - numB : numB - numA;
             }}
         }}
         
-        // 텍스트 정렬
-        return currentSort.ascending ? 
+        // 기본 텍스트 정렬
+        return currentSort[market].ascending ? 
             aVal.localeCompare(bVal) : 
             bVal.localeCompare(aVal);
     }});
@@ -624,13 +699,13 @@ function sortTable(columnIndex) {{
 <div class="meta">생성일시: {now}</div>
 <div class="warn">⚠️ 본 리포트는 <b>보조 참고용</b>입니다. 투자 판단은 본인 책임입니다.</div>
 
-<h2>🇰🇷 한국 시장</h2>
+<h2>🇰🇷 국장</h2>
 {TABLE_HEADER}
 {make_table(kr_results)}
         </tbody>
     </table>
 
-<h2>🇺🇸 미국 시장</h2>
+<h2>🇺🇸 미장</h2>
 {TABLE_HEADER}
 {make_table(us_results)}
         </tbody>
