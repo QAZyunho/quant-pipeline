@@ -53,8 +53,10 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git reset --hard origin/main
-          git add -f reports/md/
+          git fetch origin reports
+          git checkout reports
+          mkdir -p md
+          cp reports/md/*.md md/ 2>/dev/null || true
+          git add md/
           git diff --staged --quiet || git commit -m "📊 일별 분석 리포트: $(date +'%Y-%m-%d')"
-          git push origin main
+          git push origin reports
