@@ -6,3 +6,4 @@ pyarrow>=14.0.0
 requests>=2.31.0
 beautifulsoup4>=4.12.0
 OpenDartReader>=0.0.9
+pytz>=2024.1

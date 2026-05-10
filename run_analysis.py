@@ -10,12 +10,27 @@ import sys
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
+import pytz
 
 import numpy as np
 import pandas as pd
 
-# ── 로깅 ─────────────────────────────────────────────────────
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+# ── 시간대 설정 ──────────────────────────────────────────────
+KST = pytz.timezone('Asia/Seoul')
+
+# ── 로깅 (한국 시간 사용) ─────────────────────────────────────
+class KSTFormatter(logging.Formatter):
+    def formatTime(self, record, datefmt=None):
+        dt = datetime.fromtimestamp(record.created, KST)
+        if datefmt:
+            return dt.strftime(datefmt)
+        return dt.strftime('%Y-%m-%d %H:%M:%S KST')
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(KSTFormatter("%(asctime)s [%(levelname)s] %(message)s"))
+logger.addHandler(handler)
 log = logging.getLogger(__name__)
 
 # ── 경로 ─────────────────────────────────────────────────────
@@ -25,7 +40,8 @@ JSON_DIR = REPORTS_DIR / "json"
 html_DIR.mkdir(parents=True, exist_ok=True)
 JSON_DIR.mkdir(parents=True, exist_ok=True)
 
-TODAY = datetime.today().strftime("%Y-%m-%d")
+# 한국 시간 기준으로 TODAY 설정
+TODAY = datetime.now(KST).strftime("%Y-%m-%d")
 REPORT_PATH = html_DIR / f"{TODAY}.html"
 # ── 관심 종목 (watchlist.json에서 로드) ──────────────────────
 WATCHLIST_PATH = Path("watchlist.json")
@@ -225,7 +241,7 @@ def combined_row(ticker: str, name: str, sig: dict) -> str:
     )
 
 def build_report(kr_results: dict, us_results: dict) -> str:
-    now = datetime.now().strftime("%Y-%m-%d %H:%M KST")
+    now = datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S KST")
 
     def color_return(val: float) -> str:
         color = "#e53935" if val > 0 else "#1e88e5"
@@ -290,6 +306,13 @@ def build_report(kr_results: dict, us_results: dict) -> str:
             pbr = sig.get("pbr", 0)
             roe = sig.get("roe", sig.get("div", 0))  # 미국은 ROE, 한국은 DIV
             div = sig.get("div", 0)
+            
+            # 종합 스코어
+            comp_scores = sig.get("comprehensive_scores", {})
+            swing_score = comp_scores.get("swing", {}).get("score", 0)
+            longterm_score = comp_scores.get("longterm", {}).get("score", 0)
+            longterm_grade = comp_scores.get("longterm", {}).get("grade", "F")
+            recommendation = comp_scores.get("recommendation", "unknown")
 
             def fmt_ratio(v, low_good=True):
                 if v == 0: return "<span style='color:#555'>-</span>"
@@ -298,12 +321,48 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 else:
                     color = "#e53935" if v > 15 else ("#fb8c00" if v > 8 else "#888")
                 return f'<span style="color:{color}">{v}</span>'
+            
+            def fmt_score(score):
+                """스코어를 색깔로 표시 (0-100)"""
+                if score >= 80: color = "#22c55e"  # 초록
+                elif score >= 60: color = "#3b82f6"  # 파랑
+                elif score >= 40: color = "#f59e0b"  # 주황
+                elif score >= 20: color = "#ef4444"  # 빨강
+                else: color = "#6b7280"  # 회색
+                return f'<span style="color:{color};font-weight:bold">{score}</span>'
+            
+            def fmt_grade(grade):
+                """등급을 색깔로 표시"""
+                color_map = {
+                    "A+": "#22c55e", "A": "#3b82f6",
+                    "B+": "#06b6d4", "B": "#8b5cf6",
+                    "C+": "#f59e0b", "C": "#fb8c00",
+                    "D": "#ef4444", "F": "#6b7280"
+                }
+                color = color_map.get(grade, "#6b7280")
+                return f'<span style="color:{color};font-weight:bold">{grade}</span>'
+            
+            def fmt_recommendation(rec):
+                """추천 등급을 색깔과 아이콘으로 표시"""
+                rec_map = {
+                    "strong_buy": ("🚀", "#22c55e", "강매수"),
+                    "buy": ("📈", "#3b82f6", "매수"),
+                    "swing_trade": ("⚡", "#8b5cf6", "스윙"),
+                    "watchlist": ("👁️", "#06b6d4", "관심"),
+                    "hold": ("🤝", "#f59e0b", "보유"),
+                    "avoid": ("🚫", "#ef4444", "회피"),
+                }
+                icon, color, text = rec_map.get(rec, ("❓", "#6b7280", "미지"))
+                return f'<span style="color:{color}">{icon} {text}</span>'
 
             rows += f"""
             <tr>
                 <td><b>{ticker}</b></td>
                 <td>{name}</td>
                 <td>{color_signal(sig['overall'])}</td>
+                <td>{fmt_recommendation(recommendation)}</td>
+                <td>{fmt_score(swing_score)}</td>
+                <td>{fmt_score(longterm_score)} {fmt_grade(longterm_grade)}</td>
                 <td>{sig['close']:,.0f}</td>
                 <td>{color_return(sig['returns_1d'])}</td>
                 <td>{color_rsi(sig['rsi'])}</td>
@@ -326,6 +385,9 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th><th>종합신호</th>
+                <th title="스윙+장기 종합 투자 추천">최종추천</th>
+                <th title="단기 진입 타이밍 점수 (0-100)">스윙점수</th>
+                <th title="장기 투자 가치 점수 (0-100)">장기점수</th>
                 <th>현재가</th><th>등락률</th>
                 <th title="14일 기준. 35↓과매도 65↑과매수">RSI</th>
                 <th title="25 이상이면 추세 존재">ADX</th>
@@ -460,7 +522,7 @@ def main():
     # 한국
     log.info("📡 한국 데이터 수집 중...")
     import time
-    from fundamental import enrich_with_fundamental
+    from fundamental import enrich_with_fundamental, calculate_comprehensive_scores
     for ticker, name in WATCHLIST["KR"].items():
         try:
             df = fetch_kr(ticker)
@@ -472,6 +534,11 @@ def main():
             # 펀더멘털 + 목표주가 추가
             fund = enrich_with_fundamental(ticker, "KR", sig["close"])
             sig.update(fund)
+            
+            # 종합 스코어 계산
+            comprehensive = calculate_comprehensive_scores(ticker, "KR", sig, fund)
+            sig["comprehensive_scores"] = comprehensive
+            
             kr_results[ticker] = (name, sig)
             log.info(f"[KR] {ticker} {name}: {sig['overall']}")
             time.sleep(0.5)
@@ -492,6 +559,11 @@ def main():
             # 펀더멘털 추가
             fund = enrich_with_fundamental(ticker, "US", sig["close"])
             sig.update(fund)
+            
+            # 종합 스코어 계산
+            comprehensive = calculate_comprehensive_scores(ticker, "US", sig, fund)
+            sig["comprehensive_scores"] = comprehensive
+            
             us_results[ticker] = (name, sig)
             log.info(f"[US] {ticker} {name}: {sig['overall']}")
             time.sleep(0.3)

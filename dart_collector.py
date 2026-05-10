@@ -35,6 +35,12 @@ REPORT_CODES = {
     "q3":     "11014",  # 3분기보고서
 }
 
+# 우선주 → 보통주 매핑
+PREFERRED_MAP = {
+    "000155": "000150",  # 두산우 → 두산
+    "005935": "005930",  # 삼성전자우 → 삼성전자
+}
+
 # 재무제표 계정명 매핑
 ACCOUNT_MAP = {
     "매출액":                "revenue",
@@ -48,6 +54,10 @@ ACCOUNT_MAP = {
     "부채총계":               "total_liabilities",
     "자본총계":               "total_equity",
     "자본금":                 "capital",
+    "유동자산":               "current_assets",
+    "유동부채":               "current_liabilities",
+    "이자비용":               "interest_expense",
+    "금융비용":               "interest_expense",
 }
 
 
@@ -55,13 +65,20 @@ def get_dart_financials(
     ticker: str,
     api_key: Optional[str] = None,
     year: Optional[int] = None,
+    include_previous: bool = True,
 ) -> dict:
     """
     OpenDartReader로 재무제표 핵심 지표 수집.
     7일 캐시 적용 — 재무제표는 분기별 데이터라 매일 바뀌지 않음.
+    
+    Args:
+        include_previous: True면 전년도 데이터도 함께 수집 (성장률 계산용)
     """
+    # ── 우선주 → 보통주 변환 ──────────────────────────────────
+    dart_ticker = PREFERRED_MAP.get(ticker, ticker)
+    
     # ── 캐시 확인 ────────────────────────────────────────────
-    cache_path = CACHE_DIR / f"dart_{ticker}.json"
+    cache_path = CACHE_DIR / f"dart_{dart_ticker}.json"
     if cache_path.exists():
         age = time.time() - cache_path.stat().st_mtime
         if age < 7 * 86400:  # 7일 이내
@@ -87,7 +104,42 @@ def get_dart_financials(
         now = datetime.today()
         year = now.year - 1 if now.month >= 4 else now.year - 2
 
-    # ── 연결재무제표 시도 → 별도재무제표 fallback ──────────────
+    # 최종 결과
+    result = {}
+
+    # ── 현재 연도 데이터 수집 ──────────────────────────────────
+    current_data = _get_year_data(dart, dart_ticker, year)
+    if current_data:
+        result.update(current_data)
+        result["year"] = year
+
+    # ── 전년도 데이터 수집 (성장률 계산용) ─────────────────────
+    if include_previous and current_data:
+        prev_year = year - 1
+        prev_data = _get_year_data(dart, dart_ticker, prev_year)
+        if prev_data:
+            result["previous_year"] = prev_year
+            result["previous"] = prev_data
+            result = _calc_growth_rates(result)
+
+    if result:
+        # 캐시 저장
+        cache_path.write_text(
+            json.dumps(result, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+        return result
+
+    log.warning(f"[DART] {ticker} 재무제표 수집 실패")
+    
+    # 우선주인 경우 로그에 변환 정보 추가
+    if ticker in PREFERRED_MAP:
+        log.info(f"[DART] {ticker} → {dart_ticker} 변환하여 조회했으나 실패")
+    return {}
+
+
+def _get_year_data(dart, ticker: str, year: int) -> dict:
+    """특정 연도의 재무제표 데이터 수집."""
     attempts = [
         ("연간",      "11011", "CFS"),
         ("반기",      "11012", "CFS"),
@@ -102,21 +154,13 @@ def get_dart_financials(
             if df is not None and not df.empty:
                 log.info(f"[DART] {ticker} {year}년 {report_type} 수집 완료")
                 result = _parse_finstate(df)
-                result["year"]        = year
                 result["report_type"] = report_type
                 result = _calc_ratios(result)
-
-                # 캐시 저장
-                cache_path.write_text(
-                    json.dumps(result, ensure_ascii=False, indent=2),
-                    encoding="utf-8"
-                )
                 return result
         except Exception as e:
-            log.debug(f"[DART] {ticker} {report_type} 실패: {e}")
+            log.debug(f"[DART] {ticker} {year}년 {report_type} 실패: {e}")
             continue
-
-    log.warning(f"[DART] {ticker} 재무제표 수집 실패 (모든 시도 소진)")
+    
     return {}
 
 
@@ -140,18 +184,61 @@ def _parse_finstate(df) -> dict:
 
 def _calc_ratios(data: dict) -> dict:
     """핵심 재무비율 계산."""
-    rev    = data.get("revenue", 0)
-    op     = data.get("operating_income", 0)
-    net    = data.get("net_income", 0)
-    assets = data.get("total_assets", 0)
-    liab   = data.get("total_liabilities", 0)
-    equity = data.get("total_equity", 0)
+    rev         = data.get("revenue", 0)
+    op          = data.get("operating_income", 0)
+    net         = data.get("net_income", 0)
+    assets      = data.get("total_assets", 0)
+    liab        = data.get("total_liabilities", 0)
+    equity      = data.get("total_equity", 0)
+    cur_assets  = data.get("current_assets", 0)
+    cur_liab    = data.get("current_liabilities", 0)
+    interest    = data.get("interest_expense", 0)
 
     data["roe"]        = round(net / equity * 100, 2) if equity else 0.0
     data["roa"]        = round(net / assets * 100, 2) if assets else 0.0
     data["debt_ratio"] = round(liab / equity * 100, 2) if equity else 0.0
     data["op_margin"]  = round(op / rev * 100, 2) if rev else 0.0
     data["net_margin"] = round(net / rev * 100, 2) if rev else 0.0
+    
+    # 안정성 지표
+    data["current_ratio"] = round(cur_assets / cur_liab * 100, 1) if cur_liab else 0.0
+    data["interest_coverage"] = round(op / interest, 1) if interest > 0 else 999.9
+    
+    return data
+
+
+def _calc_growth_rates(data: dict) -> dict:
+    """전년 대비 성장률 계산."""
+    current = data
+    previous = data.get("previous", {})
+    
+    if not previous:
+        return data
+    
+    # 매출 성장률
+    cur_rev = current.get("revenue", 0)
+    prev_rev = previous.get("revenue", 0)
+    if prev_rev > 0:
+        data["revenue_growth"] = round((cur_rev - prev_rev) / prev_rev * 100, 1)
+    else:
+        data["revenue_growth"] = 0.0
+    
+    # 영업이익 성장률
+    cur_op = current.get("operating_income", 0)
+    prev_op = previous.get("operating_income", 0)
+    if prev_op > 0:
+        data["operating_growth"] = round((cur_op - prev_op) / prev_op * 100, 1)
+    else:
+        data["operating_growth"] = 0.0 if cur_op >= 0 else -999.0
+    
+    # 순이익 성장률
+    cur_net = current.get("net_income", 0)
+    prev_net = previous.get("net_income", 0)
+    if prev_net > 0:
+        data["net_growth"] = round((cur_net - prev_net) / prev_net * 100, 1)
+    else:
+        data["net_growth"] = 0.0 if cur_net >= 0 else -999.0
+    
     return data
 
 
@@ -175,13 +262,20 @@ def format_dart_html(data: dict) -> str:
         return f'<span style="color:{color}">{v:+.1f}%</span>'
 
     rows = [
-        ("매출액",    _fmt(data.get("revenue", 0))),
-        ("영업이익",  _fmt(data.get("operating_income", 0))),
-        ("순이익",    _fmt(data.get("net_income", 0))),
-        ("영업이익률", _pct(data.get("op_margin", 0))),
-        ("ROE",       _pct(data.get("roe", 0))),
-        ("ROA",       _pct(data.get("roa", 0))),
-        ("부채비율",  f"{data.get('debt_ratio', 0):.1f}%"),
+        ("매출액",      _fmt(data.get("revenue", 0))),
+        ("영업이익",    _fmt(data.get("operating_income", 0))),
+        ("순이익",      _fmt(data.get("net_income", 0))),
+        ("───────",    "───────"),
+        ("매출성장률",  _pct(data.get("revenue_growth", 0))),
+        ("영업성장률",  _pct(data.get("operating_growth", 0))),
+        ("───────",    "───────"),
+        ("영업이익률",  _pct(data.get("op_margin", 0))),
+        ("ROE",         _pct(data.get("roe", 0))),
+        ("ROA",         _pct(data.get("roa", 0))),
+        ("───────",    "───────"),
+        ("부채비율",    f"{data.get('debt_ratio', 0):.1f}%"),
+        ("유동비율",    f"{data.get('current_ratio', 0):.1f}%"),
+        ("이자보상배율", f"{data.get('interest_coverage', 0):.1f}"),
     ]
 
     inner = "".join(
