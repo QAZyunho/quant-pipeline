@@ -6,25 +6,50 @@
 <title>퀀트 리포트 2026-05-10</title>
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-         background: #0d1117; color: #c9d1d9; padding: 24px; }
-  h1   { color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
-  h2   { color: #e6edf3; margin-top: 32px; }
-  h3   { color: #8b949e; }
-  .meta { color: #8b949e; font-size: 0.9em; margin-bottom: 24px; }
+         background: #0d1117; color: #c9d1d9; padding: 24px; font-size: 15px; }
+  h1   { color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; font-size: 28px; }
+  h2   { color: #e6edf3; margin-top: 32px; font-size: 22px; }
+  h3   { color: #8b949e; font-size: 18px; }
+  h4   { color: #e6edf3; font-size: 16px; margin-top: 24px; }
+  .meta { color: #8b949e; font-size: 14px; margin-bottom: 24px; }
   .warn { background: #2d1b00; border-left: 4px solid #fb8c00;
-           padding: 8px 16px; border-radius: 4px; margin-bottom: 24px; }
+           padding: 12px 20px; border-radius: 4px; margin-bottom: 24px; font-size: 14px; }
   table { border-collapse: collapse; width: 100%; margin-bottom: 16px;
-           font-size: 0.9em; }
-  th    { background: #161b22; color: #8b949e; padding: 8px 12px;
+           font-size: 13px; }
+  th    { background: #161b22; color: #8b949e; padding: 10px 14px;
            text-align: left; border-bottom: 1px solid #30363d;
-           cursor: help; }
-  td    { padding: 7px 12px; border-bottom: 1px solid #21262d; }
+           font-size: 13px; font-weight: 600; }
+  td    { padding: 9px 14px; border-bottom: 1px solid #21262d; }
   tr:hover td { background: #161b22; }
   details { margin-top: 32px; }
-  summary { cursor: pointer; color: #58a6ff; font-size: 1.1em;
-             font-weight: bold; padding: 8px 0; }
+  summary { cursor: pointer; color: #58a6ff; font-size: 16px;
+             font-weight: 600; padding: 8px 0; }
+  summary:hover { color: #79c0ff; }
   .legend-table td, .legend-table th {
-    font-size: 0.85em; padding: 5px 10px; }
+    font-size: 13px; padding: 8px 14px; border-bottom: 1px solid #30363d; }
+  .legend-table th { background: #0d1117; color: #f0f6fc; font-weight: 600; }
+  
+  /* 도움말 아이콘 스타일 */
+  .help-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #0969da;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    margin-left: 4px;
+    cursor: help;
+    vertical-align: middle;
+  }
+  .help-icon:hover {
+    background: #1f6feb;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+  }
   .footer { color: #8b949e; font-size: 0.8em; margin-top: 40px;
              border-top: 1px solid #30363d; padding-top: 12px; }
 </style>
@@ -32,7 +57,7 @@
 <body>
 
 <h1>📊 퀀트 일별 분석 리포트</h1>
-<div class="meta">생성일시: 2026-05-10 16:47:10 KST</div>
+<div class="meta">생성일시: 2026-05-10 17:44:03 KST</div>
 <div class="warn">⚠️ 본 리포트는 <b>보조 참고용</b>입니다. 투자 판단은 본인 책임입니다.</div>
 
 <h2>🇰🇷 한국 시장</h2>
@@ -41,29 +66,29 @@
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th><th>종합신호</th>
-                <th title="스윙+장기 종합 투자 추천">최종추천</th>
-                <th title="단기 진입 타이밍 점수 (0-100)">스윙점수</th>
-                <th title="장기 투자 가치 점수 (0-100)">장기점수</th>
+                <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
+                <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
+                <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
                 <th>현재가</th><th>등락률</th>
-                <th title="14일 기준. 35↓과매도 65↑과매수">RSI</th>
-                <th title="25 이상이면 추세 존재">ADX</th>
-                <th title="1/3/6개월 평균 수익률">모멘텀</th>
-                <th title="매수/매도 신호 개수">매수/매도</th>
-                <th title="주가수익비율. 낮을수록 저평가">PER</th>
-                <th title="주가순자산비율. 1 이하면 저평가">PBR</th>
-                <th title="자기자본이익률. 높을수록 수익성 좋음">ROE%</th>
-                <th title="배당수익률">배당%</th>
-                <th title="수익률 Z-score">수익률Z</th>
-                <th title="변동폭 Z-score">변동폭Z</th>
-                <th title="거래량 Z-score">거래량Z</th>
-                <th>체제</th>
+                <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
+                <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
+                <th>모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
+                <th>매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
+                <th>PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
+                <th>PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
+                <th>ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
+                <th>배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
+                <th>수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
+                <th>변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
+                <th>거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
+                <th>체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
             </tr>
         </thead>
         <tbody>
     
 
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=005930" target="_blank" style="color:#58a6ff">005930</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/samsung-electronics" target="_blank" style="color:#58a6ff">005930</a></b></td>
                 <td>삼성전자</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -85,7 +110,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000660" target="_blank" style="color:#58a6ff">000660</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/sk-hynix" target="_blank" style="color:#58a6ff">000660</a></b></td>
                 <td>SK하이닉스</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -107,7 +132,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=035420" target="_blank" style="color:#58a6ff">035420</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/naver-corp" target="_blank" style="color:#58a6ff">035420</a></b></td>
                 <td>NAVER</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -129,7 +154,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=005380" target="_blank" style="color:#58a6ff">005380</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/hyundai-motor-co" target="_blank" style="color:#58a6ff">005380</a></b></td>
                 <td>현대차</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -151,7 +176,7 @@
                 <td>🐂 강세</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=336260" target="_blank" style="color:#58a6ff">336260</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-336260" target="_blank" style="color:#58a6ff">336260</a></b></td>
                 <td>두산퓨얼셀</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -173,7 +198,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000880" target="_blank" style="color:#58a6ff">000880</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-000880" target="_blank" style="color:#58a6ff">000880</a></b></td>
                 <td>한화</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -195,7 +220,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=375500" target="_blank" style="color:#58a6ff">375500</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-375500" target="_blank" style="color:#58a6ff">375500</a></b></td>
                 <td>DL이앤씨</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -217,7 +242,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=071970" target="_blank" style="color:#58a6ff">071970</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-071970" target="_blank" style="color:#58a6ff">071970</a></b></td>
                 <td>HD현대마린엔진</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#06b6d4">👁️ 관심</span></td>
@@ -239,7 +264,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=003550" target="_blank" style="color:#58a6ff">003550</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-003550" target="_blank" style="color:#58a6ff">003550</a></b></td>
                 <td>LG</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -261,7 +286,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=402340" target="_blank" style="color:#58a6ff">402340</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-402340" target="_blank" style="color:#58a6ff">402340</a></b></td>
                 <td>SK스퀘어</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -283,7 +308,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=006800" target="_blank" style="color:#58a6ff">006800</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-006800" target="_blank" style="color:#58a6ff">006800</a></b></td>
                 <td>미래에셋증권</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -305,7 +330,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=039490" target="_blank" style="color:#58a6ff">039490</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-039490" target="_blank" style="color:#58a6ff">039490</a></b></td>
                 <td>키움증권</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -327,7 +352,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=006260" target="_blank" style="color:#58a6ff">006260</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-006260" target="_blank" style="color:#58a6ff">006260</a></b></td>
                 <td>LS</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -349,7 +374,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000155" target="_blank" style="color:#58a6ff">000155</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/doosan-corp-pref" target="_blank" style="color:#58a6ff">000155</a></b></td>
                 <td>두산우</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -371,7 +396,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=329180" target="_blank" style="color:#58a6ff">329180</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-329180" target="_blank" style="color:#58a6ff">329180</a></b></td>
                 <td>HD현대중공업</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -393,7 +418,7 @@
                 <td>💥 폭락</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=010060" target="_blank" style="color:#58a6ff">010060</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-010060" target="_blank" style="color:#58a6ff">010060</a></b></td>
                 <td>OCI홀딩스</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -415,7 +440,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=277810" target="_blank" style="color:#58a6ff">277810</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-277810" target="_blank" style="color:#58a6ff">277810</a></b></td>
                 <td>레인보우로보틱스</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -437,7 +462,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=454910" target="_blank" style="color:#58a6ff">454910</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-454910" target="_blank" style="color:#58a6ff">454910</a></b></td>
                 <td>두산로보틱스</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -459,7 +484,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=096770" target="_blank" style="color:#58a6ff">096770</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-096770" target="_blank" style="color:#58a6ff">096770</a></b></td>
                 <td>SK이노베이션</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -481,7 +506,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=003490" target="_blank" style="color:#58a6ff">003490</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-003490" target="_blank" style="color:#58a6ff">003490</a></b></td>
                 <td>대한항공</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -503,7 +528,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=034020" target="_blank" style="color:#58a6ff">034020</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-034020" target="_blank" style="color:#58a6ff">034020</a></b></td>
                 <td>두산에너빌리티</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -525,7 +550,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=028260" target="_blank" style="color:#58a6ff">028260</a></b></td>
+                <td><b><a href="https://kr.investing.com/equities/kr-stock-028260" target="_blank" style="color:#58a6ff">028260</a></b></td>
                 <td>삼성물산</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -555,29 +580,29 @@
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th><th>종합신호</th>
-                <th title="스윙+장기 종합 투자 추천">최종추천</th>
-                <th title="단기 진입 타이밍 점수 (0-100)">스윙점수</th>
-                <th title="장기 투자 가치 점수 (0-100)">장기점수</th>
+                <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
+                <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
+                <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
                 <th>현재가</th><th>등락률</th>
-                <th title="14일 기준. 35↓과매도 65↑과매수">RSI</th>
-                <th title="25 이상이면 추세 존재">ADX</th>
-                <th title="1/3/6개월 평균 수익률">모멘텀</th>
-                <th title="매수/매도 신호 개수">매수/매도</th>
-                <th title="주가수익비율. 낮을수록 저평가">PER</th>
-                <th title="주가순자산비율. 1 이하면 저평가">PBR</th>
-                <th title="자기자본이익률. 높을수록 수익성 좋음">ROE%</th>
-                <th title="배당수익률">배당%</th>
-                <th title="수익률 Z-score">수익률Z</th>
-                <th title="변동폭 Z-score">변동폭Z</th>
-                <th title="거래량 Z-score">거래량Z</th>
-                <th>체제</th>
+                <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
+                <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
+                <th>모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
+                <th>매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
+                <th>PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
+                <th>PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
+                <th>ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
+                <th>배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
+                <th>수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
+                <th>변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
+                <th>거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
+                <th>체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
             </tr>
         </thead>
         <tbody>
     
 
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AAPL" target="_blank" style="color:#58a6ff">AAPL</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/apple-computer-inc" target="_blank" style="color:#58a6ff">AAPL</a></b></td>
                 <td>Apple</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -599,7 +624,7 @@
                 <td>🐂 강세</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/NVDA" target="_blank" style="color:#58a6ff">NVDA</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/nvidia-corp" target="_blank" style="color:#58a6ff">NVDA</a></b></td>
                 <td>NVIDIA</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -621,7 +646,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/MSFT" target="_blank" style="color:#58a6ff">MSFT</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/microsoft-corp" target="_blank" style="color:#58a6ff">MSFT</a></b></td>
                 <td>Microsoft</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -643,7 +668,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/GOOGL" target="_blank" style="color:#58a6ff">GOOGL</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/google-inc-c" target="_blank" style="color:#58a6ff">GOOGL</a></b></td>
                 <td>Alphabet A</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -665,7 +690,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/SPY" target="_blank" style="color:#58a6ff">SPY</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/spdr-s-p-500" target="_blank" style="color:#58a6ff">SPY</a></b></td>
                 <td>S&P500 ETF</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -687,7 +712,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AMZN" target="_blank" style="color:#58a6ff">AMZN</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/amazon-com-inc" target="_blank" style="color:#58a6ff">AMZN</a></b></td>
                 <td>Amazon</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -709,7 +734,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/META" target="_blank" style="color:#58a6ff">META</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/facebook-inc" target="_blank" style="color:#58a6ff">META</a></b></td>
                 <td>Meta</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -731,7 +756,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/RKLB" target="_blank" style="color:#58a6ff">RKLB</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/rklb" target="_blank" style="color:#58a6ff">RKLB</a></b></td>
                 <td>Rocket Lab</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -753,7 +778,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/FTNT" target="_blank" style="color:#58a6ff">FTNT</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/ftnt" target="_blank" style="color:#58a6ff">FTNT</a></b></td>
                 <td>Fortinet</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -775,7 +800,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AMD" target="_blank" style="color:#58a6ff">AMD</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/amd" target="_blank" style="color:#58a6ff">AMD</a></b></td>
                 <td>AMD</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -797,7 +822,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/INTC" target="_blank" style="color:#58a6ff">INTC</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/intc" target="_blank" style="color:#58a6ff">INTC</a></b></td>
                 <td>Intel</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -819,7 +844,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/QCOM" target="_blank" style="color:#58a6ff">QCOM</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/qcom" target="_blank" style="color:#58a6ff">QCOM</a></b></td>
                 <td>Qualcomm</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -841,7 +866,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AA" target="_blank" style="color:#58a6ff">AA</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/aa" target="_blank" style="color:#58a6ff">AA</a></b></td>
                 <td>Alcoa</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -863,7 +888,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/LITE" target="_blank" style="color:#58a6ff">LITE</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/lite" target="_blank" style="color:#58a6ff">LITE</a></b></td>
                 <td>Lumentum</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -885,7 +910,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/CRWV" target="_blank" style="color:#58a6ff">CRWV</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/crwv" target="_blank" style="color:#58a6ff">CRWV</a></b></td>
                 <td>Core Weave</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -907,7 +932,7 @@
                 <td>💥 폭락</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/GRAB" target="_blank" style="color:#58a6ff">GRAB</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/grab" target="_blank" style="color:#58a6ff">GRAB</a></b></td>
                 <td>Grab holdings</td>
                 <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -929,7 +954,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/IONQ" target="_blank" style="color:#58a6ff">IONQ</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/ionq" target="_blank" style="color:#58a6ff">IONQ</a></b></td>
                 <td>IonQ</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -951,7 +976,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/POET" target="_blank" style="color:#58a6ff">POET</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/poet" target="_blank" style="color:#58a6ff">POET</a></b></td>
                 <td>Poet Technologies</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -973,7 +998,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/JOBY" target="_blank" style="color:#58a6ff">JOBY</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/joby" target="_blank" style="color:#58a6ff">JOBY</a></b></td>
                 <td>Joby Aviation</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -995,7 +1020,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/CAT" target="_blank" style="color:#58a6ff">CAT</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/cat" target="_blank" style="color:#58a6ff">CAT</a></b></td>
                 <td>Caterpillar</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -1017,7 +1042,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/COIN" target="_blank" style="color:#58a6ff">COIN</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/coin" target="_blank" style="color:#58a6ff">COIN</a></b></td>
                 <td>Coinbase</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -1039,7 +1064,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/BE" target="_blank" style="color:#58a6ff">BE</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/be" target="_blank" style="color:#58a6ff">BE</a></b></td>
                 <td>Bloom Energy</td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -1061,7 +1086,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/OKLO" target="_blank" style="color:#58a6ff">OKLO</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/oklo" target="_blank" style="color:#58a6ff">OKLO</a></b></td>
                 <td>Oklo</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -1083,7 +1108,7 @@
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/MU" target="_blank" style="color:#58a6ff">MU</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/mu" target="_blank" style="color:#58a6ff">MU</a></b></td>
                 <td>Micron Technology</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
@@ -1105,7 +1130,7 @@
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AVGO" target="_blank" style="color:#58a6ff">AVGO</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/avgo" target="_blank" style="color:#58a6ff">AVGO</a></b></td>
                 <td>Broadcom</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
@@ -1127,7 +1152,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/IREN" target="_blank" style="color:#58a6ff">IREN</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/iren" target="_blank" style="color:#58a6ff">IREN</a></b></td>
                 <td>Irene</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -1149,7 +1174,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/BN" target="_blank" style="color:#58a6ff">BN</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/bn" target="_blank" style="color:#58a6ff">BN</a></b></td>
                 <td>Brookfield</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -1171,7 +1196,7 @@
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/KORU" target="_blank" style="color:#58a6ff">KORU</a></b></td>
+                <td><b><a href="https://www.investing.com/equities/koru" target="_blank" style="color:#58a6ff">KORU</a></b></td>
                 <td>Korea 3x ETF</td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
@@ -1205,8 +1230,8 @@
                 style="width:100%; height:100%; border:none;"></iframe>
     </div>
     <div style="margin-top:8px; text-align:center;">
-        <a href="https://finance.naver.com/item/fchart.naver?code=005930" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
-            📊 상세 차트 보기
+        <a href="https://kr.investing.com/equities/samsung-electronics" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
+            📊 Investing.com 상세 차트
         </a>
     </div>
 </div>
@@ -1218,8 +1243,8 @@
                 style="width:100%; height:100%; border:none;"></iframe>
     </div>
     <div style="margin-top:8px; text-align:center;">
-        <a href="https://finance.naver.com/item/fchart.naver?code=000660" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
-            📊 상세 차트 보기
+        <a href="https://kr.investing.com/equities/sk-hynix" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
+            📊 Investing.com 상세 차트
         </a>
     </div>
 </div>
@@ -1231,8 +1256,8 @@
                 style="width:100%; height:100%; border:none;"></iframe>
     </div>
     <div style="margin-top:8px; text-align:center;">
-        <a href="https://finance.yahoo.com/chart/AAPL" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
-            📊 상세 차트 보기
+        <a href="https://www.investing.com/equities/apple-computer-inc" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
+            📊 Investing.com 상세 차트
         </a>
     </div>
 </div>
@@ -1244,15 +1269,18 @@
                 style="width:100%; height:100%; border:none;"></iframe>
     </div>
     <div style="margin-top:8px; text-align:center;">
-        <a href="https://finance.yahoo.com/chart/NVDA" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
-            📊 상세 차트 보기
+        <a href="https://www.investing.com/equities/nvidia-corp" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
+            📊 Investing.com 상세 차트
         </a>
     </div>
 </div>
 </div>
 
 <details>
-<summary>📖 지표 설명 (클릭해서 펼치기)</summary>
+<summary>📖 상세 가이드 (클릭해서 펼치기)</summary>
+<p style="color:#8b949e; font-size:13px; margin-bottom:16px;">
+💡 각 지표명 옆의 <span class="help-icon">?</span> 아이콘에 마우스를 올리면 상세 설명을 볼 수 있습니다.
+</p>
 
 <h3>종합신호</h3>
 <table class="legend-table">
