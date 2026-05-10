@@ -248,13 +248,12 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         return f'<span style="color:{color}">{val:+.2f}%</span>'
 
     def color_rsi(val: float) -> str:
-        if val > 65:
-            color = "#e53935"
-        elif val < 35:
-            color = "#1e88e5"
+        if val >= 70:
+            return f'<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">{val}</span>'
+        elif val <= 30:
+            return f'<span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">{val}</span>'
         else:
-            color = "#888"
-        return f'<span style="color:{color}">{val}</span>'
+            return f'<span style="color:#6b7280">{val}</span>'
 
     def color_adx(val: float) -> str:
         color = "#e53935" if val >= 25 else "#888"
@@ -265,15 +264,14 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         return f'<span style="color:{color}">{val:+.2f}%</span>'
 
     def color_z(val: float) -> str:
-        if val > 2:
-            color = "#e53935"
-        elif val < -2:
-            color = "#1e88e5"
+        if val >= 2:
+            return f'🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">{val:+.2f}</span>'
+        elif val <= -2:
+            return f'💀<span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">{val:+.2f}</span>'
         elif abs(val) > 1:
-            color = "#fb8c00"
+            return f'<span style="color:#fb8c00;font-weight:bold">{val:+.2f}</span>'
         else:
-            color = "#888"
-        return f'<span style="color:{color}">{val:+.2f}</span>'
+            return f'<span style="color:#6b7280">{val:+.2f}</span>'
 
     def color_signal(overall: str) -> str:
         colors = {
@@ -343,44 +341,33 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 return f'<span style="color:{color};font-weight:bold">{grade}</span>'
             
             def fmt_recommendation(rec):
-                """추천 등급을 색깔과 아이콘으로 표시"""
+                """추천을 역지표로 표시 (군중심리 체온계)"""
                 rec_map = {
-                    "strong_buy": ("🚀", "#22c55e", "강매수"),
-                    "buy": ("📈", "#3b82f6", "매수"),
+                    "strong_buy": ("🚀⚠️", "#ef4444", "강매수(꼭대기?)"),
+                    "buy": ("📈⚠️", "#f59e0b", "매수(주의)"),
                     "swing_trade": ("⚡", "#8b5cf6", "스윙"),
                     "watchlist": ("👁️", "#06b6d4", "관심"),
                     "hold": ("🤝", "#f59e0b", "보유"),
-                    "avoid": ("🚫", "#ef4444", "회피"),
+                    "avoid": ("🚫", "#6b7280", "회피"),
                 }
                 icon, color, text = rec_map.get(rec, ("❓", "#6b7280", "미지"))
                 return f'<span style="color:{color}">{icon} {text}</span>'
 
-            # 기존 차트 링크 (TradingView 등)
+            # 재무제표 링크
             if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
-                chart_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
-            else:  # 미국 주식
-                chart_link = f"https://finance.yahoo.com/chart/{ticker}"
-            
-            # investing.com 차트 링크 추가
-            if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
-                investing_link = f"https://kr.investing.com/search/?q={ticker}"
-                # 재무제표 링크 - 한국
                 finance_link = f"https://finance.naver.com/item/main.naver?code={ticker}"
             else:  # 미국 주식
-                investing_link = f"https://www.investing.com/search/?q={ticker}"
-                # 재무제표 링크 - 미국
                 finance_link = f"https://finance.yahoo.com/quote/{ticker}/financials"
             
             rows += f"""
             <tr>
-                <td><b><a href="{chart_link}" target="_blank" style="color:#58a6ff">{ticker}</a></b></td>
+                <td><b>{ticker}</b></td>
                 <td>{name}</td>
-                <td><a href="{investing_link}" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('{ticker}')">📋▼</span>
                         <div id="finance_{ticker}" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            {"<a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=" + ticker + "' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>" if ticker.isdigit() else ""}
+                            {"<a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>" if ticker.isdigit() else ""}
                             <a href="{finance_link}" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             {"<a href='https://finance.naver.com/item/coinfo.naver?code=" + ticker + "' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>" if ticker.isdigit() else ""}
                         </div>
@@ -388,8 +375,7 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 </td>
                 <td>{color_signal(sig['overall'])}</td>
                 <td>{fmt_recommendation(recommendation)}</td>
-                <td>{fmt_score(swing_score)}</td>
-                <td>{fmt_score(longterm_score)} {fmt_grade(longterm_grade)}</td>
+                <td>{fmt_grade(longterm_grade)}</td>
                 <td>{sig['close']:,.0f}</td>
                 <td>{color_return(sig['returns_1d'])}</td>
                 <td>{color_rsi(sig['rsi'])}</td>
@@ -412,12 +398,10 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th>
-                <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
                 <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
                 <th>종합신호</th>
-                <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
-                <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
-                <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
+                <th>군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
+                <th>생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
                 <th>현재가</th><th>등락률</th>
                 <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
                 <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
@@ -598,6 +582,23 @@ document.addEventListener('click', function(event) {{
     </div>
     
     <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📊 Yahoo Finance</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            미국 주식 재무제표와 차트 분석을 위한 필수 금융 플랫폼
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://finance.yahoo.com" target="_blank" style="display:inline-block; background:#6f42c1; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🌐 Yahoo Finance 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>미국 주식 재무제표 및 실적 분석</li>
+            <li>인터랙티브 차트 및 기술적 지표</li>
+            <li>실시간 뉴스 및 애널리스트 리포트</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
         <h4 style="margin:0 0 12px 0; color:#e6edf3;">📈 위폴 주식 커뮤니티</h4>
         <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
             개인투자자들의 실전 투자 경험과 종목 분석을 공유하는 커뮤니티
@@ -611,6 +612,23 @@ document.addEventListener('click', function(event) {{
             <li>실시간 종목 토론 및 의견 교환</li>
             <li>개인투자자 관점의 투자 아이디어</li>
             <li>시장 동향 및 투자 전략 공유</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">🤖 Gemini AI</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            투자 아이디어 검증과 심층 분석을 위한 AI 어시스턴트
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://gemini.google.com/gem/2fcc2fede5c6" target="_blank" style="display:inline-block; background:#f59e0b; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🧠 Gemini 대화 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>종목 분석 및 투자 전략 검증</li>
+            <li>재무데이터 해석 및 트렌드 분석</li>
+            <li>리스크 요인 및 시나리오 플래닝</li>
         </ul>
     </div>
 </div>
