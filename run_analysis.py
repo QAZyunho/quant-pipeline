@@ -364,14 +364,28 @@ def build_report(kr_results: dict, us_results: dict) -> str:
             # investing.com 차트 링크 추가
             if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
                 investing_link = f"https://kr.investing.com/search/?q={ticker}"
+                # 재무제표 링크 - 한국
+                finance_link = f"https://finance.naver.com/item/main.naver?code={ticker}"
             else:  # 미국 주식
                 investing_link = f"https://www.investing.com/search/?q={ticker}"
+                # 재무제표 링크 - 미국
+                finance_link = f"https://finance.yahoo.com/quote/{ticker}/financials"
             
             rows += f"""
             <tr>
                 <td><b><a href="{chart_link}" target="_blank" style="color:#58a6ff">{ticker}</a></b></td>
                 <td>{name}</td>
                 <td><a href="{investing_link}" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('{ticker}')">📋▼</span>
+                        <div id="finance_{ticker}" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            {"<a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=" + ticker + "' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>" if ticker.isdigit() else ""}
+                            <a href="{finance_link}" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            {"<a href='https://finance.naver.com/item/coinfo.naver?code=" + ticker + "' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>" if ticker.isdigit() else ""}
+                        </div>
+                    </div>
+                </td>
                 <td>{color_signal(sig['overall'])}</td>
                 <td>{fmt_recommendation(recommendation)}</td>
                 <td>{fmt_score(swing_score)}</td>
@@ -399,6 +413,7 @@ def build_report(kr_results: dict, us_results: dict) -> str:
             <tr>
                 <th>티커</th><th>종목명</th>
                 <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
+                <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
                 <th>종합신호</th>
                 <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
                 <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
@@ -522,6 +537,25 @@ def build_report(kr_results: dict, us_results: dict) -> str:
   .footer {{ color: #8b949e; font-size: 0.8em; margin-top: 40px;
              border-top: 1px solid #30363d; padding-top: 12px; }}
 </style>
+<script>
+function toggleFinanceMenu(ticker) {{
+    const menu = document.getElementById('finance_' + ticker);
+    const isVisible = menu.style.display === 'block';
+    
+    // 모든 메뉴 숨기기
+    document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
+    
+    // 클릭한 메뉴만 토글
+    menu.style.display = isVisible ? 'none' : 'block';
+}}
+
+// 외부 클릭시 메뉴 닫기
+document.addEventListener('click', function(event) {{
+    if (!event.target.closest('[onclick*="toggleFinanceMenu"]')) {{
+        document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
+    }}
+}});
+</script>
 </head>
 <body>
 
@@ -541,67 +575,44 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         </tbody>
     </table>
 
-<h2>📈 주요 종목 차트 (클릭하여 상세 차트 보기)</h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">"""
-
-    # 상위 추천 종목들의 차트 위젯 추가
-    top_picks = []
-    for ticker, (name, sig) in list(kr_results.items())[:3]:  # 상위 3개
-        if sig and sig.get("comprehensive_scores", {}).get("recommendation") in ["strong_buy", "buy"]:
-            top_picks.append((ticker, name, "KR"))
-    
-    for ticker, (name, sig) in list(us_results.items())[:3]:  # 상위 3개  
-        if sig and sig.get("comprehensive_scores", {}).get("recommendation") in ["strong_buy", "buy"]:
-            top_picks.append((ticker, name, "US"))
-    
-    for ticker, name, market in top_picks[:6]:  # 최대 6개
-        if market == "KR":
-            widget_symbol = f"KRX:{ticker}"
-            # 한국 주식: investing.com 올바른 링크
-            ticker_map = {
-                "005930": "samsung-electronics-co-ltd",
-                "000660": "sk-hynix-inc",
-                "035420": "naver-corp",
-                "207940": "samsung-biologics-co-ltd",
-                "005380": "hyundai-motor-co",
-                "000270": "kia-corp",
-                "068270": "celltrion-inc",
-                "035720": "kakao-corp",
-                "051910": "lg-chem-ltd",
-                "006400": "samsung-sdi-co-ltd",
-                "000155": "doosan-corp-pref",
-                "005935": "samsung-electronics-pref"
-            }
-            # investing.com 검색 링크
-            detail_link = f"https://kr.investing.com/search/?q={ticker}"
-            # 기본 차트 링크
-            basic_chart_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
-        else:
-            widget_symbol = f"NASDAQ:{ticker}" if ticker in ["AAPL", "MSFT", "GOOGL", "AMZN", "META", "TSLA", "NVDA"] else f"NYSE:{ticker}"
-            # investing.com 검색 링크
-            detail_link = f"https://www.investing.com/search/?q={ticker}"
-            # 기본 차트 링크
-            basic_chart_link = f"https://finance.yahoo.com/chart/{ticker}"
-            
-        html += f"""
-<div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
-    <h4 style="margin:0 0 8px 0; color:#e6edf3;">{ticker} - {name}</h4>
-    <div style="position:relative; height:300px;">
-        <!-- TradingView 위젯 -->
-        <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tv_chart_{ticker}&symbol={widget_symbol}&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=0d1117&studies=[]&theme=dark&style=1&timezone=Asia%2FSeoul&withdateranges=1&hideideas=1&hidelogo=1&allow_symbol_change=false&width=100%25&height=300"
-                style="width:100%; height:100%; border:none;"></iframe>
+<h2>🔗 투자 참고 사이트</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📊 Investing.com</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            전 세계 금융시장 데이터와 전문적인 차트 도구를 제공하는 글로벌 금융 정보 플랫폼
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://kr.investing.com" target="_blank" style="display:inline-block; background:#0969da; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px; margin-right:8px;">
+                🇰🇷 한국 사이트
+            </a>
+            <a href="https://www.investing.com" target="_blank" style="display:inline-block; background:#1f6feb; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🌍 글로벌 사이트
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>실시간 주가 차트 및 기술적 지표</li>
+            <li>재무제표 및 기업 분석 자료</li>
+            <li>경제 캘린더 및 뉴스</li>
+        </ul>
     </div>
-    <div style="margin-top:8px; text-align:center;">
-        <a href="{detail_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em; margin-right:12px;">
-            📊 Investing.com
-        </a>
-        <a href="{basic_chart_link}" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.9em;">
-            📈 기본 차트
-        </a>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📈 위폴 주식 커뮤니티</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            개인투자자들의 실전 투자 경험과 종목 분석을 공유하는 커뮤니티
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://wepoll.kr/g2/bbs/board.php?bo_table=stock" target="_blank" style="display:inline-block; background:#22c55e; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                💬 주식 게시판 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>실시간 종목 토론 및 의견 교환</li>
+            <li>개인투자자 관점의 투자 아이디어</li>
+            <li>시장 동향 및 투자 전략 공유</li>
+        </ul>
     </div>
-</div>"""
-
-    html += """
 </div>
 
 <details>
