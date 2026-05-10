@@ -275,20 +275,42 @@ def build_report(kr_results: dict, us_results: dict) -> str:
         for ticker, (name, sig) in results.items():
             if not sig:
                 continue
-            rz  = sig["returns_z"]
-            raz = sig["range_z"]
-            vcz = sig["vol_change_z"]
+            rz  = sig.get("returns_z", 0)
+            raz = sig.get("range_z", 0)
+            vcz = sig.get("vol_change_z", 0)
 
-            if rz > 1.0 and raz < 0.5:
-                regime = "🐂 강세"
-            elif rz < -1.5:
-                regime = "💥 폭락"
-            elif raz > 1.5:
-                regime = "⚡ 고변동"
-            elif abs(rz) < 0.3 and raz < 0.3:
-                regime = "😴 횡보"
+            if rz > 1.0 and raz < 0.5:   regime = "🐂 강세"
+            elif rz < -1.5:               regime = "💥 폭락"
+            elif raz > 1.5:               regime = "⚡ 고변동"
+            elif abs(rz) < 0.3 and raz < 0.3: regime = "😴 횡보"
+            else:                         regime = "🌀 노이즈"
+
+            # 펀더멘털
+            per = sig.get("per", 0)
+            pbr = sig.get("pbr", 0)
+            roe = sig.get("roe", sig.get("div", 0))  # 미국은 ROE, 한국은 DIV
+            div = sig.get("div", 0)
+
+            # 목표주가
+            target = sig.get("target", {})
+            if target and target.get("target_avg"):
+                upside = target.get("upside", 0)
+                up_color = "#e53935" if upside > 0 else "#1e88e5"
+                target_str = (
+                    f'<span style="color:{up_color}">'
+                    f'{int(target["target_avg"]):,}원 '
+                    f'({upside:+.1f}%)</span>'
+                )
             else:
-                regime = "🌀 노이즈"
+                target_str = "<span style='color:#555'>-</span>"
+
+            def fmt_ratio(v, low_good=True):
+                if v == 0: return "<span style='color:#555'>-</span>"
+                if low_good:
+                    color = "#1e88e5" if v < 10 else ("#fb8c00" if v < 20 else "#888")
+                else:
+                    color = "#e53935" if v > 15 else ("#fb8c00" if v > 8 else "#888")
+                return f'<span style="color:{color}">{v}</span>'
 
             rows += f"""
             <tr>
@@ -301,6 +323,11 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 <td>{color_adx(sig['adx'])}</td>
                 <td>{color_mom(sig['mom_score'])}</td>
                 <td>{sig['buy_count']}/{sig['sell_count']}</td>
+                <td>{fmt_ratio(per)}</td>
+                <td>{fmt_ratio(pbr)}</td>
+                <td>{fmt_ratio(roe, low_good=False)}</td>
+                <td><span style="color:#888">{div}%</span></td>
+                <td>{target_str}</td>
                 <td>{color_z(rz)}</td>
                 <td>{color_z(raz)}</td>
                 <td>{color_z(vcz)}</td>
@@ -314,13 +341,18 @@ def build_report(kr_results: dict, us_results: dict) -> str:
             <tr>
                 <th>티커</th><th>종목명</th><th>종합신호</th>
                 <th>현재가</th><th>등락률</th>
-                <th title="14일 기준. 35↓과매도(파랑) 65↑과매수(빨강)">RSI</th>
-                <th title="25 이상이면 추세 존재(빨강)">ADX</th>
+                <th title="14일 기준. 35↓과매도 65↑과매수">RSI</th>
+                <th title="25 이상이면 추세 존재">ADX</th>
                 <th title="1/3/6개월 평균 수익률">모멘텀</th>
-                <th title="7개 지표 중 매수/매도 신호 개수">매수/매도</th>
-                <th title="수익률 Z-score. ±2 이상이면 비정상">수익률Z</th>
-                <th title="변동폭 Z-score. +2 이상이면 극단적 변동">변동폭Z</th>
-                <th title="거래량 Z-score. +2 이상이면 거래량 폭발">거래량Z</th>
+                <th title="매수/매도 신호 개수">매수/매도</th>
+                <th title="주가수익비율. 낮을수록 저평가">PER</th>
+                <th title="주가순자산비율. 1 이하면 저평가">PBR</th>
+                <th title="자기자본이익률. 높을수록 수익성 좋음">ROE%</th>
+                <th title="배당수익률">배당%</th>
+                <th title="증권사 평균 목표주가 대비 상승여력">목표주가</th>
+                <th title="수익률 Z-score">수익률Z</th>
+                <th title="변동폭 Z-score">변동폭Z</th>
+                <th title="거래량 Z-score">거래량Z</th>
                 <th>체제</th>
             </tr>
         </thead>
@@ -443,6 +475,7 @@ def main():
     # 한국
     log.info("📡 한국 데이터 수집 중...")
     import time
+    from fundamental import enrich_with_fundamental
     for ticker, name in WATCHLIST["KR"].items():
         try:
             df = fetch_kr(ticker)
@@ -451,6 +484,9 @@ def main():
                 continue
             df = add_indicators(df)
             sig = get_signal(df)
+            # 펀더멘털 + 목표주가 추가
+            fund = enrich_with_fundamental(ticker, "KR", sig["close"])
+            sig.update(fund)
             kr_results[ticker] = (name, sig)
             log.info(f"[KR] {ticker} {name}: {sig['overall']}")
             time.sleep(0.5)
@@ -468,6 +504,9 @@ def main():
                 continue
             df = add_indicators(df)
             sig = get_signal(df)
+            # 펀더멘털 추가
+            fund = enrich_with_fundamental(ticker, "US", sig["close"])
+            sig.update(fund)
             us_results[ticker] = (name, sig)
             log.info(f"[US] {ticker} {name}: {sig['overall']}")
             time.sleep(0.3)
