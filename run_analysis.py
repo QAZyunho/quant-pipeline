@@ -355,50 +355,23 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 icon, color, text = rec_map.get(rec, ("❓", "#6b7280", "미지"))
                 return f'<span style="color:{color}">{icon} {text}</span>'
 
-            # investing.com 차트 링크 생성
+            # 기존 차트 링크 (TradingView 등)
             if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
-                # 한국 주식은 investing.com에서 특별한 형식 사용
-                ticker_map = {
-                    "005930": "samsung-electronics",
-                    "000660": "sk-hynix", 
-                    "035420": "naver-corp",
-                    "207940": "samsung-biologics",
-                    "005380": "hyundai-motor-co",
-                    "000270": "kia-corp",
-                    "068270": "celltrion",
-                    "035720": "kakao",
-                    "051910": "lg-chem-ltd",
-                    "006400": "samsung-sdi-co-ltd",
-                    "000155": "doosan-corp-pref", # 두산우
-                    "005935": "samsung-electronics-co-ltd-pref" # 삼성전자우
-                }
-                investing_name = ticker_map.get(ticker, f"kr-stock-{ticker}")
-                chart_link = f"https://kr.investing.com/equities/{investing_name}"
+                chart_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
             else:  # 미국 주식
-                # 미국 주식 investing.com 매핑
-                us_ticker_map = {
-                    "AAPL": "apple-computer-inc",
-                    "MSFT": "microsoft-corp", 
-                    "GOOGL": "google-inc-c",
-                    "AMZN": "amazon-com-inc",
-                    "TSLA": "tesla-motors",
-                    "META": "facebook-inc",
-                    "NVDA": "nvidia-corp",
-                    "SPY": "spdr-s-p-500",
-                    "QQQ": "powershares-qqq-trust-series-1",
-                    "BRK.B": "berkshire-hathaway-inc",
-                    "JPM": "jp-morgan-chase",
-                    "V": "visa-inc",
-                    "JNJ": "johnson-johnson",
-                    "WMT": "wal-mart-stores"
-                }
-                investing_name = us_ticker_map.get(ticker, ticker.lower())
-                chart_link = f"https://www.investing.com/equities/{investing_name}"
+                chart_link = f"https://finance.yahoo.com/chart/{ticker}"
+            
+            # investing.com 차트 링크 추가
+            if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
+                investing_link = f"https://kr.investing.com/search/?q={ticker}"
+            else:  # 미국 주식
+                investing_link = f"https://www.investing.com/search/?q={ticker}"
             
             rows += f"""
             <tr>
                 <td><b><a href="{chart_link}" target="_blank" style="color:#58a6ff">{ticker}</a></b></td>
                 <td>{name}</td>
+                <td><a href="{investing_link}" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>{color_signal(sig['overall'])}</td>
                 <td>{fmt_recommendation(recommendation)}</td>
                 <td>{fmt_score(swing_score)}</td>
@@ -424,7 +397,9 @@ def build_report(kr_results: dict, us_results: dict) -> str:
     <table>
         <thead>
             <tr>
-                <th>티커</th><th>종목명</th><th>종합신호</th>
+                <th>티커</th><th>종목명</th>
+                <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
+                <th>종합신호</th>
                 <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
                 <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
                 <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
@@ -492,11 +467,57 @@ def build_report(kr_results: dict, us_results: dict) -> str:
     margin-left: 4px;
     cursor: help;
     vertical-align: middle;
+    position: relative;
   }}
   .help-icon:hover {{
     background: #1f6feb;
     transform: scale(1.1);
     transition: all 0.2s ease;
+  }}
+  
+  /* 툴팁 스타일 - 더 강력한 구현 */
+  .help-icon::before {{
+    content: attr(title);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #161b22;
+    color: #f0f6fc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    font-size: 12px;
+    white-space: pre-line;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    min-width: 250px;
+    max-width: 350px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    pointer-events: none;
+    font-weight: normal;
+    line-height: 1.4;
+  }}
+  
+  .help-icon::after {{
+    content: "";
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #161b22;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }}
+  
+  .help-icon:hover::before,
+  .help-icon:hover::after {{
+    opacity: 1;
+    visibility: visible;
   }}
   .footer {{ color: #8b949e; font-size: 0.8em; margin-top: 40px;
              border-top: 1px solid #30363d; padding-top: 12px; }}
@@ -536,39 +557,31 @@ def build_report(kr_results: dict, us_results: dict) -> str:
     for ticker, name, market in top_picks[:6]:  # 최대 6개
         if market == "KR":
             widget_symbol = f"KRX:{ticker}"
-            # 한국 주식 investing.com 링크
+            # 한국 주식: investing.com 올바른 링크
             ticker_map = {
-                "005930": "samsung-electronics",
-                "000660": "sk-hynix", 
+                "005930": "samsung-electronics-co-ltd",
+                "000660": "sk-hynix-inc",
                 "035420": "naver-corp",
-                "207940": "samsung-biologics",
+                "207940": "samsung-biologics-co-ltd",
                 "005380": "hyundai-motor-co",
                 "000270": "kia-corp",
-                "068270": "celltrion",
-                "035720": "kakao",
+                "068270": "celltrion-inc",
+                "035720": "kakao-corp",
                 "051910": "lg-chem-ltd",
                 "006400": "samsung-sdi-co-ltd",
                 "000155": "doosan-corp-pref",
-                "005935": "samsung-electronics-co-ltd-pref"
+                "005935": "samsung-electronics-pref"
             }
-            investing_name = ticker_map.get(ticker, f"kr-stock-{ticker}")
-            detail_link = f"https://kr.investing.com/equities/{investing_name}"
+            # investing.com 검색 링크
+            detail_link = f"https://kr.investing.com/search/?q={ticker}"
+            # 기본 차트 링크
+            basic_chart_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
         else:
             widget_symbol = f"NASDAQ:{ticker}" if ticker in ["AAPL", "MSFT", "GOOGL", "AMZN", "META", "TSLA", "NVDA"] else f"NYSE:{ticker}"
-            # 미국 주식 investing.com 링크
-            us_ticker_map = {
-                "AAPL": "apple-computer-inc",
-                "MSFT": "microsoft-corp", 
-                "GOOGL": "google-inc-c",
-                "AMZN": "amazon-com-inc",
-                "TSLA": "tesla-motors",
-                "META": "facebook-inc",
-                "NVDA": "nvidia-corp",
-                "SPY": "spdr-s-p-500",
-                "QQQ": "powershares-qqq-trust-series-1"
-            }
-            investing_name = us_ticker_map.get(ticker, ticker.lower())
-            detail_link = f"https://www.investing.com/equities/{investing_name}"
+            # investing.com 검색 링크
+            detail_link = f"https://www.investing.com/search/?q={ticker}"
+            # 기본 차트 링크
+            basic_chart_link = f"https://finance.yahoo.com/chart/{ticker}"
             
         html += f"""
 <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
@@ -579,8 +592,11 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 style="width:100%; height:100%; border:none;"></iframe>
     </div>
     <div style="margin-top:8px; text-align:center;">
-        <a href="{detail_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
-            📊 Investing.com 상세 차트
+        <a href="{detail_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em; margin-right:12px;">
+            📊 Investing.com
+        </a>
+        <a href="{basic_chart_link}" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.9em;">
+            📈 기본 차트
         </a>
     </div>
 </div>"""
