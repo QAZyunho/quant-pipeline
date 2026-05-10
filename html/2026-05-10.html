@@ -122,7 +122,7 @@ document.addEventListener('click', function(event) {
 <body>
 
 <h1>📊 퀀트 일별 분석 리포트</h1>
-<div class="meta">생성일시: 2026-05-10 18:25:17 KST</div>
+<div class="meta">생성일시: 2026-05-10 22:46:45 KST</div>
 <div class="warn">⚠️ 본 리포트는 <b>보조 참고용</b>입니다. 투자 판단은 본인 책임입니다.</div>
 
 <h2>🇰🇷 한국 시장</h2>
@@ -131,12 +131,10 @@ document.addEventListener('click', function(event) {
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th>
-                <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
                 <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
                 <th>종합신호</th>
-                <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
-                <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
-                <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
+                <th>군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
+                <th>생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
                 <th>현재가</th><th>등락률</th>
                 <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
                 <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
@@ -156,26 +154,24 @@ document.addEventListener('click', function(event) {
     
 
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=005930" target="_blank" style="color:#58a6ff">005930</a></b></td>
+                <td><b>005930</b></td>
                 <td>삼성전자</td>
-                <td><a href="https://kr.investing.com/search/?q=005930" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('005930')">📋▼</span>
                         <div id="finance_005930" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=005930' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=005930" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=005930' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#3b82f6;font-weight:bold">62</span> <span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
                 <td>268,500</td>
                 <td><span style="color:#1e88e5">-1.10%</span></td>
-                <td><span style="color:#e53935">77.7</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">77.7</span></td>
                 <td><span style="color:#e53935">55.9</span></td>
                 <td><span style="color:#e53935">+88.31%</span></td>
                 <td>4/2</td>
@@ -183,32 +179,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#fb8c00">10.36</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.55</span></td>
-                <td><span style="color:#888">+0.46</span></td>
-                <td><span style="color:#fb8c00">-1.09</span></td>
+                <td><span style="color:#6b7280">-0.55</span></td>
+                <td><span style="color:#6b7280">+0.46</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.09</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000660" target="_blank" style="color:#58a6ff">000660</a></b></td>
+                <td><b>000660</b></td>
                 <td>SK하이닉스</td>
-                <td><a href="https://kr.investing.com/search/?q=000660" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000660')">📋▼</span>
                         <div id="finance_000660" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=000660' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=000660" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=000660' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#3b82f6;font-weight:bold">72</span> <span style="color:#06b6d4;font-weight:bold">B+</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#06b6d4;font-weight:bold">B+</span></td>
                 <td>1,686,000</td>
                 <td><span style="color:#e53935">+1.93%</span></td>
-                <td><span style="color:#e53935">92.8</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">92.8</span></td>
                 <td><span style="color:#e53935">71.4</span></td>
                 <td><span style="color:#e53935">+129.60%</span></td>
                 <td>4/2</td>
@@ -216,32 +210,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#e53935">35.59</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.24</span></td>
-                <td><span style="color:#1e88e5">-2.09</span></td>
-                <td><span style="color:#1e88e5">-2.61</span></td>
+                <td><span style="color:#6b7280">+0.24</span></td>
+                <td>💀<span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">-2.09</span></td>
+                <td>💀<span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">-2.61</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=035420" target="_blank" style="color:#58a6ff">035420</a></b></td>
+                <td><b>035420</b></td>
                 <td>NAVER</td>
-                <td><a href="https://kr.investing.com/search/?q=035420" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('035420')">📋▼</span>
                         <div id="finance_035420" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=035420' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=035420" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=035420' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">29</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">34</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>215,000</td>
                 <td><span style="color:#e53935">+3.61%</span></td>
-                <td><span style="color:#888">45.5</span></td>
+                <td><span style="color:#6b7280">45.5</span></td>
                 <td><span style="color:#888">22.3</span></td>
                 <td><span style="color:#1e88e5">-9.88%</span></td>
                 <td>2/2</td>
@@ -249,32 +241,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">6.28</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.22</span></td>
-                <td><span style="color:#888">+0.65</span></td>
-                <td><span style="color:#888">+0.48</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.22</span></td>
+                <td><span style="color:#6b7280">+0.65</span></td>
+                <td><span style="color:#6b7280">+0.48</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=005380" target="_blank" style="color:#58a6ff">005380</a></b></td>
+                <td><b>005380</b></td>
                 <td>현대차</td>
-                <td><a href="https://kr.investing.com/search/?q=005380" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('005380')">📋▼</span>
                         <div id="finance_005380" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=005380' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=005380" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=005380' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">20</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>613,000</td>
                 <td><span style="color:#e53935">+7.17%</span></td>
-                <td><span style="color:#e53935">68.2</span></td>
+                <td><span style="color:#6b7280">68.2</span></td>
                 <td><span style="color:#e53935">45.9</span></td>
                 <td><span style="color:#e53935">+56.41%</span></td>
                 <td>4/2</td>
@@ -282,32 +272,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.84</span></td>
-                <td><span style="color:#fb8c00">-1.32</span></td>
-                <td><span style="color:#fb8c00">-1.69</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.84</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.32</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.69</span></td>
                 <td>🐂 강세</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=336260" target="_blank" style="color:#58a6ff">336260</a></b></td>
+                <td><b>336260</b></td>
                 <td>두산퓨얼셀</td>
-                <td><a href="https://kr.investing.com/search/?q=336260" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('336260')">📋▼</span>
                         <div id="finance_336260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=336260' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=336260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=336260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">6</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>86,300</td>
                 <td><span style="color:#e53935">+13.25%</span></td>
-                <td><span style="color:#e53935">88.1</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">88.1</span></td>
                 <td><span style="color:#e53935">64.6</span></td>
                 <td><span style="color:#e53935">+140.65%</span></td>
                 <td>4/2</td>
@@ -315,32 +303,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">-36.14</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#e53935">+2.31</span></td>
-                <td><span style="color:#e53935">+3.08</span></td>
-                <td><span style="color:#888">+0.19</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.31</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+3.08</span></td>
+                <td><span style="color:#6b7280">+0.19</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000880" target="_blank" style="color:#58a6ff">000880</a></b></td>
+                <td><b>000880</b></td>
                 <td>한화</td>
-                <td><a href="https://kr.investing.com/search/?q=000880" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000880')">📋▼</span>
                         <div id="finance_000880" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=000880' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=000880" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=000880' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">36</span> <span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
                 <td>141,300</td>
                 <td><span style="color:#e53935">+1.29%</span></td>
-                <td><span style="color:#888">63.8</span></td>
+                <td><span style="color:#6b7280">63.8</span></td>
                 <td><span style="color:#e53935">58.0</span></td>
                 <td><span style="color:#e53935">+33.50%</span></td>
                 <td>4/1</td>
@@ -348,20 +334,19 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">4.11</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.16</span></td>
-                <td><span style="color:#888">+0.51</span></td>
-                <td><span style="color:#888">-0.79</span></td>
+                <td><span style="color:#6b7280">+0.16</span></td>
+                <td><span style="color:#6b7280">+0.51</span></td>
+                <td><span style="color:#6b7280">-0.79</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=375500" target="_blank" style="color:#58a6ff">375500</a></b></td>
+                <td><b>375500</b></td>
                 <td>DL이앤씨</td>
-                <td><a href="https://kr.investing.com/search/?q=375500" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('375500')">📋▼</span>
                         <div id="finance_375500" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=375500' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=375500" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=375500' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
@@ -369,11 +354,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">44</span> <span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
                 <td>95,400</td>
                 <td><span style="color:#1e88e5">-4.89%</span></td>
-                <td><span style="color:#888">45.5</span></td>
+                <td><span style="color:#6b7280">45.5</span></td>
                 <td><span style="color:#e53935">30.8</span></td>
                 <td><span style="color:#e53935">+89.56%</span></td>
                 <td>3/1</td>
@@ -381,20 +365,19 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">7.06</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">-1.25</span></td>
-                <td><span style="color:#888">+0.17</span></td>
-                <td><span style="color:#888">-0.85</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.25</span></td>
+                <td><span style="color:#6b7280">+0.17</span></td>
+                <td><span style="color:#6b7280">-0.85</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=071970" target="_blank" style="color:#58a6ff">071970</a></b></td>
+                <td><b>071970</b></td>
                 <td>HD현대마린엔진</td>
-                <td><a href="https://kr.investing.com/search/?q=071970" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('071970')">📋▼</span>
                         <div id="finance_071970" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=071970' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=071970" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=071970' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
@@ -402,11 +385,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#06b6d4">👁️ 관심</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">29</span></td>
-                <td><span style="color:#3b82f6;font-weight:bold">71</span> <span style="color:#06b6d4;font-weight:bold">B+</span></td>
+                <td><span style="color:#06b6d4;font-weight:bold">B+</span></td>
                 <td>94,800</td>
                 <td><span style="color:#1e88e5">-5.11%</span></td>
-                <td><span style="color:#888">57.3</span></td>
+                <td><span style="color:#6b7280">57.3</span></td>
                 <td><span style="color:#e53935">44.8</span></td>
                 <td><span style="color:#e53935">+11.30%</span></td>
                 <td>2/2</td>
@@ -414,32 +396,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#e53935">33.77</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">-1.40</span></td>
-                <td><span style="color:#fb8c00">+1.05</span></td>
-                <td><span style="color:#888">-0.19</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.40</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.05</span></td>
+                <td><span style="color:#6b7280">-0.19</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=003550" target="_blank" style="color:#58a6ff">003550</a></b></td>
+                <td><b>003550</b></td>
                 <td>LG</td>
-                <td><a href="https://kr.investing.com/search/?q=003550" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('003550')">📋▼</span>
                         <div id="finance_003550" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=003550' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=003550" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=003550' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">26</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>108,900</td>
                 <td><span style="color:#e53935">+4.11%</span></td>
-                <td><span style="color:#e53935">85.1</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">85.1</span></td>
                 <td><span style="color:#e53935">69.0</span></td>
                 <td><span style="color:#e53935">+27.94%</span></td>
                 <td>4/2</td>
@@ -447,32 +427,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">3.3</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.59</span></td>
-                <td><span style="color:#e53935">+2.98</span></td>
-                <td><span style="color:#888">+0.23</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.59</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.98</span></td>
+                <td><span style="color:#6b7280">+0.23</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=402340" target="_blank" style="color:#58a6ff">402340</a></b></td>
+                <td><b>402340</b></td>
                 <td>SK스퀘어</td>
-                <td><a href="https://kr.investing.com/search/?q=402340" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('402340')">📋▼</span>
                         <div id="finance_402340" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=402340' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=402340" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=402340' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#3b82f6;font-weight:bold">63</span> <span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
                 <td>1,098,000</td>
                 <td><span style="color:#1e88e5">-0.09%</span></td>
-                <td><span style="color:#e53935">97.2</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">97.2</span></td>
                 <td><span style="color:#e53935">75.3</span></td>
                 <td><span style="color:#e53935">+186.59%</span></td>
                 <td>4/2</td>
@@ -480,32 +458,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#e53935">31.51</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.26</span></td>
-                <td><span style="color:#888">-0.01</span></td>
-                <td><span style="color:#888">-0.70</span></td>
+                <td><span style="color:#6b7280">-0.26</span></td>
+                <td><span style="color:#6b7280">-0.01</span></td>
+                <td><span style="color:#6b7280">-0.70</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=006800" target="_blank" style="color:#58a6ff">006800</a></b></td>
+                <td><b>006800</b></td>
                 <td>미래에셋증권</td>
-                <td><a href="https://kr.investing.com/search/?q=006800" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('006800')">📋▼</span>
                         <div id="finance_006800" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=006800' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=006800" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=006800' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">21</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>79,600</td>
                 <td><span style="color:#e53935">+0.76%</span></td>
-                <td><span style="color:#888">61.8</span></td>
+                <td><span style="color:#6b7280">61.8</span></td>
                 <td><span style="color:#e53935">33.6</span></td>
                 <td><span style="color:#e53935">+111.01%</span></td>
                 <td>4/1</td>
@@ -513,32 +489,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#fb8c00">11.74</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.04</span></td>
-                <td><span style="color:#888">+0.58</span></td>
-                <td><span style="color:#888">-0.45</span></td>
+                <td><span style="color:#6b7280">-0.04</span></td>
+                <td><span style="color:#6b7280">+0.58</span></td>
+                <td><span style="color:#6b7280">-0.45</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=039490" target="_blank" style="color:#58a6ff">039490</a></b></td>
+                <td><b>039490</b></td>
                 <td>키움증권</td>
-                <td><a href="https://kr.investing.com/search/?q=039490" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('039490')">📋▼</span>
                         <div id="finance_039490" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=039490' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=039490" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=039490' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">12</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>452,500</td>
                 <td><span style="color:#1e88e5">-2.90%</span></td>
-                <td><span style="color:#888">48.4</span></td>
+                <td><span style="color:#6b7280">48.4</span></td>
                 <td><span style="color:#888">23.6</span></td>
                 <td><span style="color:#e53935">+23.79%</span></td>
                 <td>4/0</td>
@@ -546,32 +520,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#e53935">16.59</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.88</span></td>
-                <td><span style="color:#1e88e5">-2.23</span></td>
-                <td><span style="color:#1e88e5">-2.08</span></td>
+                <td><span style="color:#6b7280">-0.88</span></td>
+                <td>💀<span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">-2.23</span></td>
+                <td>💀<span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">-2.08</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=006260" target="_blank" style="color:#58a6ff">006260</a></b></td>
+                <td><b>006260</b></td>
                 <td>LS</td>
-                <td><a href="https://kr.investing.com/search/?q=006260" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('006260')">📋▼</span>
                         <div id="finance_006260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=006260' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=006260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=006260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">9</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>543,000</td>
                 <td><span style="color:#e53935">+7.10%</span></td>
-                <td><span style="color:#e53935">83.4</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">83.4</span></td>
                 <td><span style="color:#e53935">66.4</span></td>
                 <td><span style="color:#e53935">+147.84%</span></td>
                 <td>4/2</td>
@@ -579,32 +551,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">6.32</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.60</span></td>
-                <td><span style="color:#e53935">+2.40</span></td>
-                <td><span style="color:#888">-0.46</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.60</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.40</span></td>
+                <td><span style="color:#6b7280">-0.46</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000155" target="_blank" style="color:#58a6ff">000155</a></b></td>
+                <td><b>000155</b></td>
                 <td>두산우</td>
-                <td><a href="https://kr.investing.com/search/?q=000155" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000155')">📋▼</span>
                         <div id="finance_000155" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=000155' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=000155" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=000155' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">11</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>690,000</td>
                 <td><span style="color:#1e88e5">-2.27%</span></td>
-                <td><span style="color:#e53935">86.1</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">86.1</span></td>
                 <td><span style="color:#e53935">59.0</span></td>
                 <td><span style="color:#e53935">+46.33%</span></td>
                 <td>4/2</td>
@@ -612,20 +582,19 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">2.04</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.64</span></td>
-                <td><span style="color:#888">-0.68</span></td>
-                <td><span style="color:#888">-0.91</span></td>
+                <td><span style="color:#6b7280">-0.64</span></td>
+                <td><span style="color:#6b7280">-0.68</span></td>
+                <td><span style="color:#6b7280">-0.91</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=329180" target="_blank" style="color:#58a6ff">329180</a></b></td>
+                <td><b>329180</b></td>
                 <td>HD현대중공업</td>
-                <td><a href="https://kr.investing.com/search/?q=329180" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('329180')">📋▼</span>
                         <div id="finance_329180" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=329180' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=329180" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=329180' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
@@ -633,11 +602,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">49</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>658,000</td>
                 <td><span style="color:#1e88e5">-5.05%</span></td>
-                <td><span style="color:#e53935">74.9</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">74.9</span></td>
                 <td><span style="color:#e53935">56.1</span></td>
                 <td><span style="color:#e53935">+23.17%</span></td>
                 <td>4/1</td>
@@ -645,32 +613,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#e53935">15.15</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">-1.58</span></td>
-                <td><span style="color:#fb8c00">+1.55</span></td>
-                <td><span style="color:#888">-0.52</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.58</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.55</span></td>
+                <td><span style="color:#6b7280">-0.52</span></td>
                 <td>💥 폭락</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=010060" target="_blank" style="color:#58a6ff">010060</a></b></td>
+                <td><b>010060</b></td>
                 <td>OCI홀딩스</td>
-                <td><a href="https://kr.investing.com/search/?q=010060" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('010060')">📋▼</span>
                         <div id="finance_010060" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=010060' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=010060" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=010060' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">14</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>318,500</td>
                 <td><span style="color:#1e88e5">-2.90%</span></td>
-                <td><span style="color:#888">54.2</span></td>
+                <td><span style="color:#6b7280">54.2</span></td>
                 <td><span style="color:#e53935">44.3</span></td>
                 <td><span style="color:#e53935">+142.01%</span></td>
                 <td>3/1</td>
@@ -678,32 +644,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">-3.09</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.68</span></td>
-                <td><span style="color:#888">-0.27</span></td>
-                <td><span style="color:#888">-0.64</span></td>
+                <td><span style="color:#6b7280">-0.68</span></td>
+                <td><span style="color:#6b7280">-0.27</span></td>
+                <td><span style="color:#6b7280">-0.64</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=277810" target="_blank" style="color:#58a6ff">277810</a></b></td>
+                <td><b>277810</b></td>
                 <td>레인보우로보틱스</td>
-                <td><a href="https://kr.investing.com/search/?q=277810" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('277810')">📋▼</span>
                         <div id="finance_277810" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=277810' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=277810" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=277810' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">30</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>784,000</td>
                 <td><span style="color:#e53935">+12.48%</span></td>
-                <td><span style="color:#e53935">86.8</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">86.8</span></td>
                 <td><span style="color:#e53935">56.5</span></td>
                 <td><span style="color:#e53935">+44.53%</span></td>
                 <td>3/3</td>
@@ -711,32 +675,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">1.06</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#e53935">+2.52</span></td>
-                <td><span style="color:#fb8c00">+1.95</span></td>
-                <td><span style="color:#fb8c00">+1.98</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.52</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.95</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.98</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=454910" target="_blank" style="color:#58a6ff">454910</a></b></td>
+                <td><b>454910</b></td>
                 <td>두산로보틱스</td>
-                <td><a href="https://kr.investing.com/search/?q=454910" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('454910')">📋▼</span>
                         <div id="finance_454910" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=454910' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=454910" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=454910' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">25</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>101,000</td>
                 <td><span style="color:#e53935">+1.92%</span></td>
-                <td><span style="color:#888">59.6</span></td>
+                <td><span style="color:#6b7280">59.6</span></td>
                 <td><span style="color:#e53935">47.8</span></td>
                 <td><span style="color:#e53935">+15.93%</span></td>
                 <td>4/0</td>
@@ -744,32 +706,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">-15.92</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.41</span></td>
-                <td><span style="color:#888">-0.40</span></td>
-                <td><span style="color:#888">-0.42</span></td>
+                <td><span style="color:#6b7280">+0.41</span></td>
+                <td><span style="color:#6b7280">-0.40</span></td>
+                <td><span style="color:#6b7280">-0.42</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=096770" target="_blank" style="color:#58a6ff">096770</a></b></td>
+                <td><b>096770</b></td>
                 <td>SK이노베이션</td>
-                <td><a href="https://kr.investing.com/search/?q=096770" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('096770')">📋▼</span>
                         <div id="finance_096770" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=096770' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=096770" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=096770' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">26</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>134,700</td>
                 <td><span style="color:#1e88e5">-2.25%</span></td>
-                <td><span style="color:#888">58.4</span></td>
+                <td><span style="color:#6b7280">58.4</span></td>
                 <td><span style="color:#e53935">39.7</span></td>
                 <td><span style="color:#e53935">+13.70%</span></td>
                 <td>4/0</td>
@@ -777,32 +737,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.68</span></td>
-                <td><span style="color:#888">-0.29</span></td>
-                <td><span style="color:#888">-0.51</span></td>
+                <td><span style="color:#6b7280">-0.68</span></td>
+                <td><span style="color:#6b7280">-0.29</span></td>
+                <td><span style="color:#6b7280">-0.51</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=003490" target="_blank" style="color:#58a6ff">003490</a></b></td>
+                <td><b>003490</b></td>
                 <td>대한항공</td>
-                <td><a href="https://kr.investing.com/search/?q=003490" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('003490')">📋▼</span>
                         <div id="finance_003490" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=003490' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=003490" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=003490' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">5</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>27,050</td>
                 <td><span style="color:#e53935">+2.66%</span></td>
-                <td><span style="color:#e53935">65.5</span></td>
+                <td><span style="color:#6b7280">65.5</span></td>
                 <td><span style="color:#e53935">25.8</span></td>
                 <td><span style="color:#e53935">+19.81%</span></td>
                 <td>4/2</td>
@@ -810,32 +768,30 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">5.65</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.02</span></td>
-                <td><span style="color:#e53935">+2.19</span></td>
-                <td><span style="color:#888">-0.68</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.02</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.19</span></td>
+                <td><span style="color:#6b7280">-0.68</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=034020" target="_blank" style="color:#58a6ff">034020</a></b></td>
+                <td><b>034020</b></td>
                 <td>두산에너빌리티</td>
-                <td><a href="https://kr.investing.com/search/?q=034020" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('034020')">📋▼</span>
                         <div id="finance_034020" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=034020' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=034020" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=034020' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">11</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>129,600</td>
                 <td><span style="color:#1e88e5">-4.99%</span></td>
-                <td><span style="color:#e53935">71.5</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">71.5</span></td>
                 <td><span style="color:#e53935">65.7</span></td>
                 <td><span style="color:#e53935">+44.34%</span></td>
                 <td>4/1</td>
@@ -843,20 +799,19 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">1.71</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">-1.37</span></td>
-                <td><span style="color:#fb8c00">-1.99</span></td>
-                <td><span style="color:#fb8c00">-1.69</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.37</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.99</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.69</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.naver.com/item/fchart.naver?code=028260" target="_blank" style="color:#58a6ff">028260</a></b></td>
+                <td><b>028260</b></td>
                 <td>삼성물산</td>
-                <td><a href="https://kr.investing.com/search/?q=028260" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('028260')">📋▼</span>
                         <div id="finance_028260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
-                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=028260' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
                             <a href="https://finance.naver.com/item/main.naver?code=028260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
                             <a href='https://finance.naver.com/item/coinfo.naver?code=028260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
                         </div>
@@ -864,11 +819,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">40</span> <span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
                 <td>422,500</td>
                 <td><span style="color:#e53935">+4.32%</span></td>
-                <td><span style="color:#e53935">82.6</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">82.6</span></td>
                 <td><span style="color:#e53935">49.2</span></td>
                 <td><span style="color:#e53935">+62.11%</span></td>
                 <td>4/2</td>
@@ -876,9 +830,9 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">6.79</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.10</span></td>
-                <td><span style="color:#e53935">+2.34</span></td>
-                <td><span style="color:#888">-0.48</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.10</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.34</span></td>
+                <td><span style="color:#6b7280">-0.48</span></td>
                 <td>⚡ 고변동</td>
             </tr>
         </tbody>
@@ -890,12 +844,10 @@ document.addEventListener('click', function(event) {
         <thead>
             <tr>
                 <th>티커</th><th>종목명</th>
-                <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
                 <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
                 <th>종합신호</th>
-                <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
-                <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
-                <th>장기점수 <span class="help-icon" title="장기 투자가치 점수 (0-100)&#10;수익성(25) + 안정성(25) + 밸류에이션(25) + 성장성(25)&#10;A+(85+): 최우량 종목&#10;A(75+): 우량 종목&#10;B+(65+): 양호한 종목&#10;B(55+): 평균 수준&#10;C+(45+): 관심 필요">?</span></th>
+                <th>군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
+                <th>생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
                 <th>현재가</th><th>등락률</th>
                 <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
                 <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
@@ -915,9 +867,8 @@ document.addEventListener('click', function(event) {
     
 
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AAPL" target="_blank" style="color:#58a6ff">AAPL</a></b></td>
+                <td><b>AAPL</b></td>
                 <td>Apple</td>
-                <td><a href="https://www.investing.com/search/?q=AAPL" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AAPL')">📋▼</span>
@@ -929,12 +880,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">53</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>293</td>
                 <td><span style="color:#e53935">+2.05%</span></td>
-                <td><span style="color:#e53935">68.9</span></td>
+                <td><span style="color:#6b7280">68.9</span></td>
                 <td><span style="color:#e53935">35.9</span></td>
                 <td><span style="color:#e53935">+8.98%</span></td>
                 <td>4/2</td>
@@ -942,15 +892,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">40.4</span></td>
                 <td><span style="color:#e53935">141.47</span></td>
                 <td><span style="color:#888">37.0%</span></td>
-                <td><span style="color:#fb8c00">+1.28</span></td>
-                <td><span style="color:#888">-0.39</span></td>
-                <td><span style="color:#888">+0.25</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.28</span></td>
+                <td><span style="color:#6b7280">-0.39</span></td>
+                <td><span style="color:#6b7280">+0.25</span></td>
                 <td>🐂 강세</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/NVDA" target="_blank" style="color:#58a6ff">NVDA</a></b></td>
+                <td><b>NVDA</b></td>
                 <td>NVIDIA</td>
-                <td><a href="https://www.investing.com/search/?q=NVDA" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('NVDA')">📋▼</span>
@@ -962,12 +911,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">53</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>215</td>
                 <td><span style="color:#e53935">+1.75%</span></td>
-                <td><span style="color:#888">60.3</span></td>
+                <td><span style="color:#6b7280">60.3</span></td>
                 <td><span style="color:#e53935">34.7</span></td>
                 <td><span style="color:#e53935">+14.45%</span></td>
                 <td>4/1</td>
@@ -975,15 +923,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">33.25</span></td>
                 <td><span style="color:#e53935">101.48</span></td>
                 <td><span style="color:#888">2.0%</span></td>
-                <td><span style="color:#888">+0.69</span></td>
-                <td><span style="color:#888">-0.37</span></td>
-                <td><span style="color:#888">-0.81</span></td>
+                <td><span style="color:#6b7280">+0.69</span></td>
+                <td><span style="color:#6b7280">-0.37</span></td>
+                <td><span style="color:#6b7280">-0.81</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/MSFT" target="_blank" style="color:#58a6ff">MSFT</a></b></td>
+                <td><b>MSFT</b></td>
                 <td>Microsoft</td>
-                <td><a href="https://www.investing.com/search/?q=MSFT" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('MSFT')">📋▼</span>
@@ -995,12 +942,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">14</span></td>
-                <td><span style="color:#3b82f6;font-weight:bold">61</span> <span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
                 <td>415</td>
                 <td><span style="color:#1e88e5">-1.34%</span></td>
-                <td><span style="color:#888">48.4</span></td>
+                <td><span style="color:#6b7280">48.4</span></td>
                 <td><span style="color:#888">21.7</span></td>
                 <td><span style="color:#888">-0.94%</span></td>
                 <td>1/2</td>
@@ -1008,15 +954,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">7.44</span></td>
                 <td><span style="color:#e53935">34.01</span></td>
                 <td><span style="color:#888">88.0%</span></td>
-                <td><span style="color:#888">-0.90</span></td>
-                <td><span style="color:#888">-0.79</span></td>
-                <td><span style="color:#888">-0.27</span></td>
+                <td><span style="color:#6b7280">-0.90</span></td>
+                <td><span style="color:#6b7280">-0.79</span></td>
+                <td><span style="color:#6b7280">-0.27</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/GOOGL" target="_blank" style="color:#58a6ff">GOOGL</a></b></td>
+                <td><b>GOOGL</b></td>
                 <td>Alphabet A</td>
-                <td><a href="https://www.investing.com/search/?q=GOOGL" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('GOOGL')">📋▼</span>
@@ -1028,12 +973,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">58</span> <span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
                 <td>401</td>
                 <td><span style="color:#e53935">+0.71%</span></td>
-                <td><span style="color:#e53935">89.3</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">89.3</span></td>
                 <td><span style="color:#e53935">75.5</span></td>
                 <td><span style="color:#e53935">+30.41%</span></td>
                 <td>4/2</td>
@@ -1041,15 +985,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#fb8c00">11.67</span></td>
                 <td><span style="color:#e53935">38.88</span></td>
                 <td><span style="color:#888">22.0%</span></td>
-                <td><span style="color:#888">+0.17</span></td>
-                <td><span style="color:#888">-0.99</span></td>
-                <td><span style="color:#888">-0.45</span></td>
+                <td><span style="color:#6b7280">+0.17</span></td>
+                <td><span style="color:#6b7280">-0.99</span></td>
+                <td><span style="color:#6b7280">-0.45</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/SPY" target="_blank" style="color:#58a6ff">SPY</a></b></td>
+                <td><b>SPY</b></td>
                 <td>S&P500 ETF</td>
-                <td><a href="https://www.investing.com/search/?q=SPY" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('SPY')">📋▼</span>
@@ -1061,12 +1004,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">30</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>738</td>
                 <td><span style="color:#e53935">+0.83%</span></td>
-                <td><span style="color:#e53935">73.8</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">73.8</span></td>
                 <td><span style="color:#e53935">37.8</span></td>
                 <td><span style="color:#e53935">+8.36%</span></td>
                 <td>4/2</td>
@@ -1074,15 +1016,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">1.72</span></td>
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">103.0%</span></td>
-                <td><span style="color:#888">+0.91</span></td>
-                <td><span style="color:#888">-0.98</span></td>
-                <td><span style="color:#888">-0.43</span></td>
+                <td><span style="color:#6b7280">+0.91</span></td>
+                <td><span style="color:#6b7280">-0.98</span></td>
+                <td><span style="color:#6b7280">-0.43</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AMZN" target="_blank" style="color:#58a6ff">AMZN</a></b></td>
+                <td><b>AMZN</b></td>
                 <td>Amazon</td>
-                <td><a href="https://www.investing.com/search/?q=AMZN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AMZN')">📋▼</span>
@@ -1094,12 +1035,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">55</span> <span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
                 <td>273</td>
                 <td><span style="color:#e53935">+0.56%</span></td>
-                <td><span style="color:#e53935">79.6</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">79.6</span></td>
                 <td><span style="color:#e53935">58.2</span></td>
                 <td><span style="color:#e53935">+18.45%</span></td>
                 <td>4/2</td>
@@ -1107,15 +1047,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">6.64</span></td>
                 <td><span style="color:#e53935">24.29</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.20</span></td>
-                <td><span style="color:#888">-0.78</span></td>
-                <td><span style="color:#888">-0.24</span></td>
+                <td><span style="color:#6b7280">+0.20</span></td>
+                <td><span style="color:#6b7280">-0.78</span></td>
+                <td><span style="color:#6b7280">-0.24</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/META" target="_blank" style="color:#58a6ff">META</a></b></td>
+                <td><b>META</b></td>
                 <td>Meta</td>
-                <td><a href="https://www.investing.com/search/?q=META" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('META')">📋▼</span>
@@ -1128,11 +1067,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#3b82f6;font-weight:bold">61</span> <span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
                 <td>610</td>
                 <td><span style="color:#1e88e5">-1.16%</span></td>
-                <td><span style="color:#1e88e5">28.0</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">28.0</span></td>
                 <td><span style="color:#e53935">38.5</span></td>
                 <td><span style="color:#1e88e5">-4.91%</span></td>
                 <td>3/3</td>
@@ -1140,15 +1078,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">7.1</span></td>
                 <td><span style="color:#e53935">32.93</span></td>
                 <td><span style="color:#888">34.0%</span></td>
-                <td><span style="color:#888">-0.53</span></td>
-                <td><span style="color:#888">-0.52</span></td>
-                <td><span style="color:#888">+0.05</span></td>
+                <td><span style="color:#6b7280">-0.53</span></td>
+                <td><span style="color:#6b7280">-0.52</span></td>
+                <td><span style="color:#6b7280">+0.05</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/RKLB" target="_blank" style="color:#58a6ff">RKLB</a></b></td>
+                <td><b>RKLB</b></td>
                 <td>Rocket Lab</td>
-                <td><a href="https://www.investing.com/search/?q=RKLB" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('RKLB')">📋▼</span>
@@ -1160,12 +1097,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">23</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>105</td>
                 <td><span style="color:#e53935">+34.22%</span></td>
-                <td><span style="color:#888">60.6</span></td>
+                <td><span style="color:#6b7280">60.6</span></td>
                 <td><span style="color:#888">21.8</span></td>
                 <td><span style="color:#e53935">+63.60%</span></td>
                 <td>4/1</td>
@@ -1173,15 +1109,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">33.29</span></td>
                 <td><span style="color:#888">-13.55</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#e53935">+5.85</span></td>
-                <td><span style="color:#e53935">+3.76</span></td>
-                <td><span style="color:#e53935">+4.98</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+5.85</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+3.76</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+4.98</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/FTNT" target="_blank" style="color:#58a6ff">FTNT</a></b></td>
+                <td><b>FTNT</b></td>
                 <td>Fortinet</td>
-                <td><a href="https://www.investing.com/search/?q=FTNT" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('FTNT')">📋▼</span>
@@ -1193,12 +1128,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">53</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>114</td>
                 <td><span style="color:#e53935">+5.65%</span></td>
-                <td><span style="color:#e53935">86.0</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">86.0</span></td>
                 <td><span style="color:#e53935">35.5</span></td>
                 <td><span style="color:#e53935">+37.30%</span></td>
                 <td>4/2</td>
@@ -1206,15 +1140,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">85.13</span></td>
                 <td><span style="color:#e53935">132.39</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+2.00</span></td>
-                <td><span style="color:#e53935">+3.06</span></td>
-                <td><span style="color:#888">-0.97</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.00</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+3.06</span></td>
+                <td><span style="color:#6b7280">-0.97</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AMD" target="_blank" style="color:#58a6ff">AMD</a></b></td>
+                <td><b>AMD</b></td>
                 <td>AMD</td>
-                <td><a href="https://www.investing.com/search/?q=AMD" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AMD')">📋▼</span>
@@ -1227,11 +1160,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">41</span> <span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
                 <td>455</td>
                 <td><span style="color:#e53935">+11.44%</span></td>
-                <td><span style="color:#e53935">80.7</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">80.7</span></td>
                 <td><span style="color:#e53935">65.3</span></td>
                 <td><span style="color:#e53935">+96.10%</span></td>
                 <td>4/2</td>
@@ -1239,15 +1171,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#fb8c00">11.78</span></td>
                 <td><span style="color:#fb8c00">8.06</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#e53935">+2.67</span></td>
-                <td><span style="color:#e53935">+2.30</span></td>
-                <td><span style="color:#888">+0.42</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.67</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.30</span></td>
+                <td><span style="color:#6b7280">+0.42</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/INTC" target="_blank" style="color:#58a6ff">INTC</a></b></td>
+                <td><b>INTC</b></td>
                 <td>Intel</td>
-                <td><a href="https://www.investing.com/search/?q=INTC" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('INTC')">📋▼</span>
@@ -1259,12 +1190,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">15</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>125</td>
                 <td><span style="color:#e53935">+13.96%</span></td>
-                <td><span style="color:#e53935">88.4</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">88.4</span></td>
                 <td><span style="color:#e53935">80.4</span></td>
                 <td><span style="color:#e53935">+158.27%</span></td>
                 <td>4/2</td>
@@ -1272,15 +1202,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">5.46</span></td>
                 <td><span style="color:#888">-2.91</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#e53935">+2.95</span></td>
-                <td><span style="color:#e53935">+4.82</span></td>
-                <td><span style="color:#fb8c00">+1.21</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.95</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+4.82</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.21</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/QCOM" target="_blank" style="color:#58a6ff">QCOM</a></b></td>
+                <td><b>QCOM</b></td>
                 <td>Qualcomm</td>
-                <td><a href="https://www.investing.com/search/?q=QCOM" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('QCOM')">📋▼</span>
@@ -1293,11 +1222,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">49</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>219</td>
                 <td><span style="color:#e53935">+8.17%</span></td>
-                <td><span style="color:#e53935">86.2</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">86.2</span></td>
                 <td><span style="color:#e53935">65.1</span></td>
                 <td><span style="color:#e53935">+51.79%</span></td>
                 <td>4/2</td>
@@ -1305,15 +1233,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">8.51</span></td>
                 <td><span style="color:#e53935">36.08</span></td>
                 <td><span style="color:#888">168.0%</span></td>
-                <td><span style="color:#e53935">+3.24</span></td>
-                <td><span style="color:#e53935">+2.89</span></td>
-                <td><span style="color:#888">-0.41</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+3.24</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.89</span></td>
+                <td><span style="color:#6b7280">-0.41</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AA" target="_blank" style="color:#58a6ff">AA</a></b></td>
+                <td><b>AA</b></td>
                 <td>Alcoa</td>
-                <td><a href="https://www.investing.com/search/?q=AA" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AA')">📋▼</span>
@@ -1325,12 +1252,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">29</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">39</span> <span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
                 <td>63</td>
                 <td><span style="color:#e53935">+0.86%</span></td>
-                <td><span style="color:#888">40.0</span></td>
+                <td><span style="color:#6b7280">40.0</span></td>
                 <td><span style="color:#e53935">28.4</span></td>
                 <td><span style="color:#e53935">+23.42%</span></td>
                 <td>2/2</td>
@@ -1338,15 +1264,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">2.44</span></td>
                 <td><span style="color:#e53935">15.43</span></td>
                 <td><span style="color:#888">63.0%</span></td>
-                <td><span style="color:#888">+0.13</span></td>
-                <td><span style="color:#fb8c00">-1.17</span></td>
-                <td><span style="color:#888">-0.71</span></td>
+                <td><span style="color:#6b7280">+0.13</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.17</span></td>
+                <td><span style="color:#6b7280">-0.71</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/LITE" target="_blank" style="color:#58a6ff">LITE</a></b></td>
+                <td><b>LITE</b></td>
                 <td>Lumentum</td>
-                <td><a href="https://www.investing.com/search/?q=LITE" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('LITE')">📋▼</span>
@@ -1358,12 +1283,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">33</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>904</td>
                 <td><span style="color:#e53935">+1.26%</span></td>
-                <td><span style="color:#888">50.8</span></td>
+                <td><span style="color:#6b7280">50.8</span></td>
                 <td><span style="color:#888">23.0</span></td>
                 <td><span style="color:#e53935">+117.71%</span></td>
                 <td>3/1</td>
@@ -1371,15 +1295,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">76.23</span></td>
                 <td><span style="color:#e53935">22.83</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.02</span></td>
-                <td><span style="color:#888">+0.32</span></td>
-                <td><span style="color:#888">-0.36</span></td>
+                <td><span style="color:#6b7280">+0.02</span></td>
+                <td><span style="color:#6b7280">+0.32</span></td>
+                <td><span style="color:#6b7280">-0.36</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/CRWV" target="_blank" style="color:#58a6ff">CRWV</a></b></td>
+                <td><b>CRWV</b></td>
                 <td>Core Weave</td>
-                <td><a href="https://www.investing.com/search/?q=CRWV" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CRWV')">📋▼</span>
@@ -1391,12 +1314,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">29</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">23</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>114</td>
                 <td><span style="color:#1e88e5">-11.40%</span></td>
-                <td><span style="color:#888">48.2</span></td>
+                <td><span style="color:#6b7280">48.2</span></td>
                 <td><span style="color:#e53935">31.7</span></td>
                 <td><span style="color:#e53935">+16.91%</span></td>
                 <td>2/2</td>
@@ -1404,15 +1326,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#fb8c00">17.18</span></td>
                 <td><span style="color:#888">-40.67</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">-1.76</span></td>
-                <td><span style="color:#fb8c00">+1.01</span></td>
-                <td><span style="color:#888">+0.15</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.76</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.01</span></td>
+                <td><span style="color:#6b7280">+0.15</span></td>
                 <td>💥 폭락</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/GRAB" target="_blank" style="color:#58a6ff">GRAB</a></b></td>
+                <td><b>GRAB</b></td>
                 <td>Grab holdings</td>
-                <td><a href="https://www.investing.com/search/?q=GRAB" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('GRAB')">📋▼</span>
@@ -1424,12 +1345,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">14</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">32</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>4</td>
                 <td><span style="color:#1e88e5">-1.85%</span></td>
-                <td><span style="color:#1e88e5">20.5</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">20.5</span></td>
                 <td><span style="color:#888">22.1</span></td>
                 <td><span style="color:#1e88e5">-15.28%</span></td>
                 <td>1/4</td>
@@ -1437,15 +1357,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">2.27</span></td>
                 <td><span style="color:#888">4.77</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.73</span></td>
-                <td><span style="color:#888">-0.33</span></td>
-                <td><span style="color:#888">-0.27</span></td>
+                <td><span style="color:#6b7280">-0.73</span></td>
+                <td><span style="color:#6b7280">-0.33</span></td>
+                <td><span style="color:#6b7280">-0.27</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/IONQ" target="_blank" style="color:#58a6ff">IONQ</a></b></td>
+                <td><b>IONQ</b></td>
                 <td>IonQ</td>
-                <td><a href="https://www.investing.com/search/?q=IONQ" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('IONQ')">📋▼</span>
@@ -1457,12 +1376,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">30</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>49</td>
                 <td><span style="color:#e53935">+3.27%</span></td>
-                <td><span style="color:#888">51.6</span></td>
+                <td><span style="color:#6b7280">51.6</span></td>
                 <td><span style="color:#e53935">34.5</span></td>
                 <td><span style="color:#e53935">+34.98%</span></td>
                 <td>4/0</td>
@@ -1470,15 +1388,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">4.7</span></td>
                 <td><span style="color:#fb8c00">11.29</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.48</span></td>
-                <td><span style="color:#888">-0.06</span></td>
-                <td><span style="color:#888">-0.88</span></td>
+                <td><span style="color:#6b7280">+0.48</span></td>
+                <td><span style="color:#6b7280">-0.06</span></td>
+                <td><span style="color:#6b7280">-0.88</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/POET" target="_blank" style="color:#58a6ff">POET</a></b></td>
+                <td><b>POET</b></td>
                 <td>Poet Technologies</td>
-                <td><a href="https://www.investing.com/search/?q=POET" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('POET')">📋▼</span>
@@ -1490,12 +1407,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">0</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>11</td>
                 <td><span style="color:#e53935">+14.30%</span></td>
-                <td><span style="color:#888">55.3</span></td>
+                <td><span style="color:#6b7280">55.3</span></td>
                 <td><span style="color:#e53935">28.7</span></td>
                 <td><span style="color:#e53935">+82.64%</span></td>
                 <td>4/0</td>
@@ -1503,15 +1419,14 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.75</span></td>
-                <td><span style="color:#e53935">+2.06</span></td>
-                <td><span style="color:#888">+0.58</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.75</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.06</span></td>
+                <td><span style="color:#6b7280">+0.58</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/JOBY" target="_blank" style="color:#58a6ff">JOBY</a></b></td>
+                <td><b>JOBY</b></td>
                 <td>Joby Aviation</td>
-                <td><a href="https://www.investing.com/search/?q=JOBY" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('JOBY')">📋▼</span>
@@ -1523,12 +1438,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">12</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>11</td>
                 <td><span style="color:#e53935">+8.59%</span></td>
-                <td><span style="color:#888">63.9</span></td>
+                <td><span style="color:#6b7280">63.9</span></td>
                 <td><span style="color:#e53935">32.1</span></td>
                 <td><span style="color:#e53935">+2.36%</span></td>
                 <td>3/2</td>
@@ -1536,15 +1450,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">5.24</span></td>
                 <td><span style="color:#888">-67.97</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.57</span></td>
-                <td><span style="color:#fb8c00">+1.05</span></td>
-                <td><span style="color:#888">-0.22</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.57</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.05</span></td>
+                <td><span style="color:#6b7280">-0.22</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/CAT" target="_blank" style="color:#58a6ff">CAT</a></b></td>
+                <td><b>CAT</b></td>
                 <td>Caterpillar</td>
-                <td><a href="https://www.investing.com/search/?q=CAT" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CAT')">📋▼</span>
@@ -1556,12 +1469,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">53</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>897</td>
                 <td><span style="color:#e53935">+0.20%</span></td>
-                <td><span style="color:#e53935">70.4</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">70.4</span></td>
                 <td><span style="color:#e53935">46.1</span></td>
                 <td><span style="color:#e53935">+32.14%</span></td>
                 <td>4/2</td>
@@ -1569,15 +1481,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">22.15</span></td>
                 <td><span style="color:#e53935">51.33</span></td>
                 <td><span style="color:#888">67.0%</span></td>
-                <td><span style="color:#888">-0.11</span></td>
-                <td><span style="color:#888">-0.14</span></td>
-                <td><span style="color:#888">-0.88</span></td>
+                <td><span style="color:#6b7280">-0.11</span></td>
+                <td><span style="color:#6b7280">-0.14</span></td>
+                <td><span style="color:#6b7280">-0.88</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/COIN" target="_blank" style="color:#58a6ff">COIN</a></b></td>
+                <td><b>COIN</b></td>
                 <td>Coinbase</td>
-                <td><a href="https://www.investing.com/search/?q=COIN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('COIN')">📋▼</span>
@@ -1589,12 +1500,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">29</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">20</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>201</td>
                 <td><span style="color:#e53935">+4.25%</span></td>
-                <td><span style="color:#888">44.4</span></td>
+                <td><span style="color:#6b7280">44.4</span></td>
                 <td><span style="color:#888">15.7</span></td>
                 <td><span style="color:#888">+1.28%</span></td>
                 <td>2/1</td>
@@ -1602,15 +1512,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">3.93</span></td>
                 <td><span style="color:#888">6.69</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.89</span></td>
-                <td><span style="color:#fb8c00">+1.77</span></td>
-                <td><span style="color:#888">+0.65</span></td>
+                <td><span style="color:#6b7280">+0.89</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.77</span></td>
+                <td><span style="color:#6b7280">+0.65</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/BE" target="_blank" style="color:#58a6ff">BE</a></b></td>
+                <td><b>BE</b></td>
                 <td>Bloom Energy</td>
-                <td><a href="https://www.investing.com/search/?q=BE" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('BE')">📋▼</span>
@@ -1622,12 +1531,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">29</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">25</span> <span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
                 <td>261</td>
                 <td><span style="color:#e53935">+0.92%</span></td>
-                <td><span style="color:#888">63.5</span></td>
+                <td><span style="color:#6b7280">63.5</span></td>
                 <td><span style="color:#e53935">44.8</span></td>
                 <td><span style="color:#e53935">+76.70%</span></td>
                 <td>2/2</td>
@@ -1635,15 +1543,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">80.52</span></td>
                 <td><span style="color:#888">1.29</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">-0.06</span></td>
-                <td><span style="color:#888">+0.21</span></td>
-                <td><span style="color:#888">+0.38</span></td>
+                <td><span style="color:#6b7280">-0.06</span></td>
+                <td><span style="color:#6b7280">+0.21</span></td>
+                <td><span style="color:#6b7280">+0.38</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/OKLO" target="_blank" style="color:#58a6ff">OKLO</a></b></td>
+                <td><b>OKLO</b></td>
                 <td>Oklo</td>
-                <td><a href="https://www.investing.com/search/?q=OKLO" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('OKLO')">📋▼</span>
@@ -1655,12 +1562,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">12</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>73</td>
                 <td><span style="color:#e53935">+0.95%</span></td>
-                <td><span style="color:#888">53.0</span></td>
+                <td><span style="color:#6b7280">53.0</span></td>
                 <td><span style="color:#e53935">32.3</span></td>
                 <td><span style="color:#e53935">+4.55%</span></td>
                 <td>4/0</td>
@@ -1668,15 +1574,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">7.88</span></td>
                 <td><span style="color:#888">-12.24</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#888">+0.05</span></td>
-                <td><span style="color:#888">-0.95</span></td>
-                <td><span style="color:#888">-0.71</span></td>
+                <td><span style="color:#6b7280">+0.05</span></td>
+                <td><span style="color:#6b7280">-0.95</span></td>
+                <td><span style="color:#6b7280">-0.71</span></td>
                 <td>😴 횡보</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/MU" target="_blank" style="color:#58a6ff">MU</a></b></td>
+                <td><b>MU</b></td>
                 <td>Micron Technology</td>
-                <td><a href="https://www.investing.com/search/?q=MU" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('MU')">📋▼</span>
@@ -1688,12 +1593,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#3b82f6">📈 매수</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">53</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>747</td>
                 <td><span style="color:#e53935">+15.49%</span></td>
-                <td><span style="color:#e53935">88.0</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">88.0</span></td>
                 <td><span style="color:#e53935">60.6</span></td>
                 <td><span style="color:#e53935">+127.06%</span></td>
                 <td>4/2</td>
@@ -1701,15 +1605,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#fb8c00">11.63</span></td>
                 <td><span style="color:#e53935">39.82</span></td>
                 <td><span style="color:#888">8.0%</span></td>
-                <td><span style="color:#e53935">+3.72</span></td>
-                <td><span style="color:#e53935">+2.25</span></td>
-                <td><span style="color:#888">+0.85</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+3.72</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.25</span></td>
+                <td><span style="color:#6b7280">+0.85</span></td>
                 <td>⚡ 고변동</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/AVGO" target="_blank" style="color:#58a6ff">AVGO</a></b></td>
+                <td><b>AVGO</b></td>
                 <td>Broadcom</td>
-                <td><a href="https://www.investing.com/search/?q=AVGO" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AVGO')">📋▼</span>
@@ -1722,11 +1625,10 @@ document.addEventListener('click', function(event) {
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">53</span> <span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
                 <td>430</td>
                 <td><span style="color:#e53935">+4.23%</span></td>
-                <td><span style="color:#888">62.6</span></td>
+                <td><span style="color:#6b7280">62.6</span></td>
                 <td><span style="color:#e53935">32.2</span></td>
                 <td><span style="color:#e53935">+23.62%</span></td>
                 <td>3/2</td>
@@ -1734,15 +1636,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#888">25.5</span></td>
                 <td><span style="color:#e53935">33.37</span></td>
                 <td><span style="color:#888">60.0%</span></td>
-                <td><span style="color:#fb8c00">+1.45</span></td>
-                <td><span style="color:#fb8c00">+1.04</span></td>
-                <td><span style="color:#888">-0.19</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.45</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.04</span></td>
+                <td><span style="color:#6b7280">-0.19</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/IREN" target="_blank" style="color:#58a6ff">IREN</a></b></td>
+                <td><b>IREN</b></td>
                 <td>Irene</td>
-                <td><a href="https://www.investing.com/search/?q=IREN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('IREN')">📋▼</span>
@@ -1754,12 +1655,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">16</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>61</td>
                 <td><span style="color:#e53935">+7.65%</span></td>
-                <td><span style="color:#888">63.5</span></td>
+                <td><span style="color:#6b7280">63.5</span></td>
                 <td><span style="color:#e53935">38.1</span></td>
                 <td><span style="color:#e53935">+30.51%</span></td>
                 <td>4/1</td>
@@ -1767,15 +1667,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">8.09</span></td>
                 <td><span style="color:#888">7.73</span></td>
                 <td><span style="color:#888">0%</span></td>
-                <td><span style="color:#fb8c00">+1.05</span></td>
-                <td><span style="color:#fb8c00">+1.09</span></td>
-                <td><span style="color:#888">+0.57</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.05</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.09</span></td>
+                <td><span style="color:#6b7280">+0.57</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/BN" target="_blank" style="color:#58a6ff">BN</a></b></td>
+                <td><b>BN</b></td>
                 <td>Brookfield</td>
-                <td><a href="https://www.investing.com/search/?q=BN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('BN')">📋▼</span>
@@ -1787,12 +1686,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#ef4444;font-weight:bold">36</span> <span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
                 <td>47</td>
                 <td><span style="color:#e53935">+1.23%</span></td>
-                <td><span style="color:#888">52.6</span></td>
+                <td><span style="color:#6b7280">52.6</span></td>
                 <td><span style="color:#888">24.2</span></td>
                 <td><span style="color:#e53935">+6.15%</span></td>
                 <td>4/1</td>
@@ -1800,15 +1698,14 @@ document.addEventListener('click', function(event) {
                 <td><span style="color:#1e88e5">2.41</span></td>
                 <td><span style="color:#888">1.95</span></td>
                 <td><span style="color:#888">59.0%</span></td>
-                <td><span style="color:#888">+0.64</span></td>
-                <td><span style="color:#888">+0.20</span></td>
-                <td><span style="color:#888">-0.66</span></td>
+                <td><span style="color:#6b7280">+0.64</span></td>
+                <td><span style="color:#6b7280">+0.20</span></td>
+                <td><span style="color:#6b7280">-0.66</span></td>
                 <td>🌀 노이즈</td>
             </tr>
             <tr>
-                <td><b><a href="https://finance.yahoo.com/chart/KORU" target="_blank" style="color:#58a6ff">KORU</a></b></td>
+                <td><b>KORU</b></td>
                 <td>Korea 3x ETF</td>
-                <td><a href="https://www.investing.com/search/?q=KORU" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
                 <td>
                     <div style="position:relative; display:inline-block;">
                         <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('KORU')">📋▼</span>
@@ -1820,12 +1717,11 @@ document.addEventListener('click', function(event) {
                     </div>
                 </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
-                <td><span style="color:#ef4444">🚫 회피</span></td>
-                <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
-                <td><span style="color:#6b7280;font-weight:bold">17</span> <span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
                 <td>942</td>
                 <td><span style="color:#e53935">+22.61%</span></td>
-                <td><span style="color:#e53935">77.4</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">77.4</span></td>
                 <td><span style="color:#e53935">49.4</span></td>
                 <td><span style="color:#e53935">+245.14%</span></td>
                 <td>4/2</td>
@@ -1833,9 +1729,9 @@ document.addEventListener('click', function(event) {
                 <td><span style='color:#555'>-</span></td>
                 <td><span style='color:#555'>-</span></td>
                 <td><span style="color:#888">28.0%</span></td>
-                <td><span style="color:#e53935">+2.96</span></td>
-                <td><span style="color:#888">+0.89</span></td>
-                <td><span style="color:#888">-0.18</span></td>
+                <td>🔥<span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">+2.96</span></td>
+                <td><span style="color:#6b7280">+0.89</span></td>
+                <td><span style="color:#6b7280">-0.18</span></td>
                 <td>🌀 노이즈</td>
             </tr>
         </tbody>
@@ -1864,6 +1760,23 @@ document.addEventListener('click', function(event) {
     </div>
     
     <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📊 Yahoo Finance</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            미국 주식 재무제표와 차트 분석을 위한 필수 금융 플랫폼
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://finance.yahoo.com" target="_blank" style="display:inline-block; background:#6f42c1; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🌐 Yahoo Finance 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>미국 주식 재무제표 및 실적 분석</li>
+            <li>인터랙티브 차트 및 기술적 지표</li>
+            <li>실시간 뉴스 및 애널리스트 리포트</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
         <h4 style="margin:0 0 12px 0; color:#e6edf3;">📈 위폴 주식 커뮤니티</h4>
         <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
             개인투자자들의 실전 투자 경험과 종목 분석을 공유하는 커뮤니티
@@ -1877,6 +1790,23 @@ document.addEventListener('click', function(event) {
             <li>실시간 종목 토론 및 의견 교환</li>
             <li>개인투자자 관점의 투자 아이디어</li>
             <li>시장 동향 및 투자 전략 공유</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">🤖 Gemini AI</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            투자 아이디어 검증과 심층 분석을 위한 AI 어시스턴트
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://gemini.google.com/gem/2fcc2fede5c6" target="_blank" style="display:inline-block; background:#f59e0b; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🧠 Gemini 대화 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>종목 분석 및 투자 전략 검증</li>
+            <li>재무데이터 해석 및 트렌드 분석</li>
+            <li>리스크 요인 및 시나리오 플래닝</li>
         </ul>
     </div>
 </div>
