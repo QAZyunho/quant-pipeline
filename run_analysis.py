@@ -20,11 +20,13 @@ log = logging.getLogger(__name__)
 
 # ── 경로 ─────────────────────────────────────────────────────
 REPORTS_DIR = Path("reports")
-REPORTS_DIR.mkdir(exist_ok=True)
+MD_DIR   = REPORTS_DIR / "md"
+JSON_DIR = REPORTS_DIR / "json"
+MD_DIR.mkdir(parents=True, exist_ok=True)
+JSON_DIR.mkdir(parents=True, exist_ok=True)
 
 TODAY = datetime.today().strftime("%Y-%m-%d")
-REPORT_PATH = REPORTS_DIR / f"{TODAY}.md"
-
+REPORT_PATH = MD_DIR / f"{TODAY}.md"
 # ── 관심 종목 (watchlist.json에서 로드) ──────────────────────
 WATCHLIST_PATH = Path("watchlist.json")
 
@@ -366,11 +368,16 @@ def main():
         "kr": {t: {"name": n, **s} if s else {"name": n} for t, (n, s) in kr_results.items()},
         "us": {t: {"name": n, **s} if s else {"name": n} for t, (n, s) in us_results.items()},
     }
-    (REPORTS_DIR / f"{TODAY}.json").write_text(
+    # md 저장
+    REPORT_PATH.write_text(report, encoding="utf-8")
+    (MD_DIR / "latest.md").write_text(report, encoding="utf-8")
+    log.info(f"✅ 리포트 저장: {REPORT_PATH}")
+
+    # json 저장 (git 제외)
+    (JSON_DIR / f"{TODAY}.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    log.info("✅ JSON 요약 저장 완료")
-
+    log.info("✅ JSON 저장 완료")
 
 if __name__ == "__main__":
     main()
