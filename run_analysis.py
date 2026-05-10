@@ -509,13 +509,49 @@ def build_report(kr_results: dict, us_results: dict) -> str:
   <tr><td><strong>이자보상배율</strong></td><td style="color:#1e88e5">5배 이상</td><td style="color:#fb8c00">3배 이하</td><td><strong>영업이익 ÷ 이자비용</strong><br/>영업으로 번 돈으로 이자를 몇 번 갚을 수 있는지. 5배면 "이자의 5배를 벌고 있어 안전". 3배 미만이면 이자 부담이 과중</td></tr>
 </table>
 
-<h3>종합 스코어링</h3>
+<h3>종합 스코어링 상세</h3>
+
+<h4>🎯 스윙점수 (0~100점) - 단기 진입 타이밍</h4>
 <table class="legend-table">
-  <tr><th>구분</th><th>구성요소</th><th>점수 범위</th><th>활용법</th></tr>
-  <tr><td><strong>🎯 스윙점수</strong></td><td>RSI, MACD, 볼린저, ADX<br/>거래량, 모멘텀, 수익률</td><td>0~100점</td><td>단기 진입 타이밍 판단<br/>70점 이상: 진입 고려</td></tr>
-  <tr><td><strong>⭐ 장기점수</strong></td><td>수익성(25) + 안정성(25)<br/>밸류에이션(25) + 성장성(25)</td><td>0~100점<br/>A+ ~ F등급</td><td>장기 투자가치 판단<br/>B+ 이상 종목 선호</td></tr>
-  <tr><td><strong>🎊 최종추천</strong></td><td>스윙 + 장기 종합</td><td>강매수/매수/스윙<br/>관심/보유/회피</td><td>투자 의사결정 참고<br/>개인 성향에 맞게 활용</td></tr>
+  <tr><th>점수</th><th>매수신호 개수</th><th>의미</th><th>조치</th></tr>
+  <tr><td style="color:#22c55e"><strong>80~100점</strong></td><td>6~7개 매수</td><td>강한 단기 상승 신호</td><td>적극적 진입 고려</td></tr>
+  <tr><td style="color:#3b82f6"><strong>60~79점</strong></td><td>4~5개 매수</td><td>양호한 진입 타이밍</td><td>조건부 진입</td></tr>
+  <tr><td style="color:#f59e0b"><strong>40~59점</strong></td><td>3개 매수</td><td>중립적, 방향성 애매</td><td>추가 확인 필요</td></tr>
+  <tr><td style="color:#ef4444"><strong>20~39점</strong></td><td>1~2개 매수</td><td>약한 신호, 하락 우세</td><td>진입 보류</td></tr>
+  <tr><td style="color:#6b7280"><strong>0~19점</strong></td><td>0~1개 매수</td><td>강한 하락 신호</td><td>매도 고려</td></tr>
 </table>
+<p><small>📊 <strong>계산법</strong>: (매수신호 개수 ÷ 7) × 100<br/>
+📋 <strong>7가지 신호</strong>: RSI(35↓), MACD(양수), 볼린저(하단25%↓), ADX방향(DI+>DI-), MA크로스(20>60), 모멘텀(+2%↑), 거래량(1.5배↑)</small></p>
+
+<h4>⭐ 장기점수 (0~100점) - 투자가치 평가</h4>
+<table class="legend-table">
+  <tr><th>등급</th><th>점수</th><th>투자가치</th><th>예시 조건</th></tr>
+  <tr><td style="color:#22c55e"><strong>A+ (85~100)</strong></td><td>85~100점</td><td>최우량 종목</td><td>ROE 15%+ 저PER + 고성장</td></tr>
+  <tr><td style="color:#3b82f6"><strong>A (75~84)</strong></td><td>75~84점</td><td>우량 종목</td><td>안정성+수익성 양호</td></tr>
+  <tr><td style="color:#06b6d4"><strong>B+ (65~74)</strong></td><td>65~74점</td><td>양호한 종목</td><td>일부 지표 우수</td></tr>
+  <tr><td style="color:#8b5cf6"><strong>B (55~64)</strong></td><td>55~64점</td><td>평균 수준</td><td>무난하지만 특별하지 않음</td></tr>
+  <tr><td style="color:#f59e0b"><strong>C+ (45~54)</strong></td><td>45~54점</td><td>관심 필요</td><td>일부 지표 부족</td></tr>
+  <tr><td style="color:#fb8c00"><strong>C (35~44)</strong></td><td>35~44점</td><td>투자 신중</td><td>여러 지표 부족</td></tr>
+  <tr><td style="color:#ef4444"><strong>D (25~34)</strong></td><td>25~34점</td><td>위험 종목</td><td>재무상태 불량</td></tr>
+  <tr><td style="color:#6b7280"><strong>F (0~24)</strong></td><td>0~24점</td><td>투자 부적합</td><td>대부분 지표 나쁨</td></tr>
+</table>
+<p><small>📊 <strong>4개 영역별 25점씩</strong>:<br/>
+🏆 <strong>수익성(25점)</strong>: ROE 15%↑(10점) + ROA 8%↑(8점) + 영업이익률 10%↑(7점)<br/>
+🛡️ <strong>안정성(25점)</strong>: 부채비율 50%↓(10점) + 유동비율 150%↑(8점) + 이자보상배율 5↑(7점)<br/>
+💰 <strong>밸류에이션(25점)</strong>: PER 적정(12점) + PBR 저평가(13점)<br/>
+📈 <strong>성장성(25점)</strong>: 매출성장률 15%↑(12점) + 영업이익성장률 20%↑(13점)</small></p>
+
+<h4>🎊 최종추천 - 스윙+장기 종합판단</h4>
+<table class="legend-table">
+  <tr><th>추천</th><th>조건</th><th>투자 성향</th><th>예시</th></tr>
+  <tr><td style="color:#22c55e"><strong>🚀 강매수</strong></td><td>스윙70+ & 장기60+</td><td>적극적 성장 추구</td><td>스윙85 + 장기A</td></tr>
+  <tr><td style="color:#3b82f6"><strong>📈 매수</strong></td><td>스윙50+ & 장기50+</td><td>안정적 수익 추구</td><td>스윙65 + 장기B+</td></tr>
+  <tr><td style="color:#8b5cf6"><strong>⚡ 스윙</strong></td><td>스윙70+ & 장기30~70</td><td>단기 트레이딩</td><td>스윙80 + 장기C</td></tr>
+  <tr><td style="color:#06b6d4"><strong>👁️ 관심</strong></td><td>스윙30~70 & 장기70+</td><td>장기 관점 대기</td><td>스윙40 + 장기A</td></tr>
+  <tr><td style="color:#f59e0b"><strong>🤝 보유</strong></td><td>스윙40+ & 장기40+</td><td>현상 유지</td><td>스윙45 + 장기B</td></tr>
+  <tr><td style="color:#ef4444"><strong>🚫 회피</strong></td><td>장기30 미만</td><td>투자 부적합</td><td>장기 F등급</td></tr>
+</table>
+<p><small>💡 <strong>활용 팁</strong>: 개인 투자 성향에 맞춰 선택적 참고. 스윙 점수는 진입 타이밍, 장기 점수는 종목 선별 기준으로 활용</small></p>
 
 <h3>시장 체제</h3>
 <table class="legend-table">
