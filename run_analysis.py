@@ -397,24 +397,26 @@ def build_report(kr_results: dict, us_results: dict) -> str:
     <table>
         <thead>
             <tr>
-                <th>티커</th><th>종목명</th>
+                <th onclick="sortTable(0)" class="sortable">티커</th>
+                <th onclick="sortTable(1)" class="sortable">종목명</th>
                 <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
-                <th>종합신호</th>
-                <th>군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
-                <th>생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
-                <th>현재가</th><th>등락률</th>
-                <th>RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
-                <th>ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
-                <th>모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
-                <th>매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
-                <th>PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
-                <th>PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
-                <th>ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
-                <th>배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
-                <th>수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
-                <th>변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
-                <th>거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
-                <th>체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
+                <th onclick="sortTable(3)" class="sortable">종합신호</th>
+                <th onclick="sortTable(4)" class="sortable">군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
+                <th onclick="sortTable(5)" class="sortable">생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
+                <th onclick="sortTable(6)" class="sortable">현재가</th>
+                <th onclick="sortTable(7)" class="sortable">등락률</th>
+                <th onclick="sortTable(8)" class="sortable">RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
+                <th onclick="sortTable(9)" class="sortable">ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
+                <th onclick="sortTable(10)" class="sortable">모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
+                <th onclick="sortTable(11)" class="sortable">매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
+                <th onclick="sortTable(12)" class="sortable">PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
+                <th onclick="sortTable(13)" class="sortable">PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
+                <th onclick="sortTable(14)" class="sortable">ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
+                <th onclick="sortTable(15)" class="sortable">배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
+                <th onclick="sortTable(16)" class="sortable">수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
+                <th onclick="sortTable(17)" class="sortable">변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
+                <th onclick="sortTable(18)" class="sortable">거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
+                <th onclick="sortTable(19)" class="sortable">체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
             </tr>
         </thead>
         <tbody>
@@ -520,6 +522,16 @@ def build_report(kr_results: dict, us_results: dict) -> str:
   }}
   .footer {{ color: #8b949e; font-size: 0.8em; margin-top: 40px;
              border-top: 1px solid #30363d; padding-top: 12px; }}
+  
+  /* 정렬 가능한 헤더 스타일 */
+  .sortable {{ 
+    cursor: pointer; 
+    user-select: none;
+    transition: background-color 0.2s ease;
+  }}
+  .sortable:hover {{ 
+    background-color: #30363d !important; 
+  }}
 </style>
 <script>
 function toggleFinanceMenu(ticker) {{
@@ -539,6 +551,71 @@ document.addEventListener('click', function(event) {{
         document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
     }}
 }});
+
+// 테이블 정렬 기능 - 극단적 이상치 사냥을 위한 무기
+let currentSort = {{ column: -1, ascending: true }};
+
+function sortTable(columnIndex) {{
+    const table = document.querySelector('table');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // 정렬 방향 결정
+    if (currentSort.column === columnIndex) {{
+        currentSort.ascending = !currentSort.ascending;
+    }} else {{
+        currentSort.ascending = false; // 첫 클릭은 내림차순 (극값부터)
+        currentSort.column = columnIndex;
+    }}
+    
+    // 모든 헤더에서 정렬 표시 제거
+    table.querySelectorAll('th').forEach(th => {{
+        th.innerHTML = th.innerHTML.replace(/[↑↓]/g, '');
+    }});
+    
+    // 현재 헤더에 정렬 방향 표시
+    const header = table.querySelectorAll('th')[columnIndex];
+    header.innerHTML += currentSort.ascending ? ' ↑' : ' ↓';
+    
+    // 정렬 로직
+    rows.sort((a, b) => {{
+        let aVal = a.children[columnIndex].textContent.trim();
+        let bVal = b.children[columnIndex].textContent.trim();
+        
+        // 숫자 추출 (%, +/-, 특수문자 제거)
+        const extractNumber = (str) => {{
+            // 🔥💀 등의 이모지 제거하고 숫자만 추출
+            const match = str.replace(/[🔥💀⚠️]/g, '').match(/[-+]?\d*\.?\d+/);
+            return match ? parseFloat(match[0]) : 0;
+        }};
+        
+        const numA = extractNumber(aVal);
+        const numB = extractNumber(bVal);
+        
+        if (!isNaN(numA) && !isNaN(numB)) {{
+            // 극단치 우선 정렬 (절댓값 기준)
+            if (columnIndex >= 16 && columnIndex <= 18) {{ // Z-Score 컬럼들 (수익률Z, 변동폭Z, 거래량Z)
+                const absA = Math.abs(numA);
+                const absB = Math.abs(numB);
+                if (currentSort.ascending) {{
+                    return absA - absB;
+                }} else {{
+                    return absB - absA; // 극단치(절댓값 큰 것)부터
+                }}
+            }} else {{
+                return currentSort.ascending ? numA - numB : numB - numA;
+            }}
+        }}
+        
+        // 텍스트 정렬
+        return currentSort.ascending ? 
+            aVal.localeCompare(bVal) : 
+            bVal.localeCompare(aVal);
+    }});
+    
+    // 재정렬된 행들을 테이블에 다시 추가
+    rows.forEach(row => tbody.appendChild(row));
+}}
 </script>
 </head>
 <body>
