@@ -355,9 +355,15 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 icon, color, text = rec_map.get(rec, ("❓", "#6b7280", "미지"))
                 return f'<span style="color:{color}">{icon} {text}</span>'
 
+            # 차트 링크 생성
+            if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
+                chart_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
+            else:  # 미국 주식
+                chart_link = f"https://finance.yahoo.com/chart/{ticker}"
+            
             rows += f"""
             <tr>
-                <td><b>{ticker}</b></td>
+                <td><b><a href="{chart_link}" target="_blank" style="color:#58a6ff">{ticker}</a></b></td>
                 <td>{name}</td>
                 <td>{color_signal(sig['overall'])}</td>
                 <td>{fmt_recommendation(recommendation)}</td>
@@ -454,6 +460,45 @@ def build_report(kr_results: dict, us_results: dict) -> str:
 {make_table(us_results)}
         </tbody>
     </table>
+
+<h2>📈 주요 종목 차트 (클릭하여 상세 차트 보기)</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">"""
+
+    # 상위 추천 종목들의 차트 위젯 추가
+    top_picks = []
+    for ticker, (name, sig) in list(kr_results.items())[:3]:  # 상위 3개
+        if sig and sig.get("comprehensive_scores", {}).get("recommendation") in ["strong_buy", "buy"]:
+            top_picks.append((ticker, name, "KR"))
+    
+    for ticker, (name, sig) in list(us_results.items())[:3]:  # 상위 3개  
+        if sig and sig.get("comprehensive_scores", {}).get("recommendation") in ["strong_buy", "buy"]:
+            top_picks.append((ticker, name, "US"))
+    
+    for ticker, name, market in top_picks[:6]:  # 최대 6개
+        if market == "KR":
+            widget_symbol = f"KRX:{ticker}"
+            naver_link = f"https://finance.naver.com/item/fchart.naver?code={ticker}"
+        else:
+            widget_symbol = f"NASDAQ:{ticker}" if ticker in ["AAPL", "MSFT", "GOOGL", "AMZN", "META", "TSLA", "NVDA"] else f"NYSE:{ticker}"
+            naver_link = f"https://finance.yahoo.com/chart/{ticker}"
+            
+        html += f"""
+<div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
+    <h4 style="margin:0 0 8px 0; color:#e6edf3;">{ticker} - {name}</h4>
+    <div style="position:relative; height:300px;">
+        <!-- TradingView 위젯 -->
+        <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tv_chart_{ticker}&symbol={widget_symbol}&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=0d1117&studies=[]&theme=dark&style=1&timezone=Asia%2FSeoul&withdateranges=1&hideideas=1&hidelogo=1&allow_symbol_change=false&width=100%25&height=300"
+                style="width:100%; height:100%; border:none;"></iframe>
+    </div>
+    <div style="margin-top:8px; text-align:center;">
+        <a href="{naver_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em;">
+            📊 상세 차트 보기
+        </a>
+    </div>
+</div>"""
+
+    html += """
+</div>
 
 <details>
 <summary>📖 지표 설명 (클릭해서 펼치기)</summary>
