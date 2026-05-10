@@ -53,10 +53,14 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # reports 브랜치를 별도 폴더로 체크아웃
           git fetch origin reports
-          git checkout reports
-          mkdir -p md
-          cp reports/md/*.md md/ 2>/dev/null || true
+          git worktree add /tmp/reports-branch origin/reports
+          # md 파일 복사
+          mkdir -p /tmp/reports-branch/md
+          cp reports/md/*.md /tmp/reports-branch/md/ 2>/dev/null || true
+          # 커밋 & 푸시
+          cd /tmp/reports-branch
           git add md/
           git diff --staged --quiet || git commit -m "📊 일별 분석 리포트: $(date +'%Y-%m-%d')"
           git push origin reports
