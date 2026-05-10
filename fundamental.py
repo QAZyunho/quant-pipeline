@@ -197,27 +197,26 @@ def _get_current_price_naver(ticker: str) -> float:
 # ════════════════════════════════════════════════════════════
 # 통합 수집 함수
 # ════════════════════════════════════════════════════════════
-def enrich_with_fundamental(
-    ticker: str,
-    market: str,
-    current_price: float = 0,
-) -> dict:
-    """
-    OHLCV 분석 결과에 펀더멘털 + 목표주가를 추가해서 반환.
-    run_analysis.py 에서 호출.
-    """
+def enrich_with_fundamental(ticker, market, current_price=0):
     result = {}
 
     if market == "KR":
+        # pykrx: PER, PBR, DIV
         fund = get_kr_fundamental(ticker)
         result.update(fund)
-        time.sleep(0.3)
-        target = get_target_price(ticker)
-        result["target"] = target
+
+        # OpenDart: ROE, ROA, 재무제표
+        from dart_collector import get_dart_financials
+        dart_data = get_dart_financials(ticker)
+        if dart_data:
+            result["roe"]        = dart_data.get("roe", 0)
+            result["roa"]        = dart_data.get("roa", 0)
+            result["debt_ratio"] = dart_data.get("debt_ratio", 0)
+            result["op_margin"]  = dart_data.get("op_margin", 0)
+            result["dart"]       = dart_data  # 전체 재무데이터 보관
 
     elif market == "US":
         fund = get_us_fundamental(ticker)
         result.update(fund)
-        result["target"] = {}  # 미국 목표주가는 추후 추가
 
     return result

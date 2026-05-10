@@ -46,6 +46,7 @@ jobs:
         env:
           KIWOOM_APPKEY: ${{ secrets.KIWOOM_APPKEY }}
           KIWOOM_SECRETKEY: ${{ secrets.KIWOOM_SECRETKEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
         run: python run_analysis.py
 
       # 5. 결과를 레포에 커밋
