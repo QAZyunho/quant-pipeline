@@ -99,11 +99,30 @@
   .footer { color: #8b949e; font-size: 0.8em; margin-top: 40px;
              border-top: 1px solid #30363d; padding-top: 12px; }
 </style>
+<script>
+function toggleFinanceMenu(ticker) {
+    const menu = document.getElementById('finance_' + ticker);
+    const isVisible = menu.style.display === 'block';
+    
+    // 모든 메뉴 숨기기
+    document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
+    
+    // 클릭한 메뉴만 토글
+    menu.style.display = isVisible ? 'none' : 'block';
+}
+
+// 외부 클릭시 메뉴 닫기
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('[onclick*="toggleFinanceMenu"]')) {
+        document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
+    }
+});
+</script>
 </head>
 <body>
 
 <h1>📊 퀀트 일별 분석 리포트</h1>
-<div class="meta">생성일시: 2026-05-10 18:09:19 KST</div>
+<div class="meta">생성일시: 2026-05-10 18:25:17 KST</div>
 <div class="warn">⚠️ 본 리포트는 <b>보조 참고용</b>입니다. 투자 판단은 본인 책임입니다.</div>
 
 <h2>🇰🇷 한국 시장</h2>
@@ -113,6 +132,7 @@
             <tr>
                 <th>티커</th><th>종목명</th>
                 <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
+                <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
                 <th>종합신호</th>
                 <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
                 <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
@@ -139,6 +159,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=005930" target="_blank" style="color:#58a6ff">005930</a></b></td>
                 <td>삼성전자</td>
                 <td><a href="https://kr.investing.com/search/?q=005930" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('005930')">📋▼</span>
+                        <div id="finance_005930" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=005930' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=005930" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=005930' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -162,6 +192,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000660" target="_blank" style="color:#58a6ff">000660</a></b></td>
                 <td>SK하이닉스</td>
                 <td><a href="https://kr.investing.com/search/?q=000660" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000660')">📋▼</span>
+                        <div id="finance_000660" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=000660' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=000660" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=000660' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -185,6 +225,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=035420" target="_blank" style="color:#58a6ff">035420</a></b></td>
                 <td>NAVER</td>
                 <td><a href="https://kr.investing.com/search/?q=035420" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('035420')">📋▼</span>
+                        <div id="finance_035420" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=035420' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=035420" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=035420' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#ef4444;font-weight:bold">29</span></td>
@@ -208,6 +258,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=005380" target="_blank" style="color:#58a6ff">005380</a></b></td>
                 <td>현대차</td>
                 <td><a href="https://kr.investing.com/search/?q=005380" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('005380')">📋▼</span>
+                        <div id="finance_005380" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=005380' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=005380" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=005380' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -231,6 +291,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=336260" target="_blank" style="color:#58a6ff">336260</a></b></td>
                 <td>두산퓨얼셀</td>
                 <td><a href="https://kr.investing.com/search/?q=336260" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('336260')">📋▼</span>
+                        <div id="finance_336260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=336260' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=336260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=336260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -254,6 +324,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000880" target="_blank" style="color:#58a6ff">000880</a></b></td>
                 <td>한화</td>
                 <td><a href="https://kr.investing.com/search/?q=000880" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000880')">📋▼</span>
+                        <div id="finance_000880" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=000880' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=000880" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=000880' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -277,6 +357,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=375500" target="_blank" style="color:#58a6ff">375500</a></b></td>
                 <td>DL이앤씨</td>
                 <td><a href="https://kr.investing.com/search/?q=375500" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('375500')">📋▼</span>
+                        <div id="finance_375500" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=375500' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=375500" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=375500' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -300,6 +390,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=071970" target="_blank" style="color:#58a6ff">071970</a></b></td>
                 <td>HD현대마린엔진</td>
                 <td><a href="https://kr.investing.com/search/?q=071970" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('071970')">📋▼</span>
+                        <div id="finance_071970" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=071970' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=071970" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=071970' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#06b6d4">👁️ 관심</span></td>
                 <td><span style="color:#ef4444;font-weight:bold">29</span></td>
@@ -323,6 +423,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=003550" target="_blank" style="color:#58a6ff">003550</a></b></td>
                 <td>LG</td>
                 <td><a href="https://kr.investing.com/search/?q=003550" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('003550')">📋▼</span>
+                        <div id="finance_003550" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=003550' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=003550" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=003550' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -346,6 +456,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=402340" target="_blank" style="color:#58a6ff">402340</a></b></td>
                 <td>SK스퀘어</td>
                 <td><a href="https://kr.investing.com/search/?q=402340" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('402340')">📋▼</span>
+                        <div id="finance_402340" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=402340' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=402340" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=402340' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -369,6 +489,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=006800" target="_blank" style="color:#58a6ff">006800</a></b></td>
                 <td>미래에셋증권</td>
                 <td><a href="https://kr.investing.com/search/?q=006800" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('006800')">📋▼</span>
+                        <div id="finance_006800" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=006800' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=006800" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=006800' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -392,6 +522,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=039490" target="_blank" style="color:#58a6ff">039490</a></b></td>
                 <td>키움증권</td>
                 <td><a href="https://kr.investing.com/search/?q=039490" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('039490')">📋▼</span>
+                        <div id="finance_039490" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=039490' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=039490" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=039490' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -415,6 +555,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=006260" target="_blank" style="color:#58a6ff">006260</a></b></td>
                 <td>LS</td>
                 <td><a href="https://kr.investing.com/search/?q=006260" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('006260')">📋▼</span>
+                        <div id="finance_006260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=006260' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=006260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=006260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -438,6 +588,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=000155" target="_blank" style="color:#58a6ff">000155</a></b></td>
                 <td>두산우</td>
                 <td><a href="https://kr.investing.com/search/?q=000155" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000155')">📋▼</span>
+                        <div id="finance_000155" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=000155' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=000155" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=000155' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -461,6 +621,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=329180" target="_blank" style="color:#58a6ff">329180</a></b></td>
                 <td>HD현대중공업</td>
                 <td><a href="https://kr.investing.com/search/?q=329180" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('329180')">📋▼</span>
+                        <div id="finance_329180" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=329180' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=329180" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=329180' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -484,6 +654,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=010060" target="_blank" style="color:#58a6ff">010060</a></b></td>
                 <td>OCI홀딩스</td>
                 <td><a href="https://kr.investing.com/search/?q=010060" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('010060')">📋▼</span>
+                        <div id="finance_010060" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=010060' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=010060" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=010060' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -507,6 +687,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=277810" target="_blank" style="color:#58a6ff">277810</a></b></td>
                 <td>레인보우로보틱스</td>
                 <td><a href="https://kr.investing.com/search/?q=277810" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('277810')">📋▼</span>
+                        <div id="finance_277810" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=277810' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=277810" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=277810' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -530,6 +720,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=454910" target="_blank" style="color:#58a6ff">454910</a></b></td>
                 <td>두산로보틱스</td>
                 <td><a href="https://kr.investing.com/search/?q=454910" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('454910')">📋▼</span>
+                        <div id="finance_454910" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=454910' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=454910" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=454910' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -553,6 +753,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=096770" target="_blank" style="color:#58a6ff">096770</a></b></td>
                 <td>SK이노베이션</td>
                 <td><a href="https://kr.investing.com/search/?q=096770" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('096770')">📋▼</span>
+                        <div id="finance_096770" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=096770' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=096770" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=096770' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -576,6 +786,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=003490" target="_blank" style="color:#58a6ff">003490</a></b></td>
                 <td>대한항공</td>
                 <td><a href="https://kr.investing.com/search/?q=003490" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('003490')">📋▼</span>
+                        <div id="finance_003490" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=003490' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=003490" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=003490' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -599,6 +819,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=034020" target="_blank" style="color:#58a6ff">034020</a></b></td>
                 <td>두산에너빌리티</td>
                 <td><a href="https://kr.investing.com/search/?q=034020" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('034020')">📋▼</span>
+                        <div id="finance_034020" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=034020' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=034020" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=034020' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -622,6 +852,16 @@
                 <td><b><a href="https://finance.naver.com/item/fchart.naver?code=028260" target="_blank" style="color:#58a6ff">028260</a></b></td>
                 <td>삼성물산</td>
                 <td><a href="https://kr.investing.com/search/?q=028260" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('028260')">📋▼</span>
+                        <div id="finance_028260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/dsac001/search.ax?textCrpNm=028260' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 공시</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=028260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=028260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -651,6 +891,7 @@
             <tr>
                 <th>티커</th><th>종목명</th>
                 <th>차트 <span class="help-icon" title="Investing.com 전문 차트&#10;클릭하면 고급 차트 도구 사용 가능&#10;다양한 기술적 지표와 분석 도구 제공">?</span></th>
+                <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
                 <th>종합신호</th>
                 <th>최종추천 <span class="help-icon" title="스윙+장기 종합 투자 추천&#10;🚀강매수: 스윙70+ & 장기60+&#10;📈매수: 스윙50+ & 장기50+&#10;⚡스윙: 스윙70+ (단기)&#10;👁️관심: 장기70+ (대기)&#10;🤝보유: 무난한 수준&#10;🚫회피: 장기30 미만">?</span></th>
                 <th>스윙점수 <span class="help-icon" title="단기 진입 타이밍 점수 (0-100)&#10;계산: (매수신호 개수 ÷ 7) × 100&#10;80+: 적극적 진입 고려&#10;60+: 조건부 진입&#10;40+: 추가 확인 필요&#10;20-: 진입 보류">?</span></th>
@@ -677,6 +918,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/AAPL" target="_blank" style="color:#58a6ff">AAPL</a></b></td>
                 <td>Apple</td>
                 <td><a href="https://www.investing.com/search/?q=AAPL" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AAPL')">📋▼</span>
+                        <div id="finance_AAPL" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AAPL/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -700,6 +951,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/NVDA" target="_blank" style="color:#58a6ff">NVDA</a></b></td>
                 <td>NVIDIA</td>
                 <td><a href="https://www.investing.com/search/?q=NVDA" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('NVDA')">📋▼</span>
+                        <div id="finance_NVDA" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/NVDA/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -723,6 +984,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/MSFT" target="_blank" style="color:#58a6ff">MSFT</a></b></td>
                 <td>Microsoft</td>
                 <td><a href="https://www.investing.com/search/?q=MSFT" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('MSFT')">📋▼</span>
+                        <div id="finance_MSFT" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/MSFT/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#6b7280;font-weight:bold">14</span></td>
@@ -746,6 +1017,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/GOOGL" target="_blank" style="color:#58a6ff">GOOGL</a></b></td>
                 <td>Alphabet A</td>
                 <td><a href="https://www.investing.com/search/?q=GOOGL" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('GOOGL')">📋▼</span>
+                        <div id="finance_GOOGL" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/GOOGL/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -769,6 +1050,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/SPY" target="_blank" style="color:#58a6ff">SPY</a></b></td>
                 <td>S&P500 ETF</td>
                 <td><a href="https://www.investing.com/search/?q=SPY" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('SPY')">📋▼</span>
+                        <div id="finance_SPY" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/SPY/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -792,6 +1083,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/AMZN" target="_blank" style="color:#58a6ff">AMZN</a></b></td>
                 <td>Amazon</td>
                 <td><a href="https://www.investing.com/search/?q=AMZN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AMZN')">📋▼</span>
+                        <div id="finance_AMZN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AMZN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -815,6 +1116,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/META" target="_blank" style="color:#58a6ff">META</a></b></td>
                 <td>Meta</td>
                 <td><a href="https://www.investing.com/search/?q=META" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('META')">📋▼</span>
+                        <div id="finance_META" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/META/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -838,6 +1149,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/RKLB" target="_blank" style="color:#58a6ff">RKLB</a></b></td>
                 <td>Rocket Lab</td>
                 <td><a href="https://www.investing.com/search/?q=RKLB" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('RKLB')">📋▼</span>
+                        <div id="finance_RKLB" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/RKLB/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -861,6 +1182,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/FTNT" target="_blank" style="color:#58a6ff">FTNT</a></b></td>
                 <td>Fortinet</td>
                 <td><a href="https://www.investing.com/search/?q=FTNT" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('FTNT')">📋▼</span>
+                        <div id="finance_FTNT" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/FTNT/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -884,6 +1215,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/AMD" target="_blank" style="color:#58a6ff">AMD</a></b></td>
                 <td>AMD</td>
                 <td><a href="https://www.investing.com/search/?q=AMD" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AMD')">📋▼</span>
+                        <div id="finance_AMD" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AMD/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -907,6 +1248,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/INTC" target="_blank" style="color:#58a6ff">INTC</a></b></td>
                 <td>Intel</td>
                 <td><a href="https://www.investing.com/search/?q=INTC" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('INTC')">📋▼</span>
+                        <div id="finance_INTC" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/INTC/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -930,6 +1281,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/QCOM" target="_blank" style="color:#58a6ff">QCOM</a></b></td>
                 <td>Qualcomm</td>
                 <td><a href="https://www.investing.com/search/?q=QCOM" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('QCOM')">📋▼</span>
+                        <div id="finance_QCOM" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/QCOM/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -953,6 +1314,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/AA" target="_blank" style="color:#58a6ff">AA</a></b></td>
                 <td>Alcoa</td>
                 <td><a href="https://www.investing.com/search/?q=AA" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AA')">📋▼</span>
+                        <div id="finance_AA" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AA/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#ef4444;font-weight:bold">29</span></td>
@@ -976,6 +1347,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/LITE" target="_blank" style="color:#58a6ff">LITE</a></b></td>
                 <td>Lumentum</td>
                 <td><a href="https://www.investing.com/search/?q=LITE" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('LITE')">📋▼</span>
+                        <div id="finance_LITE" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/LITE/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -999,6 +1380,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/CRWV" target="_blank" style="color:#58a6ff">CRWV</a></b></td>
                 <td>Core Weave</td>
                 <td><a href="https://www.investing.com/search/?q=CRWV" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CRWV')">📋▼</span>
+                        <div id="finance_CRWV" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/CRWV/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#ef4444;font-weight:bold">29</span></td>
@@ -1022,6 +1413,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/GRAB" target="_blank" style="color:#58a6ff">GRAB</a></b></td>
                 <td>Grab holdings</td>
                 <td><a href="https://www.investing.com/search/?q=GRAB" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('GRAB')">📋▼</span>
+                        <div id="finance_GRAB" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/GRAB/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#6b7280;font-weight:bold">14</span></td>
@@ -1045,6 +1446,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/IONQ" target="_blank" style="color:#58a6ff">IONQ</a></b></td>
                 <td>IonQ</td>
                 <td><a href="https://www.investing.com/search/?q=IONQ" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('IONQ')">📋▼</span>
+                        <div id="finance_IONQ" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/IONQ/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1068,6 +1479,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/POET" target="_blank" style="color:#58a6ff">POET</a></b></td>
                 <td>Poet Technologies</td>
                 <td><a href="https://www.investing.com/search/?q=POET" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('POET')">📋▼</span>
+                        <div id="finance_POET" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/POET/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1091,6 +1512,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/JOBY" target="_blank" style="color:#58a6ff">JOBY</a></b></td>
                 <td>Joby Aviation</td>
                 <td><a href="https://www.investing.com/search/?q=JOBY" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('JOBY')">📋▼</span>
+                        <div id="finance_JOBY" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/JOBY/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -1114,6 +1545,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/CAT" target="_blank" style="color:#58a6ff">CAT</a></b></td>
                 <td>Caterpillar</td>
                 <td><a href="https://www.investing.com/search/?q=CAT" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CAT')">📋▼</span>
+                        <div id="finance_CAT" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/CAT/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1137,6 +1578,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/COIN" target="_blank" style="color:#58a6ff">COIN</a></b></td>
                 <td>Coinbase</td>
                 <td><a href="https://www.investing.com/search/?q=COIN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('COIN')">📋▼</span>
+                        <div id="finance_COIN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/COIN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#ef4444;font-weight:bold">29</span></td>
@@ -1160,6 +1611,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/BE" target="_blank" style="color:#58a6ff">BE</a></b></td>
                 <td>Bloom Energy</td>
                 <td><a href="https://www.investing.com/search/?q=BE" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('BE')">📋▼</span>
+                        <div id="finance_BE" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/BE/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#ef4444;font-weight:bold">29</span></td>
@@ -1183,6 +1644,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/OKLO" target="_blank" style="color:#58a6ff">OKLO</a></b></td>
                 <td>Oklo</td>
                 <td><a href="https://www.investing.com/search/?q=OKLO" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('OKLO')">📋▼</span>
+                        <div id="finance_OKLO" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/OKLO/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1206,6 +1677,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/MU" target="_blank" style="color:#58a6ff">MU</a></b></td>
                 <td>Micron Technology</td>
                 <td><a href="https://www.investing.com/search/?q=MU" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('MU')">📋▼</span>
+                        <div id="finance_MU" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/MU/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#3b82f6">📈 매수</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1229,6 +1710,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/AVGO" target="_blank" style="color:#58a6ff">AVGO</a></b></td>
                 <td>Broadcom</td>
                 <td><a href="https://www.investing.com/search/?q=AVGO" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AVGO')">📋▼</span>
+                        <div id="finance_AVGO" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AVGO/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#f59e0b">🤝 보유</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">43</span></td>
@@ -1252,6 +1743,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/IREN" target="_blank" style="color:#58a6ff">IREN</a></b></td>
                 <td>Irene</td>
                 <td><a href="https://www.investing.com/search/?q=IREN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('IREN')">📋▼</span>
+                        <div id="finance_IREN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/IREN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1275,6 +1776,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/BN" target="_blank" style="color:#58a6ff">BN</a></b></td>
                 <td>Brookfield</td>
                 <td><a href="https://www.investing.com/search/?q=BN" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('BN')">📋▼</span>
+                        <div id="finance_BN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/BN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1298,6 +1809,16 @@
                 <td><b><a href="https://finance.yahoo.com/chart/KORU" target="_blank" style="color:#58a6ff">KORU</a></b></td>
                 <td>Korea 3x ETF</td>
                 <td><a href="https://www.investing.com/search/?q=KORU" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.8em;">📊</a></td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('KORU')">📋▼</span>
+                        <div id="finance_KORU" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/KORU/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
                 <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
                 <td><span style="color:#ef4444">🚫 회피</span></td>
                 <td><span style="color:#f59e0b;font-weight:bold">57</span></td>
@@ -1320,72 +1841,44 @@
         </tbody>
     </table>
 
-<h2>📈 주요 종목 차트 (클릭하여 상세 차트 보기)</h2>
+<h2>🔗 투자 참고 사이트</h2>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
-<div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
-    <h4 style="margin:0 0 8px 0; color:#e6edf3;">005930 - 삼성전자</h4>
-    <div style="position:relative; height:300px;">
-        <!-- TradingView 위젯 -->
-        <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tv_chart_005930&symbol=KRX:005930&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=0d1117&studies=[]&theme=dark&style=1&timezone=Asia%2FSeoul&withdateranges=1&hideideas=1&hidelogo=1&allow_symbol_change=false&width=100%25&height=300"
-                style="width:100%; height:100%; border:none;"></iframe>
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📊 Investing.com</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            전 세계 금융시장 데이터와 전문적인 차트 도구를 제공하는 글로벌 금융 정보 플랫폼
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://kr.investing.com" target="_blank" style="display:inline-block; background:#0969da; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px; margin-right:8px;">
+                🇰🇷 한국 사이트
+            </a>
+            <a href="https://www.investing.com" target="_blank" style="display:inline-block; background:#1f6feb; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🌍 글로벌 사이트
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>실시간 주가 차트 및 기술적 지표</li>
+            <li>재무제표 및 기업 분석 자료</li>
+            <li>경제 캘린더 및 뉴스</li>
+        </ul>
     </div>
-    <div style="margin-top:8px; text-align:center;">
-        <a href="https://kr.investing.com/search/?q=005930" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em; margin-right:12px;">
-            📊 Investing.com
-        </a>
-        <a href="https://finance.naver.com/item/fchart.naver?code=005930" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.9em;">
-            📈 기본 차트
-        </a>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📈 위폴 주식 커뮤니티</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            개인투자자들의 실전 투자 경험과 종목 분석을 공유하는 커뮤니티
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://wepoll.kr/g2/bbs/board.php?bo_table=stock" target="_blank" style="display:inline-block; background:#22c55e; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                💬 주식 게시판 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>실시간 종목 토론 및 의견 교환</li>
+            <li>개인투자자 관점의 투자 아이디어</li>
+            <li>시장 동향 및 투자 전략 공유</li>
+        </ul>
     </div>
-</div>
-<div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
-    <h4 style="margin:0 0 8px 0; color:#e6edf3;">000660 - SK하이닉스</h4>
-    <div style="position:relative; height:300px;">
-        <!-- TradingView 위젯 -->
-        <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tv_chart_000660&symbol=KRX:000660&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=0d1117&studies=[]&theme=dark&style=1&timezone=Asia%2FSeoul&withdateranges=1&hideideas=1&hidelogo=1&allow_symbol_change=false&width=100%25&height=300"
-                style="width:100%; height:100%; border:none;"></iframe>
-    </div>
-    <div style="margin-top:8px; text-align:center;">
-        <a href="https://kr.investing.com/search/?q=000660" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em; margin-right:12px;">
-            📊 Investing.com
-        </a>
-        <a href="https://finance.naver.com/item/fchart.naver?code=000660" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.9em;">
-            📈 기본 차트
-        </a>
-    </div>
-</div>
-<div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
-    <h4 style="margin:0 0 8px 0; color:#e6edf3;">AAPL - Apple</h4>
-    <div style="position:relative; height:300px;">
-        <!-- TradingView 위젯 -->
-        <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tv_chart_AAPL&symbol=NASDAQ:AAPL&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=0d1117&studies=[]&theme=dark&style=1&timezone=Asia%2FSeoul&withdateranges=1&hideideas=1&hidelogo=1&allow_symbol_change=false&width=100%25&height=300"
-                style="width:100%; height:100%; border:none;"></iframe>
-    </div>
-    <div style="margin-top:8px; text-align:center;">
-        <a href="https://www.investing.com/search/?q=AAPL" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em; margin-right:12px;">
-            📊 Investing.com
-        </a>
-        <a href="https://finance.yahoo.com/chart/AAPL" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.9em;">
-            📈 기본 차트
-        </a>
-    </div>
-</div>
-<div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px;">
-    <h4 style="margin:0 0 8px 0; color:#e6edf3;">NVDA - NVIDIA</h4>
-    <div style="position:relative; height:300px;">
-        <!-- TradingView 위젯 -->
-        <iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tv_chart_NVDA&symbol=NASDAQ:NVDA&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=1&toolbarbg=0d1117&studies=[]&theme=dark&style=1&timezone=Asia%2FSeoul&withdateranges=1&hideideas=1&hidelogo=1&allow_symbol_change=false&width=100%25&height=300"
-                style="width:100%; height:100%; border:none;"></iframe>
-    </div>
-    <div style="margin-top:8px; text-align:center;">
-        <a href="https://www.investing.com/search/?q=NVDA" target="_blank" style="color:#58a6ff; text-decoration:none; font-size:0.9em; margin-right:12px;">
-            📊 Investing.com
-        </a>
-        <a href="https://finance.yahoo.com/chart/NVDA" target="_blank" style="color:#fb8c00; text-decoration:none; font-size:0.9em;">
-            📈 기본 차트
-        </a>
-    </div>
-</div>
 </div>
 
 <details>
