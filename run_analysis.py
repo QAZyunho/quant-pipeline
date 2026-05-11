@@ -353,15 +353,17 @@ def build_report(kr_results: dict, us_results: dict) -> str:
                 icon, color, text = rec_map.get(rec, ("❓", "#6b7280", "미지"))
                 return f'<span style="color:{color}">{icon} {text}</span>'
 
-            # 재무제표 링크
+            # 재무제표 링크 및 티커 링크
             if ticker.isdigit() and len(ticker) == 6:  # 한국 주식
                 finance_link = f"https://finance.naver.com/item/main.naver?code={ticker}"
+                ticker_link = f"https://finance.naver.com/item/main.naver?code={ticker}"
             else:  # 미국 주식
                 finance_link = f"https://finance.yahoo.com/quote/{ticker}/financials"
+                ticker_link = f"https://finance.yahoo.com/quote/{ticker}"
             
             rows += f"""
             <tr>
-                <td><b>{ticker}</b></td>
+                <td><a href="{ticker_link}" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">{ticker}</a></td>
                 <td>{name}</td>
                 <td>
                     <div style="position:relative; display:inline-block;">
