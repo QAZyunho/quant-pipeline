@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퀀트 리포트 2026-10-25</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: #0d1117; color: #c9d1d9; padding: 24px; font-size: 15px; }
+  h1   { color: #e6edf3; border-bottom: 1px solid #30363d; padding-bottom: 8px; font-size: 28px; }
+  h2   { color: #e6edf3; margin-top: 32px; font-size: 22px; }
+  h3   { color: #8b949e; font-size: 18px; }
+  h4   { color: #e6edf3; font-size: 16px; margin-top: 24px; }
+  .meta { color: #8b949e; font-size: 14px; margin-bottom: 24px; }
+  .warn { background: #2d1b00; border-left: 4px solid #fb8c00;
+           padding: 12px 20px; border-radius: 4px; margin-bottom: 24px; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 16px;
+           font-size: 13px; }
+  th    { background: #161b22; color: #8b949e; padding: 10px 14px;
+           text-align: left; border-bottom: 1px solid #30363d;
+           font-size: 13px; font-weight: 600; }
+  td    { padding: 9px 14px; border-bottom: 1px solid #21262d; }
+  tr:hover td { background: #161b22; }
+  details { margin-top: 32px; }
+  summary { cursor: pointer; color: #58a6ff; font-size: 16px;
+             font-weight: 600; padding: 8px 0; }
+  summary:hover { color: #79c0ff; }
+  .legend-table td, .legend-table th {
+    font-size: 13px; padding: 8px 14px; border-bottom: 1px solid #30363d; }
+  .legend-table th { background: #0d1117; color: #f0f6fc; font-weight: 600; }
+  
+  /* 도움말 아이콘 스타일 */
+  .help-icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #0969da;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    margin-left: 4px;
+    cursor: help;
+    vertical-align: middle;
+    position: relative;
+  }
+  .help-icon:hover {
+    background: #1f6feb;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+  }
+  
+  /* 툴팁 스타일 - 더 강력한 구현 */
+  .help-icon::before {
+    content: attr(title);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #161b22;
+    color: #f0f6fc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #30363d;
+    font-size: 12px;
+    white-space: pre-line;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    min-width: 250px;
+    max-width: 350px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    pointer-events: none;
+    font-weight: normal;
+    line-height: 1.4;
+  }
+  
+  .help-icon::after {
+    content: "";
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #161b22;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  
+  .help-icon:hover::before,
+  .help-icon:hover::after {
+    opacity: 1;
+    visibility: visible;
+  }
+  .footer { color: #8b949e; font-size: 0.8em; margin-top: 40px;
+             border-top: 1px solid #30363d; padding-top: 12px; }
+  
+  /* 정렬 가능한 헤더 스타일 */
+  .sortable { 
+    cursor: pointer; 
+    user-select: none;
+    transition: background-color 0.2s ease;
+  }
+  .sortable:hover { 
+    background-color: #30363d !important; 
+  }
+</style>
+<script>
+function toggleFinanceMenu(ticker) {
+    const menu = document.getElementById('finance_' + ticker);
+    const isVisible = menu.style.display === 'block';
+    
+    // 모든 메뉴 숨기기
+    document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
+    
+    // 클릭한 메뉴만 토글
+    menu.style.display = isVisible ? 'none' : 'block';
+}
+
+// 외부 클릭시 메뉴 닫기
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('[onclick*="toggleFinanceMenu"]')) {
+        document.querySelectorAll('[id^="finance_"]').forEach(m => m.style.display = 'none');
+    }
+});
+
+// 테이블 정렬 기능 - 극단적 이상치 사냥을 위한 무기
+let currentSort = { kr: { column: -1, ascending: true }, us: { column: -1, ascending: true } };
+
+function sortTable(columnIndex, market) {
+    const tables = document.querySelectorAll('table');
+    let table;
+    
+    // 시장별 테이블 선택 (국장: 첫번째, 미장: 두번째)
+    if (market === 'kr') {
+        table = tables[0];
+    } else if (market === 'us') {
+        table = tables[1];
+    } else {
+        // 클릭된 헤더가 어느 테이블에 속하는지 자동 감지
+        const clickedElement = event.target.closest('th');
+        table = clickedElement.closest('table');
+        market = Array.from(tables).indexOf(table) === 0 ? 'kr' : 'us';
+    }
+    
+    if (!table) return;
+    
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    // 정렬 방향 결정
+    if (currentSort[market].column === columnIndex) {
+        currentSort[market].ascending = !currentSort[market].ascending;
+    } else {
+        currentSort[market].ascending = false; // 첫 클릭은 내림차순 (극값부터)
+        currentSort[market].column = columnIndex;
+    }
+    
+    // 현재 테이블의 모든 헤더에서 정렬 표시 제거
+    table.querySelectorAll('th').forEach(th => {
+        th.innerHTML = th.innerHTML.replace(/[↑↓]/g, '');
+    });
+    
+    // 현재 헤더에 정렬 방향 표시
+    const header = table.querySelectorAll('th')[columnIndex];
+    header.innerHTML += currentSort[market].ascending ? ' ↑' : ' ↓';
+    
+    // 정렬 로직
+    rows.sort((a, b) => {
+        let aVal = a.children[columnIndex].textContent.trim();
+        let bVal = b.children[columnIndex].textContent.trim();
+        
+        // 숫자 추출 (%, +/-, 특수문자 제거)
+        const extractNumber = (str) => {
+            // 🔥💀 등의 이모지 제거하고 숫자만 추출
+            const match = str.replace(/[🔥💀⚠️]/g, '').match(/[-+]?\d*\.?\d+/);
+            return match ? parseFloat(match[0]) : 0;
+        };
+        
+        // 특수 컬럼별 정렬 로직
+        const getCustomSortValue = (text, colIndex) => {
+            // 종합신호 (3번 컬럼)
+            if (colIndex === 3) {
+                if (text.includes('강한매수')) return 5;
+                if (text.includes('약한매수')) return 4;
+                if (text.includes('중립')) return 3;
+                if (text.includes('약한매도')) return 2;
+                if (text.includes('강한매도')) return 1;
+                return 0;
+            }
+            
+            // 군중심리 (4번 컬럼)
+            if (colIndex === 4) {
+                if (text.includes('강매수')) return 5;
+                if (text.includes('매수')) return 4;
+                if (text.includes('스윙')) return 3;
+                if (text.includes('관심')) return 2;
+                if (text.includes('보유')) return 1;
+                if (text.includes('회피')) return 0;
+                return -1;
+            }
+            
+            // 생존등급 (5번 컬럼)
+            if (colIndex === 5) {
+                if (text.includes('A+')) return 10;
+                if (text.includes('A')) return 9;
+                if (text.includes('B+')) return 8;
+                if (text.includes('B')) return 7;
+                if (text.includes('C+')) return 6;
+                if (text.includes('C')) return 5;
+                if (text.includes('D+')) return 4;
+                if (text.includes('D')) return 3;
+                if (text.includes('F')) return 1;
+                return 0;
+            }
+            
+            // 체제 (19번 컬럼)
+            if (colIndex === 19) {
+                if (text.includes('강세')) return 5;
+                if (text.includes('고변동')) return 4;
+                if (text.includes('횡보')) return 3;
+                if (text.includes('노이즈')) return 2;
+                if (text.includes('폭락')) return 1;
+                return 0;
+            }
+            
+            return null; // 커스텀 정렬이 아닌 경우
+        };
+        
+        const customA = getCustomSortValue(aVal, columnIndex);
+        const customB = getCustomSortValue(bVal, columnIndex);
+        
+        // 커스텀 정렬 적용
+        if (customA !== null && customB !== null) {
+            return currentSort[market].ascending ? customA - customB : customB - customA;
+        }
+        
+        // 숫자 정렬
+        const numA = extractNumber(aVal);
+        const numB = extractNumber(bVal);
+        
+        if (!isNaN(numA) && !isNaN(numB)) {
+            // 극단치 우선 정렬 (절댓값 기준)
+            if (columnIndex >= 16 && columnIndex <= 18) { // Z-Score 컬럼들 (수익률Z, 변동폭Z, 거래량Z)
+                const absA = Math.abs(numA);
+                const absB = Math.abs(numB);
+                if (currentSort[market].ascending) {
+                    return absA - absB;
+                } else {
+                    return absB - absA; // 극단치(절댓값 큰 것)부터
+                }
+            } else {
+                return currentSort[market].ascending ? numA - numB : numB - numA;
+            }
+        }
+        
+        // 기본 텍스트 정렬
+        return currentSort[market].ascending ? 
+            aVal.localeCompare(bVal) : 
+            bVal.localeCompare(aVal);
+    });
+    
+    // 재정렬된 행들을 테이블에 다시 추가
+    rows.forEach(row => tbody.appendChild(row));
+}
+</script>
+</head>
+<body>
+
+<h1>📊 퀀트 일별 분석 리포트</h1>
+<div class="meta">생성일시: 2026-10-25 03:06:51 KST</div>
+<div class="warn">⚠️ 본 리포트는 <b>보조 참고용</b>입니다. 투자 판단은 본인 책임입니다.</div>
+
+<h2>🇰🇷 국장</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)" class="sortable">티커</th>
+                <th onclick="sortTable(1)" class="sortable">종목명</th>
+                <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
+                <th onclick="sortTable(3)" class="sortable">종합신호</th>
+                <th onclick="sortTable(4)" class="sortable">군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
+                <th onclick="sortTable(5)" class="sortable">생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
+                <th onclick="sortTable(6)" class="sortable">현재가</th>
+                <th onclick="sortTable(7)" class="sortable">등락률</th>
+                <th onclick="sortTable(8)" class="sortable">RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
+                <th onclick="sortTable(9)" class="sortable">ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
+                <th onclick="sortTable(10)" class="sortable">모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
+                <th onclick="sortTable(11)" class="sortable">매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
+                <th onclick="sortTable(12)" class="sortable">PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
+                <th onclick="sortTable(13)" class="sortable">PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
+                <th onclick="sortTable(14)" class="sortable">ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
+                <th onclick="sortTable(15)" class="sortable">배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
+                <th onclick="sortTable(16)" class="sortable">수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
+                <th onclick="sortTable(17)" class="sortable">변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
+                <th onclick="sortTable(18)" class="sortable">거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
+                <th onclick="sortTable(19)" class="sortable">체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
+            </tr>
+        </thead>
+        <tbody>
+    
+
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=005930" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">005930</a></td>
+                <td>삼성전자</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('005930')">📋▼</span>
+                        <div id="finance_005930" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=005930" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=005930' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>213,500</td>
+                <td><span style="color:#1e88e5">-0.47%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">25.8</span></td>
+                <td><span style="color:#e53935">51.3</span></td>
+                <td><span style="color:#1e88e5">-12.43%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#fb8c00">10.36</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.19</span></td>
+                <td><span style="color:#6b7280">+0.37</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.10</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=000660" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">000660</a></td>
+                <td>SK하이닉스</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000660')">📋▼</span>
+                        <div id="finance_000660" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=000660" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=000660' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#06b6d4">👁️ 관심</span></td>
+                <td><span style="color:#06b6d4;font-weight:bold">B+</span></td>
+                <td>1,263,000</td>
+                <td><span style="color:#e53935">+2.35%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">21.1</span></td>
+                <td><span style="color:#e53935">56.5</span></td>
+                <td><span style="color:#1e88e5">-17.85%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#e53935">35.59</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.30</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.08</span></td>
+                <td><span style="color:#6b7280">+0.81</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=035420" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">035420</a></td>
+                <td>NAVER</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('035420')">📋▼</span>
+                        <div id="finance_035420" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=035420" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=035420' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>172,600</td>
+                <td><span style="color:#1e88e5">-1.65%</span></td>
+                <td><span style="color:#6b7280">32.0</span></td>
+                <td><span style="color:#e53935">29.6</span></td>
+                <td><span style="color:#1e88e5">-14.73%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">6.28</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.44</span></td>
+                <td><span style="color:#6b7280">-0.72</span></td>
+                <td><span style="color:#6b7280">-0.23</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=005380" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">005380</a></td>
+                <td>현대차</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('005380')">📋▼</span>
+                        <div id="finance_005380" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=005380" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=005380' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>293,000</td>
+                <td><span style="color:#1e88e5">-2.50%</span></td>
+                <td><span style="color:#6b7280">30.3</span></td>
+                <td><span style="color:#e53935">38.4</span></td>
+                <td><span style="color:#1e88e5">-30.58%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.62</span></td>
+                <td><span style="color:#6b7280">-0.75</span></td>
+                <td><span style="color:#6b7280">+0.81</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=336260" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">336260</a></td>
+                <td>두산퓨얼셀</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('336260')">📋▼</span>
+                        <div id="finance_336260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=336260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=336260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>31,200</td>
+                <td><span style="color:#1e88e5">-6.17%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">25.7</span></td>
+                <td><span style="color:#e53935">39.1</span></td>
+                <td><span style="color:#1e88e5">-29.59%</span></td>
+                <td>3/3</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">-36.14</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.88</span></td>
+                <td><span style="color:#6b7280">-0.61</span></td>
+                <td><span style="color:#6b7280">-0.11</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=000880" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">000880</a></td>
+                <td>한화</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000880')">📋▼</span>
+                        <div id="finance_000880" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=000880" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=000880' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>100,600</td>
+                <td><span style="color:#1e88e5">+0.00%</span></td>
+                <td><span style="color:#6b7280">40.3</span></td>
+                <td><span style="color:#888">21.7</span></td>
+                <td><span style="color:#1e88e5">-26.50%</span></td>
+                <td>2/3</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">4.11</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.01</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.73</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.82</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=375500" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">375500</a></td>
+                <td>DL이앤씨</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('375500')">📋▼</span>
+                        <div id="finance_375500" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=375500" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=375500' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>59,600</td>
+                <td><span style="color:#e53935">+2.05%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">18.6</span></td>
+                <td><span style="color:#e53935">61.6</span></td>
+                <td><span style="color:#1e88e5">-23.37%</span></td>
+                <td>1/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">7.06</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.37</span></td>
+                <td><span style="color:#6b7280">+0.35</span></td>
+                <td><span style="color:#6b7280">+0.09</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=071970" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">071970</a></td>
+                <td>HD현대마린엔진</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('071970')">📋▼</span>
+                        <div id="finance_071970" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=071970" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=071970' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#06b6d4">👁️ 관심</span></td>
+                <td><span style="color:#06b6d4;font-weight:bold">B+</span></td>
+                <td>36,250</td>
+                <td><span style="color:#1e88e5">-2.55%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">24.0</span></td>
+                <td><span style="color:#e53935">42.4</span></td>
+                <td><span style="color:#1e88e5">-41.91%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#e53935">33.77</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.49</span></td>
+                <td><span style="color:#6b7280">-0.73</span></td>
+                <td><span style="color:#6b7280">-0.00</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=003550" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">003550</a></td>
+                <td>LG</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('003550')">📋▼</span>
+                        <div id="finance_003550" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=003550" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=003550' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>98,100</td>
+                <td><span style="color:#1e88e5">-1.70%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">29.6</span></td>
+                <td><span style="color:#e53935">43.9</span></td>
+                <td><span style="color:#1e88e5">-2.36%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">3.3</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.48</span></td>
+                <td><span style="color:#6b7280">-0.05</span></td>
+                <td><span style="color:#6b7280">+0.31</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=402340" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">402340</a></td>
+                <td>SK스퀘어</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('402340')">📋▼</span>
+                        <div id="finance_402340" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=402340" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=402340' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>764,000</td>
+                <td><span style="color:#e53935">+2.00%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">20.1</span></td>
+                <td><span style="color:#e53935">50.9</span></td>
+                <td><span style="color:#1e88e5">-19.01%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#e53935">31.51</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.22</span></td>
+                <td><span style="color:#6b7280">+0.21</span></td>
+                <td><span style="color:#6b7280">+0.71</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=006800" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">006800</a></td>
+                <td>미래에셋증권</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('006800')">📋▼</span>
+                        <div id="finance_006800" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=006800" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=006800' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>24,150</td>
+                <td><span style="color:#1e88e5">-2.03%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">26.0</span></td>
+                <td><span style="color:#e53935">41.7</span></td>
+                <td><span style="color:#1e88e5">-41.62%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#fb8c00">11.74</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.41</span></td>
+                <td><span style="color:#6b7280">+0.12</span></td>
+                <td><span style="color:#6b7280">-0.31</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=039490" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">039490</a></td>
+                <td>키움증권</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('039490')">📋▼</span>
+                        <div id="finance_039490" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=039490" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=039490' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>213,000</td>
+                <td><span style="color:#1e88e5">-1.39%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">23.5</span></td>
+                <td><span style="color:#e53935">47.4</span></td>
+                <td><span style="color:#1e88e5">-34.16%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#e53935">16.59</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.32</span></td>
+                <td><span style="color:#6b7280">-0.39</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.07</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=006260" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">006260</a></td>
+                <td>LS</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('006260')">📋▼</span>
+                        <div id="finance_006260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=006260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=006260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>212,500</td>
+                <td><span style="color:#1e88e5">-3.63%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">22.6</span></td>
+                <td><span style="color:#e53935">49.8</span></td>
+                <td><span style="color:#1e88e5">-31.17%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">6.32</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.75</span></td>
+                <td><span style="color:#6b7280">-0.26</span></td>
+                <td><span style="color:#6b7280">+0.90</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=000155" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">000155</a></td>
+                <td>두산우</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('000155')">📋▼</span>
+                        <div id="finance_000155" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=000155" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=000155' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>326,000</td>
+                <td><span style="color:#1e88e5">-4.12%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">25.6</span></td>
+                <td><span style="color:#e53935">50.9</span></td>
+                <td><span style="color:#1e88e5">-29.30%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">2.04</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.81</span></td>
+                <td><span style="color:#6b7280">+0.31</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.05</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=329180" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">329180</a></td>
+                <td>HD현대중공업</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('329180')">📋▼</span>
+                        <div id="finance_329180" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=329180" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=329180' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td>304,000</td>
+                <td><span style="color:#1e88e5">-0.49%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">11.4</span></td>
+                <td><span style="color:#e53935">61.7</span></td>
+                <td><span style="color:#1e88e5">-35.09%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#e53935">15.15</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.09</span></td>
+                <td><span style="color:#6b7280">-0.26</span></td>
+                <td><span style="color:#6b7280">-0.07</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=010060" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">010060</a></td>
+                <td>OCI홀딩스</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('010060')">📋▼</span>
+                        <div id="finance_010060" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=010060" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=010060' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>192,000</td>
+                <td><span style="color:#1e88e5">-3.52%</span></td>
+                <td><span style="color:#6b7280">41.4</span></td>
+                <td><span style="color:#888">24.5</span></td>
+                <td><span style="color:#1e88e5">-14.40%</span></td>
+                <td>1/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">-3.09</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.58</span></td>
+                <td><span style="color:#6b7280">-0.80</span></td>
+                <td><span style="color:#6b7280">+0.21</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=277810" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">277810</a></td>
+                <td>레인보우로보틱스</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('277810')">📋▼</span>
+                        <div id="finance_277810" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=277810" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=277810' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>349,000</td>
+                <td><span style="color:#1e88e5">-3.99%</span></td>
+                <td><span style="color:#6b7280">33.5</span></td>
+                <td><span style="color:#e53935">29.6</span></td>
+                <td><span style="color:#1e88e5">-26.07%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">1.06</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.72</span></td>
+                <td><span style="color:#6b7280">-0.81</span></td>
+                <td><span style="color:#6b7280">-0.62</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=454910" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">454910</a></td>
+                <td>두산로보틱스</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('454910')">📋▼</span>
+                        <div id="finance_454910" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=454910" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=454910' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>56,000</td>
+                <td><span style="color:#1e88e5">-4.11%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">29.8</span></td>
+                <td><span style="color:#e53935">36.0</span></td>
+                <td><span style="color:#1e88e5">-24.13%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">-15.92</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.78</span></td>
+                <td><span style="color:#6b7280">-0.42</span></td>
+                <td><span style="color:#6b7280">-0.11</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=096770" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">096770</a></td>
+                <td>SK이노베이션</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('096770')">📋▼</span>
+                        <div id="finance_096770" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=096770" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=096770' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>137,800</td>
+                <td><span style="color:#1e88e5">-2.27%</span></td>
+                <td><span style="color:#6b7280">48.3</span></td>
+                <td><span style="color:#888">17.3</span></td>
+                <td><span style="color:#e53935">+9.33%</span></td>
+                <td>3/2</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.59</span></td>
+                <td><span style="color:#6b7280">-0.59</span></td>
+                <td><span style="color:#6b7280">-0.69</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=003490" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">003490</a></td>
+                <td>대한항공</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('003490')">📋▼</span>
+                        <div id="finance_003490" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=003490" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=003490' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>25,850</td>
+                <td><span style="color:#1e88e5">-2.27%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">23.5</span></td>
+                <td><span style="color:#e53935">47.2</span></td>
+                <td><span style="color:#1e88e5">-2.26%</span></td>
+                <td>3/3</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">5.65</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.79</span></td>
+                <td><span style="color:#6b7280">-0.32</span></td>
+                <td><span style="color:#6b7280">-0.13</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=034020" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">034020</a></td>
+                <td>두산에너빌리티</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('034020')">📋▼</span>
+                        <div id="finance_034020" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=034020" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=034020' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>58,900</td>
+                <td><span style="color:#1e88e5">-3.92%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">20.2</span></td>
+                <td><span style="color:#e53935">56.7</span></td>
+                <td><span style="color:#1e88e5">-29.98%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">1.71</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.90</span></td>
+                <td><span style="color:#6b7280">-0.45</span></td>
+                <td><span style="color:#6b7280">+0.93</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.naver.com/item/main.naver?code=028260" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">028260</a></td>
+                <td>삼성물산</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('028260')">📋▼</span>
+                        <div id="finance_028260" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            <a href='https://dart.fss.or.kr/main.do' target='_blank' style='display:block; color:#58a6ff; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏛️ DART 홈</a>
+                            <a href="https://finance.naver.com/item/main.naver?code=028260" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            <a href='https://finance.naver.com/item/coinfo.naver?code=028260' target='_blank' style='display:block; color:#fb8c00; text-decoration:none; padding:2px 8px; font-size:0.75em;'>🏢 기업정보</a>
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>286,000</td>
+                <td><span style="color:#1e88e5">-0.52%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">29.8</span></td>
+                <td><span style="color:#e53935">37.5</span></td>
+                <td><span style="color:#1e88e5">-14.12%</span></td>
+                <td>1/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">6.79</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.16</span></td>
+                <td><span style="color:#6b7280">-0.15</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.13</span></td>
+                <td>😴 횡보</td>
+            </tr>
+        </tbody>
+    </table>
+
+<h2>🇺🇸 미장</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)" class="sortable">티커</th>
+                <th onclick="sortTable(1)" class="sortable">종목명</th>
+                <th>재무 <span class="help-icon" title="재무제표 및 기업 정보&#10;한국: DART 전자공시 + 네이버 재무정보&#10;미국: Yahoo Finance 재무정보&#10;손익계산서, 재무상태표, 현금흐름표 확인">?</span></th>
+                <th onclick="sortTable(3)" class="sortable">종합신호</th>
+                <th onclick="sortTable(4)" class="sortable">군중심리 <span class="help-icon" title="알고리즘 추천 = 군중심리 체온계 (역지표로 활용)&#10;🚀⚠️강매수(꼭대기?): 모든 지표가 위향 → 곧 폭락할 확률 높음&#10;📈⚠️매수(주의): 많은 지표 상승 → 주의 필요&#10;⚡스윙: 단기 신호만 좋음&#10;👁️관심: 장기만 좋음 (타이밍 대기)&#10;🚫회피: 안전한 선택&#10;※ 알고리즘이 강매수할 때가 진짜 위험!">?</span></th>
+                <th onclick="sortTable(5)" class="sortable">생존등급 <span class="help-icon" title="펀더멘털 분석 등급 (A+~F) - 입장권 개념&#10;A등급: 재무가 탄탄해 물려도 살아날 놈&#10;B등급: 웬만해선 안 망하는 안전한 놈 &#10;C등급: 조심해서 볼 놈&#10;F등급: 언제 상장폐지되어도 이상하지 않은 개잡주&#10;용도: 투자 금액에 따른 최소 등급 기준 설정용">?</span></th>
+                <th onclick="sortTable(6)" class="sortable">현재가</th>
+                <th onclick="sortTable(7)" class="sortable">등락률</th>
+                <th onclick="sortTable(8)" class="sortable">RSI <span class="help-icon" title="상대강도지수 (0-100)&#10;계산: 최근 14일 상승일 vs 하락일 강도&#10;35↓: 과매도 (반등 가능성)&#10;65↑: 과매수 (조정 가능성)&#10;30-70: 정상 범위">?</span></th>
+                <th onclick="sortTable(9)" class="sortable">ADX <span class="help-icon" title="추세 강도 지수&#10;25↑: 강한 추세 존재&#10;25↓: 횡보 또는 약한 추세&#10;방향은 DI+ vs DI-로 판단&#10;DI+ > DI-: 상승세&#10;DI+ < DI-: 하락세">?</span></th>
+                <th onclick="sortTable(10)" class="sortable">모멘텀 <span class="help-icon" title="수익률 지속성 지표&#10;계산: 1/3/6개월 수익률 평균&#10;+2%↑: 강한 상승세 지속&#10;-2%↓: 강한 하락세 지속&#10;±2% 내: 보통">?</span></th>
+                <th onclick="sortTable(11)" class="sortable">매수/매도 <span class="help-icon" title="7가지 지표별 매수/매도 신호 개수&#10;매수 신호: RSI(35↓), MACD(양수), 볼린저(하단), ADX방향(상승), MA크로스(골든), 모멘텀(+2%↑)&#10;매수 많을수록 상승 가능성↑">?</span></th>
+                <th onclick="sortTable(12)" class="sortable">PER <span class="help-icon" title="주가수익비율 = 주가 ÷ 주당순이익&#10;의미: 현재 주가가 1년 수익의 몇 배인지&#10;한국 좋음: 10↓ (저평가)&#10;미국 좋음: 15↓ (저평가)&#10;주의: 20↑ (고평가)">?</span></th>
+                <th onclick="sortTable(13)" class="sortable">PBR <span class="help-icon" title="주가순자산비율 = 주가 ÷ 주당순자산&#10;의미: 회사 청산시 받을 돈 대비 주가&#10;좋음: 1.0↓ (자산가치보다 저렴)&#10;주의: 3.0↑ (자산가치 대비 비쌈)">?</span></th>
+                <th onclick="sortTable(14)" class="sortable">ROE% <span class="help-icon" title="자기자본이익률 = 순이익 ÷ 자기자본 × 100&#10;의미: 주주 돈으로 얼마나 이익을 냈는지&#10;우수: 15%↑ (경영 효율성 좋음)&#10;주의: 5%↓ (수익성 부족)">?</span></th>
+                <th onclick="sortTable(15)" class="sortable">배당% <span class="help-icon" title="배당수익률 = 연간배당금 ÷ 주가 × 100&#10;의미: 주식 보유시 받는 배당금 비율&#10;좋음: 3%↑ (안정적 현금흐름)&#10;낮음: 1%↓ (배당 적음)">?</span></th>
+                <th onclick="sortTable(16)" class="sortable">수익률Z <span class="help-icon" title="수익률 Z-score (정규화된 수익률)&#10;+2↑: 비정상적 상승&#10;+1~+2: 강한 상승&#10;±1: 정상 범위&#10;-1~-2: 강한 하락&#10;-2↓: 비정상적 하락">?</span></th>
+                <th onclick="sortTable(17)" class="sortable">변동폭Z <span class="help-icon" title="변동폭 Z-score (정규화된 변동성)&#10;+2↑: 비정상적 고변동&#10;+1~+2: 높은 변동성&#10;±1: 정상 범위&#10;변동성 높으면 위험↑">?</span></th>
+                <th onclick="sortTable(18)" class="sortable">거래량Z <span class="help-icon" title="거래량 Z-score (정규화된 거래량)&#10;+1.5↑: 급증 (큰 변화 신호)&#10;±1: 정상 범위&#10;거래량 급증은 방향 전환 신호">?</span></th>
+                <th onclick="sortTable(19)" class="sortable">체제 <span class="help-icon" title="시장 체제 판단&#10;🐂강세: 수익률Z>1 & 변동폭 낮음&#10;💥폭락: 수익률Z<-1.5&#10;⚡고변동: 변동폭Z>1.5&#10;😴횡보: 수익률/변동폭 모두 낮음&#10;🌀노이즈: 방향성 불명확">?</span></th>
+            </tr>
+        </thead>
+        <tbody>
+    
+
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/AAPL" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">AAPL</a></td>
+                <td>Apple</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AAPL')">📋▼</span>
+                        <div id="finance_AAPL" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AAPL/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td>348</td>
+                <td><span style="color:#1e88e5">-0.14%</span></td>
+                <td><span style="background:#e53935;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">72.3</span></td>
+                <td><span style="color:#e53935">28.1</span></td>
+                <td><span style="color:#e53935">+11.78%</span></td>
+                <td>4/2</td>
+                <td><span style="color:#888">39.88</span></td>
+                <td><span style="color:#888">47.25</span></td>
+                <td><span style="color:#e53935">148.75</span></td>
+                <td><span style="color:#888">31.0%</span></td>
+                <td><span style="color:#6b7280">-0.18</span></td>
+                <td><span style="color:#6b7280">-0.42</span></td>
+                <td><span style="color:#6b7280">-0.56</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/NVDA" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">NVDA</a></td>
+                <td>NVIDIA</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('NVDA')">📋▼</span>
+                        <div id="finance_NVDA" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/NVDA/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#f59e0b">🤝 보유</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>211</td>
+                <td><span style="color:#1e88e5">-0.59%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">22.0</span></td>
+                <td><span style="color:#e53935">37.3</span></td>
+                <td><span style="color:#888">+0.98%</span></td>
+                <td>3/2</td>
+                <td><span style="color:#888">26.67</span></td>
+                <td><span style="color:#888">22.25</span></td>
+                <td><span style="color:#e53935">117.21</span></td>
+                <td><span style="color:#888">47.0%</span></td>
+                <td><span style="color:#6b7280">-0.29</span></td>
+                <td><span style="color:#6b7280">-0.95</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.40</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/MSFT" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">MSFT</a></td>
+                <td>Microsoft</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('MSFT')">📋▼</span>
+                        <div id="finance_MSFT" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/MSFT/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>525</td>
+                <td><span style="color:#e53935">+0.66%</span></td>
+                <td><span style="color:#6b7280">49.6</span></td>
+                <td><span style="color:#e53935">27.3</span></td>
+                <td><span style="color:#e53935">+21.47%</span></td>
+                <td>2/2</td>
+                <td><span style="color:#888">29.22</span></td>
+                <td><span style="color:#1e88e5">8.81</span></td>
+                <td><span style="color:#e53935">34.04</span></td>
+                <td><span style="color:#888">75.0%</span></td>
+                <td><span style="color:#6b7280">+0.30</span></td>
+                <td><span style="color:#6b7280">-0.32</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.05</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/GOOGL" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">GOOGL</a></td>
+                <td>Alphabet A</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('GOOGL')">📋▼</span>
+                        <div id="finance_GOOGL" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/GOOGL/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>320</td>
+                <td><span style="color:#1e88e5">-1.24%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">26.4</span></td>
+                <td><span style="color:#e53935">36.1</span></td>
+                <td><span style="color:#1e88e5">-5.09%</span></td>
+                <td>2/4</td>
+                <td><span style="color:#fb8c00">16.07</span></td>
+                <td><span style="color:#1e88e5">6.29</span></td>
+                <td><span style="color:#e53935">48.68</span></td>
+                <td><span style="color:#888">27.0%</span></td>
+                <td><span style="color:#6b7280">-0.68</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.03</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.22</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/SPY" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">SPY</a></td>
+                <td>S&P500 ETF</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('SPY')">📋▼</span>
+                        <div id="finance_SPY" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/SPY/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>760</td>
+                <td><span style="color:#1e88e5">-0.52%</span></td>
+                <td><span style="color:#6b7280">36.9</span></td>
+                <td><span style="color:#e53935">29.3</span></td>
+                <td><span style="color:#e53935">+3.04%</span></td>
+                <td>3/2</td>
+                <td><span style="color:#888">24.13</span></td>
+                <td><span style="color:#1e88e5">1.77</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">99.0%</span></td>
+                <td><span style="color:#6b7280">-0.72</span></td>
+                <td><span style="color:#6b7280">-0.66</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.45</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/AMZN" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">AMZN</a></td>
+                <td>Amazon</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AMZN')">📋▼</span>
+                        <div id="finance_AMZN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AMZN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>248</td>
+                <td><span style="color:#1e88e5">-0.95%</span></td>
+                <td><span style="color:#6b7280">47.3</span></td>
+                <td><span style="color:#e53935">27.3</span></td>
+                <td><span style="color:#888">+0.19%</span></td>
+                <td>1/3</td>
+                <td><span style="color:#fb8c00">19.95</span></td>
+                <td><span style="color:#1e88e5">4.85</span></td>
+                <td><span style="color:#e53935">30.56</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.47</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.01</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.53</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/META" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">META</a></td>
+                <td>Meta</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('META')">📋▼</span>
+                        <div id="finance_META" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/META/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#f59e0b">🤝 보유</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>643</td>
+                <td><span style="color:#1e88e5">-0.96%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">24.3</span></td>
+                <td><span style="color:#e53935">29.2</span></td>
+                <td><span style="color:#1e88e5">-4.57%</span></td>
+                <td>3/3</td>
+                <td><span style="color:#888">21.92</span></td>
+                <td><span style="color:#1e88e5">6.03</span></td>
+                <td><span style="color:#e53935">32.26</span></td>
+                <td><span style="color:#888">33.0%</span></td>
+                <td><span style="color:#6b7280">-0.35</span></td>
+                <td><span style="color:#6b7280">-0.39</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.49</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/RKLB" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">RKLB</a></td>
+                <td>Rocket Lab</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('RKLB')">📋▼</span>
+                        <div id="finance_RKLB" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/RKLB/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>53</td>
+                <td><span style="color:#e53935">+2.69%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">19.8</span></td>
+                <td><span style="color:#e53935">51.6</span></td>
+                <td><span style="color:#1e88e5">-27.98%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">9.01</span></td>
+                <td><span style="color:#888">-7.92</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.44</span></td>
+                <td><span style="color:#6b7280">-0.30</span></td>
+                <td><span style="color:#6b7280">-0.66</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/FTNT" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">FTNT</a></td>
+                <td>Fortinet</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('FTNT')">📋▼</span>
+                        <div id="finance_FTNT" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/FTNT/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td>180</td>
+                <td><span style="color:#e53935">+4.05%</span></td>
+                <td><span style="color:#6b7280">46.2</span></td>
+                <td><span style="color:#e53935">37.3</span></td>
+                <td><span style="color:#e53935">+44.09%</span></td>
+                <td>2/2</td>
+                <td><span style="color:#888">63.6</span></td>
+                <td><span style="color:#888">85.14</span></td>
+                <td><span style="color:#e53935">117.44</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">+1.36</span></td>
+                <td><span style="color:#6b7280">+0.97</span></td>
+                <td><span style="color:#6b7280">-0.60</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/AMD" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">AMD</a></td>
+                <td>AMD</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AMD')">📋▼</span>
+                        <div id="finance_AMD" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AMD/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#f59e0b">🤝 보유</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td>517</td>
+                <td><span style="color:#e53935">+1.74%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">26.6</span></td>
+                <td><span style="color:#e53935">43.4</span></td>
+                <td><span style="color:#e53935">+11.71%</span></td>
+                <td>4/2</td>
+                <td><span style="color:#888">131.83</span></td>
+                <td><span style="color:#fb8c00">12.55</span></td>
+                <td><span style="color:#fb8c00">10.2</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.31</span></td>
+                <td><span style="color:#6b7280">-0.82</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.42</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/INTC" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">INTC</a></td>
+                <td>Intel</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('INTC')">📋▼</span>
+                        <div id="finance_INTC" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/INTC/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>87</td>
+                <td><span style="color:#e53935">+1.72%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">16.2</span></td>
+                <td><span style="color:#e53935">52.6</span></td>
+                <td><span style="color:#1e88e5">-10.51%</span></td>
+                <td>3/3</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">5.01</span></td>
+                <td><span style="color:#888">-10.71</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.26</span></td>
+                <td><span style="color:#6b7280">-0.85</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.41</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/QCOM" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">QCOM</a></td>
+                <td>Qualcomm</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('QCOM')">📋▼</span>
+                        <div id="finance_QCOM" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/QCOM/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#888;font-weight:bold">⚪ 중립</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>176</td>
+                <td><span style="color:#e53935">+1.78%</span></td>
+                <td><span style="color:#6b7280">43.8</span></td>
+                <td><span style="color:#888">12.3</span></td>
+                <td><span style="color:#e53935">+4.61%</span></td>
+                <td>2/2</td>
+                <td><span style="color:#888">20.36</span></td>
+                <td><span style="color:#1e88e5">6.72</span></td>
+                <td><span style="color:#e53935">33.75</span></td>
+                <td><span style="color:#888">209.0%</span></td>
+                <td><span style="color:#6b7280">+0.50</span></td>
+                <td><span style="color:#6b7280">-0.32</span></td>
+                <td><span style="color:#6b7280">-0.66</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/AA" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">AA</a></td>
+                <td>Alcoa</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AA')">📋▼</span>
+                        <div id="finance_AA" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AA/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#06b6d4">👁️ 관심</span></td>
+                <td><span style="color:#3b82f6;font-weight:bold">A</span></td>
+                <td>38</td>
+                <td><span style="color:#1e88e5">-2.04%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">20.5</span></td>
+                <td><span style="color:#888">22.2</span></td>
+                <td><span style="color:#1e88e5">-22.46%</span></td>
+                <td>2/4</td>
+                <td><span style="color:#1e88e5">6.59</span></td>
+                <td><span style="color:#1e88e5">1.21</span></td>
+                <td><span style="color:#e53935">20.58</span></td>
+                <td><span style="color:#888">106.0%</span></td>
+                <td><span style="color:#6b7280">-0.62</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.07</span></td>
+                <td><span style="color:#6b7280">-0.80</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/LITE" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">LITE</a></td>
+                <td>Lumentum</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('LITE')">📋▼</span>
+                        <div id="finance_LITE" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/LITE/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>756</td>
+                <td><span style="color:#e53935">+0.48%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">22.6</span></td>
+                <td><span style="color:#e53935">42.6</span></td>
+                <td><span style="color:#1e88e5">-8.88%</span></td>
+                <td>3/3</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#fb8c00">14.43</span></td>
+                <td><span style="color:#888">-240.03</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.05</span></td>
+                <td><span style="color:#6b7280">-0.34</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.08</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/CRWV" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">CRWV</a></td>
+                <td>Core Weave</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CRWV')">📋▼</span>
+                        <div id="finance_CRWV" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/CRWV/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>54</td>
+                <td><span style="color:#1e88e5">-2.46%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">18.5</span></td>
+                <td><span style="color:#e53935">60.0</span></td>
+                <td><span style="color:#1e88e5">-37.99%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">5.95</span></td>
+                <td><span style="color:#888">-43.6</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.38</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.15</span></td>
+                <td><span style="color:#6b7280">-0.96</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/GRAB" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">GRAB</a></td>
+                <td>Grab holdings</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('GRAB')">📋▼</span>
+                        <div id="finance_GRAB" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/GRAB/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td>3</td>
+                <td><span style="color:#1e88e5">-2.11%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">28.9</span></td>
+                <td><span style="color:#e53935">35.7</span></td>
+                <td><span style="color:#1e88e5">-18.49%</span></td>
+                <td>2/4</td>
+                <td><span style="color:#888">25.36</span></td>
+                <td><span style="color:#1e88e5">1.68</span></td>
+                <td><span style="color:#888">7.74</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.77</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.19</span></td>
+                <td><span style="color:#6b7280">-0.42</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/IONQ" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">IONQ</a></td>
+                <td>IonQ</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('IONQ')">📋▼</span>
+                        <div id="finance_IONQ" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/IONQ/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>31</td>
+                <td><span style="color:#e53935">+0.35%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">23.8</span></td>
+                <td><span style="color:#e53935">56.4</span></td>
+                <td><span style="color:#1e88e5">-23.39%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">3.58</span></td>
+                <td><span style="color:#888">-60.48</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.07</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.21</span></td>
+                <td><span style="color:#6b7280">-0.77</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/POET" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">POET</a></td>
+                <td>Poet Technologies</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('POET')">📋▼</span>
+                        <div id="finance_POET" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/POET/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>5</td>
+                <td><span style="color:#e53935">+2.44%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">15.7</span></td>
+                <td><span style="color:#e53935">49.3</span></td>
+                <td><span style="color:#1e88e5">-38.79%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">1.11</span></td>
+                <td><span style="color:#888">-16.89</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.25</span></td>
+                <td><span style="color:#6b7280">-0.91</span></td>
+                <td><span style="color:#6b7280">-0.83</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/JOBY" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">JOBY</a></td>
+                <td>Joby Aviation</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('JOBY')">📋▼</span>
+                        <div id="finance_JOBY" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/JOBY/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>5</td>
+                <td><span style="color:#e53935">+1.28%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">20.7</span></td>
+                <td><span style="color:#e53935">71.5</span></td>
+                <td><span style="color:#1e88e5">-34.62%</span></td>
+                <td>1/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">2.66</span></td>
+                <td><span style="color:#888">-65.9</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">+0.39</span></td>
+                <td><span style="color:#6b7280">+0.35</span></td>
+                <td><span style="color:#6b7280">-0.33</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/CAT" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">CAT</a></td>
+                <td>Caterpillar</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CAT')">📋▼</span>
+                        <div id="finance_CAT" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/CAT/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#8b5cf6;font-weight:bold">B</span></td>
+                <td>687</td>
+                <td><span style="color:#1e88e5">-2.42%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">15.0</span></td>
+                <td><span style="color:#e53935">50.2</span></td>
+                <td><span style="color:#1e88e5">-17.72%</span></td>
+                <td>2/4</td>
+                <td><span style="color:#888">29.57</span></td>
+                <td><span style="color:#fb8c00">16.28</span></td>
+                <td><span style="color:#e53935">56.97</span></td>
+                <td><span style="color:#888">95.0%</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.01</span></td>
+                <td><span style="color:#6b7280">-0.68</span></td>
+                <td><span style="color:#6b7280">-0.22</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/COIN" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">COIN</a></td>
+                <td>Coinbase</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('COIN')">📋▼</span>
+                        <div id="finance_COIN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/COIN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>164</td>
+                <td><span style="color:#1e88e5">-2.74%</span></td>
+                <td><span style="color:#6b7280">35.6</span></td>
+                <td><span style="color:#e53935">30.4</span></td>
+                <td><span style="color:#1e88e5">-12.31%</span></td>
+                <td>2/3</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">3.32</span></td>
+                <td><span style="color:#888">-7.85</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.57</span></td>
+                <td><span style="color:#6b7280">-0.69</span></td>
+                <td><span style="color:#6b7280">-0.17</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/BE" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">BE</a></td>
+                <td>Bloom Energy</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('BE')">📋▼</span>
+                        <div id="finance_BE" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/BE/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>193</td>
+                <td><span style="color:#1e88e5">-11.24%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">22.7</span></td>
+                <td><span style="color:#e53935">46.3</span></td>
+                <td><span style="color:#1e88e5">-13.72%</span></td>
+                <td>3/3</td>
+                <td><span style="color:#888">254.34</span></td>
+                <td><span style="color:#888">35.18</span></td>
+                <td><span style="color:#e53935">39.61</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.67</span></td>
+                <td><span style="color:#6b7280">-0.07</span></td>
+                <td><span style="color:#6b7280">+0.78</span></td>
+                <td>💥 폭락</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/CRCL" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">CRCL</a></td>
+                <td>Circle</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('CRCL')">📋▼</span>
+                        <div id="finance_CRCL" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/CRCL/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>86</td>
+                <td><span style="color:#1e88e5">-0.82%</span></td>
+                <td><span style="color:#6b7280">53.4</span></td>
+                <td><span style="color:#e53935">25.0</span></td>
+                <td><span style="color:#e53935">+3.13%</span></td>
+                <td>4/0</td>
+                <td><span style="color:#888">58.84</span></td>
+                <td><span style="color:#1e88e5">6.19</span></td>
+                <td><span style="color:#e53935">15.35</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.14</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.07</span></td>
+                <td><span style="color:#6b7280">-0.56</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/OKLO" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">OKLO</a></td>
+                <td>Oklo</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('OKLO')">📋▼</span>
+                        <div id="finance_OKLO" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/OKLO/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#ef4444;font-weight:bold">D</span></td>
+                <td>26</td>
+                <td><span style="color:#1e88e5">-2.44%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">23.2</span></td>
+                <td><span style="color:#e53935">52.8</span></td>
+                <td><span style="color:#1e88e5">-43.68%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">1.49</span></td>
+                <td><span style="color:#888">-7.7</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.35</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.40</span></td>
+                <td><span style="color:#6b7280">-0.63</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/MU" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">MU</a></td>
+                <td>Micron Technology</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('MU')">📋▼</span>
+                        <div id="finance_MU" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/MU/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#1e88e5;font-weight:bold">🔵 약한매수</span></td>
+                <td><span style="color:#f59e0b">📈⚠️ 매수(주의)</span></td>
+                <td><span style="color:#06b6d4;font-weight:bold">B+</span></td>
+                <td>878</td>
+                <td><span style="color:#e53935">+2.46%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">28.6</span></td>
+                <td><span style="color:#e53935">56.2</span></td>
+                <td><span style="color:#e53935">+18.48%</span></td>
+                <td>4/2</td>
+                <td><span style="color:#fb8c00">11.81</span></td>
+                <td><span style="color:#1e88e5">7.17</span></td>
+                <td><span style="color:#e53935">88.26</span></td>
+                <td><span style="color:#888">7.0%</span></td>
+                <td><span style="color:#6b7280">+0.34</span></td>
+                <td><span style="color:#6b7280">-0.71</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.33</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/AVGO" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">AVGO</a></td>
+                <td>Broadcom</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('AVGO')">📋▼</span>
+                        <div id="finance_AVGO" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/AVGO/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#f59e0b;font-weight:bold">C+</span></td>
+                <td>322</td>
+                <td><span style="color:#1e88e5">-0.48%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">28.6</span></td>
+                <td><span style="color:#e53935">43.7</span></td>
+                <td><span style="color:#1e88e5">-15.91%</span></td>
+                <td>2/4</td>
+                <td><span style="color:#888">41.08</span></td>
+                <td><span style="color:#fb8c00">15.4</span></td>
+                <td><span style="color:#e53935">44.25</span></td>
+                <td><span style="color:#888">81.0%</span></td>
+                <td><span style="color:#6b7280">-0.17</span></td>
+                <td><span style="color:#6b7280">-0.76</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.32</span></td>
+                <td>😴 횡보</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/IREN" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">IREN</a></td>
+                <td>Irene</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('IREN')">📋▼</span>
+                        <div id="finance_IREN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/IREN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>25</td>
+                <td><span style="color:#1e88e5">-2.37%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">13.1</span></td>
+                <td><span style="color:#e53935">60.7</span></td>
+                <td><span style="color:#1e88e5">-42.74%</span></td>
+                <td>2/4</td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#1e88e5">2.26</span></td>
+                <td><span style="color:#888">-23.41</span></td>
+                <td><span style="color:#888">0%</span></td>
+                <td><span style="color:#6b7280">-0.34</span></td>
+                <td><span style="color:#6b7280">-0.65</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.23</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/BN" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">BN</a></td>
+                <td>Brookfield</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('BN')">📋▼</span>
+                        <div id="finance_BN" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/BN/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">C</span></td>
+                <td>38</td>
+                <td><span style="color:#1e88e5">-0.81%</span></td>
+                <td><span style="color:#6b7280">59.9</span></td>
+                <td><span style="color:#888">24.6</span></td>
+                <td><span style="color:#1e88e5">-7.39%</span></td>
+                <td>2/3</td>
+                <td><span style="color:#888">70.31</span></td>
+                <td><span style="color:#1e88e5">2.0</span></td>
+                <td><span style="color:#888">2.26</span></td>
+                <td><span style="color:#888">74.0%</span></td>
+                <td><span style="color:#6b7280">-0.44</span></td>
+                <td><span style="color:#6b7280">-0.98</span></td>
+                <td><span style="color:#6b7280">+0.04</span></td>
+                <td>🌀 노이즈</td>
+            </tr>
+            <tr>
+                <td><a href="https://finance.yahoo.com/quote/KORU" target="_blank" style="color:#58a6ff; text-decoration:none; font-weight:bold;">KORU</a></td>
+                <td>Korea 3x ETF</td>
+                <td>
+                    <div style="position:relative; display:inline-block;">
+                        <span style="color:#22c55e; cursor:pointer; font-size:0.8em;" onclick="toggleFinanceMenu('KORU')">📋▼</span>
+                        <div id="finance_KORU" style="display:none; position:absolute; top:20px; left:0; background:#161b22; border:1px solid #30363d; border-radius:4px; padding:4px; white-space:nowrap; z-index:100;">
+                            
+                            <a href="https://finance.yahoo.com/quote/KORU/financials" target="_blank" style="display:block; color:#22c55e; text-decoration:none; padding:2px 8px; font-size:0.75em;">📊 재무제표</a>
+                            
+                        </div>
+                    </div>
+                </td>
+                <td><span style="color:#fb8c00;font-weight:bold">🟠 약한매도</span></td>
+                <td><span style="color:#6b7280">🚫 회피</span></td>
+                <td><span style="color:#6b7280;font-weight:bold">F</span></td>
+                <td>11</td>
+                <td><span style="color:#e53935">+3.83%</span></td>
+                <td><span style="background:#1e88e5;color:white;padding:2px 4px;border-radius:3px;font-weight:bold">14.4</span></td>
+                <td><span style="color:#e53935">52.7</span></td>
+                <td><span style="color:#1e88e5">-48.60%</span></td>
+                <td>2/4</td>
+                <td><span style="color:#1e88e5">5.54</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style='color:#555'>-</span></td>
+                <td><span style="color:#888">40.0%</span></td>
+                <td><span style="color:#6b7280">+0.29</span></td>
+                <td><span style="color:#6b7280">-0.61</span></td>
+                <td><span style="color:#fb8c00;font-weight:bold">-1.04</span></td>
+                <td>😴 횡보</td>
+            </tr>
+        </tbody>
+    </table>
+
+<h2>🔗 투자 참고 사이트</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 16px;">
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📊 Investing.com</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            전 세계 금융시장 데이터와 전문적인 차트 도구를 제공하는 글로벌 금융 정보 플랫폼
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://kr.investing.com" target="_blank" style="display:inline-block; background:#0969da; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px; margin-right:8px;">
+                🇰🇷 한국 사이트
+            </a>
+            <a href="https://www.investing.com" target="_blank" style="display:inline-block; background:#1f6feb; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🌍 글로벌 사이트
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>실시간 주가 차트 및 기술적 지표</li>
+            <li>재무제표 및 기업 분석 자료</li>
+            <li>경제 캘린더 및 뉴스</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📊 Yahoo Finance</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            미국 주식 재무제표와 차트 분석을 위한 필수 금융 플랫폼
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://finance.yahoo.com" target="_blank" style="display:inline-block; background:#6f42c1; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🌐 Yahoo Finance 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>미국 주식 재무제표 및 실적 분석</li>
+            <li>인터랙티브 차트 및 기술적 지표</li>
+            <li>실시간 뉴스 및 애널리스트 리포트</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">📈 위폴 주식 커뮤니티</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            개인투자자들의 실전 투자 경험과 종목 분석을 공유하는 커뮤니티
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://wepoll.kr/g2/bbs/board.php?bo_table=stock" target="_blank" style="display:inline-block; background:#22c55e; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                💬 주식 게시판 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>실시간 종목 토론 및 의견 교환</li>
+            <li>개인투자자 관점의 투자 아이디어</li>
+            <li>시장 동향 및 투자 전략 공유</li>
+        </ul>
+    </div>
+    
+    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:20px;">
+        <h4 style="margin:0 0 12px 0; color:#e6edf3;">🤖 Gemini AI</h4>
+        <p style="color:#8b949e; font-size:13px; line-height:1.5; margin-bottom:16px;">
+            투자 아이디어 검증과 심층 분석을 위한 AI 어시스턴트
+        </p>
+        <div style="margin-bottom:12px;">
+            <a href="https://gemini.google.com/gem/2fcc2fede5c6" target="_blank" style="display:inline-block; background:#f59e0b; color:white; padding:8px 16px; text-decoration:none; border-radius:6px; font-size:13px;">
+                🧠 Gemini 대화 바로가기
+            </a>
+        </div>
+        <ul style="color:#8b949e; font-size:12px; margin:0; padding-left:16px;">
+            <li>종목 분석 및 투자 전략 검증</li>
+            <li>재무데이터 해석 및 트렌드 분석</li>
+            <li>리스크 요인 및 시나리오 플래닝</li>
+        </ul>
+    </div>
+</div>
+
+<details>
+<summary>📖 상세 가이드 (클릭해서 펼치기)</summary>
+<p style="color:#8b949e; font-size:13px; margin-bottom:16px;">
+💡 각 지표명 옆의 <span class="help-icon">?</span> 아이콘에 마우스를 올리면 상세 설명을 볼 수 있습니다.
+</p>
+
+<h3>종합신호</h3>
+<table class="legend-table">
+  <tr><th>신호</th><th>의미</th></tr>
+  <tr><td>🟢 강한매수</td><td>7개 중 5개 이상 매수 → 상승 가능성 높음</td></tr>
+  <tr><td>🔵 약한매수</td><td>7개 중 3~4개 매수 → 상승 우세하나 확신 낮음</td></tr>
+  <tr><td>⚪ 중립</td><td>매수/매도 혼재 → 방향성 불명확, 관망 권장</td></tr>
+  <tr><td>🟠 약한매도</td><td>7개 중 3~4개 매도 → 하락 우세하나 확신 낮음</td></tr>
+  <tr><td>🔴 강한매도</td><td>7개 중 5개 이상 매도 → 하락 가능성 높음</td></tr>
+</table>
+
+<h3>7가지 개별 지표</h3>
+<table class="legend-table">
+  <tr><th>지표</th><th>매수 조건</th><th>매도 조건</th><th>설명</th></tr>
+  <tr><td><strong>RSI</strong><br/>(상대강도지수)</td><td>35 이하 🔵</td><td>65 이상 🔴</td><td><strong>최근 14일 상승일 vs 하락일 강도</strong><br/>0~100 값. 35 이하면 "너무 팔려서 반등 가능성", 65 이상이면 "너무 올라서 조정 가능성". 과열/침체 구간 판단</td></tr>
+  <tr><td><strong>MACD</strong><br/>(이동평균수렴확산)</td><td>히스토그램 양수</td><td>히스토그램 음수</td><td><strong>12일선 - 26일선 vs 9일 평균</strong><br/>단기 추세가 장기 추세보다 강한지 측정. 양수면 "상승 모멘텀 시작", 음수면 "하락 모멘텀"</td></tr>
+  <tr><td><strong>ADX방향</strong><br/>(추세강도+방향)</td><td>DI+ &gt; DI-</td><td>DI+ &lt; DI-</td><td><strong>상승력(DI+) vs 하락력(DI-) 비교</strong><br/>DI+가 크면 상승세, DI-가 크면 하락세. 단, ADX 25 이상일 때만 신뢰 (추세 뚜렷할 때)</td></tr>
+  <tr><td><strong>볼린저밴드</strong><br/>(변동성 밴드)</td><td>하단 25% 이하</td><td>상단 75% 이상</td><td><strong>20일 평균 ± (표준편차 × 2)</strong><br/>정상 가격 범위 대비 현재 위치. 하단이면 "저점 근처", 상단이면 "고점 근처" 가능성</td></tr>
+  <tr><td><strong>MA크로스</strong><br/>(이동평균교차)</td><td>20일선 &gt; 60일선</td><td>20일선 &lt; 60일선</td><td><strong>단기 평균 vs 중기 평균</strong><br/>20일선이 60일선 위로 올라가면 골든크로스(상승), 아래로 내려가면 데드크로스(하락) 신호</td></tr>
+  <tr><td><strong>모멘텀</strong><br/>(수익률 지속성)</td><td>평균 +2% 이상 🔴</td><td>평균 -2% 이하 🔵</td><td><strong>1개월/3개월/6개월 수익률 평균</strong><br/>상승하는 종목이 계속 상승하는 경향 활용. +2% 이상이면 강한 상승세 지속 중</td></tr>
+  <tr><td><strong>거래량</strong><br/>(관심도/유동성)</td><td colspan="2">평소 대비 1.5배 이상이면 급등 (방향은 별도 판단)</td><td><strong>평균 거래량 vs 현재 거래량</strong><br/>거래량 급증은 "큰 변화 신호". 방향은 다른 지표로 판단 (매수/매도 카운트 제외)</td></tr>
+</table>
+
+<h3>Z-score 색상 기준</h3>
+<table class="legend-table">
+  <tr><th>색상</th><th>범위</th><th>의미</th></tr>
+  <tr><td style="color:#e53935">빨강</td><td>+2 이상</td><td>비정상적으로 높음</td></tr>
+  <tr><td style="color:#fb8c00">주황</td><td>±1 ~ ±2</td><td>주의 구간</td></tr>
+  <tr><td style="color:#888">회색</td><td>±1 이내</td><td>정상 범위</td></tr>
+  <tr><td style="color:#1e88e5">파랑</td><td>-2 이하</td><td>비정상적으로 낮음</td></tr>
+</table>
+
+<h3>펀더멘털 지표 (밸류에이션/수익성)</h3>
+<table class="legend-table">
+  <tr><th>지표</th><th>좋은 값</th><th>주의 값</th><th>설명</th></tr>
+  <tr><td><strong>PER</strong><br/>(주가수익비율)</td><td style="color:#1e88e5">한국: 10 이하<br/>미국: 15 이하</td><td style="color:#fb8c00">20 이상</td><td><strong>주가 ÷ 주당순이익(EPS)</strong><br/>현재 주가가 1년 수익의 몇 배인지 측정. 10이면 "10년간 벌어야 현재 주가만큼 수익". 낮을수록 저평가 (단, 적자 회사는 의미 없음)</td></tr>
+  <tr><td><strong>PBR</strong><br/>(주가순자산비율)</td><td style="color:#1e88e5">1.0 이하</td><td style="color:#fb8c00">3.0 이상</td><td><strong>주가 ÷ 주당순자산(BPS)</strong><br/>회사를 청산할 때 주주가 받을 몫 대비 주가. 1.0 이하면 "자산 가치보다 저렴". 성장주는 높아도 OK, 가치주는 낮을수록 좋음</td></tr>
+  <tr><td><strong>ROE</strong><br/>(자기자본이익률)</td><td style="color:#e53935">15% 이상</td><td style="color:#888">5% 이하</td><td><strong>순이익 ÷ 자기자본 × 100</strong><br/>주주 돈으로 얼마나 이익을 냈는지. 15%면 "100원 투자해서 15원 벌었다". 경영진의 능력과 사업 수익성을 보여줌</td></tr>
+  <tr><td><strong>ROA</strong><br/>(총자산이익률)</td><td style="color:#e53935">8% 이상</td><td style="color:#888">3% 이하</td><td><strong>순이익 ÷ 총자산 × 100</strong><br/>빌린 돈 포함해 모든 자산으로 얼마나 효율적으로 이익을 냈는지. 자산 대비 수익 창출 능력 측정</td></tr>
+  <tr><td><strong>배당수익률</strong></td><td style="color:#e53935">3% 이상</td><td style="color:#888">1% 이하</td><td><strong>연간 배당금 ÷ 주가 × 100</strong><br/>주식을 사면 1년간 받는 배당금이 투자금의 몇 %인지. 은행 이자 대신 배당 받고 싶은 투자자에게 중요</td></tr>
+</table>
+
+<h3>성장성/안정성 지표</h3>
+<table class="legend-table">
+  <tr><th>지표</th><th>좋은 값</th><th>주의 값</th><th>설명</th></tr>
+  <tr><td><strong>매출성장률</strong><br/>(YoY)</td><td style="color:#e53935">15% 이상</td><td style="color:#888">마이너스</td><td><strong>(올해매출 - 작년매출) ÷ 작년매출 × 100</strong><br/>회사가 얼마나 빠르게 성장하고 있는지 측정. 15%면 "매출이 1년 만에 15% 늘었다". 지속적 성장 가능성의 핵심 지표</td></tr>
+  <tr><td><strong>영업이익성장률</strong><br/>(YoY)</td><td style="color:#e53935">20% 이상</td><td style="color:#888">마이너스</td><td><strong>(올해영업이익 - 작년영업이익) ÷ 작년영업이익 × 100</strong><br/>매출 증가와 함께 실제 수익도 늘고 있는지 확인. 매출은 늘어도 영업이익은 줄어들면 경쟁력 악화 신호</td></tr>
+  <tr><td><strong>부채비율</strong></td><td style="color:#1e88e5">50% 이하</td><td style="color:#fb8c00">150% 이상</td><td><strong>부채 ÷ 자기자본 × 100</strong><br/>빌린 돈이 자기 돈의 몇 %인지. 50%면 "자기돈 100원에 빌린돈 50원". 높으면 파산 위험, 낮으면 안전하지만 성장 동력 부족할 수도</td></tr>
+  <tr><td><strong>유동비율</strong></td><td style="color:#1e88e5">150% 이상</td><td style="color:#fb8c00">100% 이하</td><td><strong>유동자산 ÷ 유동부채 × 100</strong><br/>1년 내 현금화 가능한 자산으로 1년 내 갚아야 할 빚을 감당할 수 있는지. 150% 이상이면 단기 자금난 걱정 없음</td></tr>
+  <tr><td><strong>이자보상배율</strong></td><td style="color:#1e88e5">5배 이상</td><td style="color:#fb8c00">3배 이하</td><td><strong>영업이익 ÷ 이자비용</strong><br/>영업으로 번 돈으로 이자를 몇 번 갚을 수 있는지. 5배면 "이자의 5배를 벌고 있어 안전". 3배 미만이면 이자 부담이 과중</td></tr>
+</table>
+
+<h3>종합 스코어링 상세</h3>
+
+<h4>🎯 스윙점수 (0~100점) - 단기 진입 타이밍</h4>
+<table class="legend-table">
+  <tr><th>점수</th><th>매수신호 개수</th><th>의미</th><th>조치</th></tr>
+  <tr><td style="color:#22c55e"><strong>80~100점</strong></td><td>6~7개 매수</td><td>강한 단기 상승 신호</td><td>적극적 진입 고려</td></tr>
+  <tr><td style="color:#3b82f6"><strong>60~79점</strong></td><td>4~5개 매수</td><td>양호한 진입 타이밍</td><td>조건부 진입</td></tr>
+  <tr><td style="color:#f59e0b"><strong>40~59점</strong></td><td>3개 매수</td><td>중립적, 방향성 애매</td><td>추가 확인 필요</td></tr>
+  <tr><td style="color:#ef4444"><strong>20~39점</strong></td><td>1~2개 매수</td><td>약한 신호, 하락 우세</td><td>진입 보류</td></tr>
+  <tr><td style="color:#6b7280"><strong>0~19점</strong></td><td>0~1개 매수</td><td>강한 하락 신호</td><td>매도 고려</td></tr>
+</table>
+<p><small>📊 <strong>계산법</strong>: (매수신호 개수 ÷ 7) × 100<br/>
+📋 <strong>7가지 신호</strong>: RSI(35↓), MACD(양수), 볼린저(하단25%↓), ADX방향(DI+>DI-), MA크로스(20>60), 모멘텀(+2%↑), 거래량(1.5배↑)</small></p>
+
+<h4>⭐ 장기점수 (0~100점) - 투자가치 평가</h4>
+<table class="legend-table">
+  <tr><th>등급</th><th>점수</th><th>투자가치</th><th>예시 조건</th></tr>
+  <tr><td style="color:#22c55e"><strong>A+ (85~100)</strong></td><td>85~100점</td><td>최우량 종목</td><td>ROE 15%+ 저PER + 고성장</td></tr>
+  <tr><td style="color:#3b82f6"><strong>A (75~84)</strong></td><td>75~84점</td><td>우량 종목</td><td>안정성+수익성 양호</td></tr>
+  <tr><td style="color:#06b6d4"><strong>B+ (65~74)</strong></td><td>65~74점</td><td>양호한 종목</td><td>일부 지표 우수</td></tr>
+  <tr><td style="color:#8b5cf6"><strong>B (55~64)</strong></td><td>55~64점</td><td>평균 수준</td><td>무난하지만 특별하지 않음</td></tr>
+  <tr><td style="color:#f59e0b"><strong>C+ (45~54)</strong></td><td>45~54점</td><td>관심 필요</td><td>일부 지표 부족</td></tr>
+  <tr><td style="color:#fb8c00"><strong>C (35~44)</strong></td><td>35~44점</td><td>투자 신중</td><td>여러 지표 부족</td></tr>
+  <tr><td style="color:#ef4444"><strong>D (25~34)</strong></td><td>25~34점</td><td>위험 종목</td><td>재무상태 불량</td></tr>
+  <tr><td style="color:#6b7280"><strong>F (0~24)</strong></td><td>0~24점</td><td>투자 부적합</td><td>대부분 지표 나쁨</td></tr>
+</table>
+<p><small>📊 <strong>4개 영역별 25점씩</strong>:<br/>
+🏆 <strong>수익성(25점)</strong>: ROE 15%↑(10점) + ROA 8%↑(8점) + 영업이익률 10%↑(7점)<br/>
+🛡️ <strong>안정성(25점)</strong>: 부채비율 50%↓(10점) + 유동비율 150%↑(8점) + 이자보상배율 5↑(7점)<br/>
+💰 <strong>밸류에이션(25점)</strong>: PER 적정(12점) + PBR 저평가(13점)<br/>
+📈 <strong>성장성(25점)</strong>: 매출성장률 15%↑(12점) + 영업이익성장률 20%↑(13점)</small></p>
+
+<h4>🎊 최종추천 - 스윙+장기 종합판단</h4>
+<table class="legend-table">
+  <tr><th>추천</th><th>조건</th><th>투자 성향</th><th>예시</th></tr>
+  <tr><td style="color:#22c55e"><strong>🚀 강매수</strong></td><td>스윙70+ & 장기60+</td><td>적극적 성장 추구</td><td>스윙85 + 장기A</td></tr>
+  <tr><td style="color:#3b82f6"><strong>📈 매수</strong></td><td>스윙50+ & 장기50+</td><td>안정적 수익 추구</td><td>스윙65 + 장기B+</td></tr>
+  <tr><td style="color:#8b5cf6"><strong>⚡ 스윙</strong></td><td>스윙70+ & 장기30~70</td><td>단기 트레이딩</td><td>스윙80 + 장기C</td></tr>
+  <tr><td style="color:#06b6d4"><strong>👁️ 관심</strong></td><td>스윙30~70 & 장기70+</td><td>장기 관점 대기</td><td>스윙40 + 장기A</td></tr>
+  <tr><td style="color:#f59e0b"><strong>🤝 보유</strong></td><td>스윙40+ & 장기40+</td><td>현상 유지</td><td>스윙45 + 장기B</td></tr>
+  <tr><td style="color:#ef4444"><strong>🚫 회피</strong></td><td>장기30 미만</td><td>투자 부적합</td><td>장기 F등급</td></tr>
+</table>
+<p><small>💡 <strong>활용 팁</strong>: 개인 투자 성향에 맞춰 선택적 참고. 스윙 점수는 진입 타이밍, 장기 점수는 종목 선별 기준으로 활용</small></p>
+
+<h3>시장 체제</h3>
+<table class="legend-table">
+  <tr><th>체제</th><th>조건</th><th>전략 힌트</th></tr>
+  <tr><td>🐂 강세</td><td>수익률Z &gt; 1, 변동폭 낮음</td><td>추세 추종 유리</td></tr>
+  <tr><td>💥 폭락</td><td>수익률Z &lt; -1.5</td><td>손절/현금화 고려</td></tr>
+  <tr><td>⚡ 고변동</td><td>변동폭Z &gt; 1.5</td><td>레버리지 위험, 관망</td></tr>
+  <tr><td>😴 횡보</td><td>수익률/변동폭 모두 낮음</td><td>돌파 대기, 박스권 매매</td></tr>
+  <tr><td>🌀 노이즈</td><td>위 조건 해당 없음</td><td>방향성 불명확</td></tr>
+</table>
+
+</details>
+
+<div class="footer">
+  자동 생성: <a href="https://github.com/QAZyunho/quant-pipeline/tree/reports" style="color:#58a6ff">quant-pipeline</a>
+</div>
+
+</body>
+</html>
